@@ -1,0 +1,15 @@
+#Byte-compiled / optimized / DLL files
+# C extensions
+*.so
+*.o
+*.a
+
+*.swp
+*~
+
+#Cmake generated file
+CMakeFiles/
+CMakeFiles/*
+*.cmake
+Makefile
+#TODO : enlever les fichiers codeblock
