@@ -16,6 +16,8 @@ set(STRATEGY_HEADER_DIR ${HEADER_DIR})
 add_subdirectory(${HEADER_DIR})
 add_subdirectory(${SRC_DIR})
 
+include_directories(${HEADER_DIR})
+
 set(STRATEGY_LIBS ${PROJECT_LIBS} sources)
 
 add_library(strategy SHARED ${STRATEGY_LIBS})

@@ -16,6 +16,8 @@ set(INTERFACE_HEADER_DIR ${HEADER_DIR})
 add_subdirectory(${HEADER_DIR})
 add_subdirectory(${SRC_DIR})
 
+include_directories(${HEADER_DIR})
+
 set(INTERFACE_LIBS ${PROJECT_LIBS} sources)
 
 add_library(interface ${INTERFACE_LIBS})

@@ -1,9 +1,10 @@
 #TODO : tester pour voir si ça marche
 #TODO : ajouter la regle pour chercher les .h au bon endroit
+#TODO : faire la rêgle install
 
 # Project Info
 cmake_minimum_required(VERSION 2.6)
-project(Backgamon)
+project(PolyBackgamon)
 message("Project C : Backgamon")
 message("Graphique interface :")
 message("\t Source   directory : ${interface_SOURCE_DIR}")
@@ -14,7 +15,7 @@ message("\t Binarie  directory : ${strategy_BINARY_DIR}")
 
 # Testing
 enable_testing()
-add_test(BackgamonRun Backgamon)
+add_test("${PROJECT_NAME}Run" ${PROJECT_NAME})
 
 set(INTERFACE_DIR "${PROJECT_BINARY_DIR}/interface")
 set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
@@ -22,7 +23,6 @@ set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
 include_directories(${SDL2_INCLUDE_DIRS})
-#target_link_libraries(sdl2test ${SDL2_LIBRARIES}) # utilité ?????
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
@@ -35,7 +35,7 @@ if(DOXYGEN_FOUND)
 		${STRATEGY_DIR}/${STRATEGY_HEADER_DIR}
 		")#laisser un espace après chaque fichier
 	set(CMAKE_PROJECT_EXT "*.h *.c")
-	set(CMAKE_PROJECT_NAME ${PORJECT_NAME})
+	set(CMAKE_PROJECT_NAME ${PROJECT_NAME})
 	configure_file(
 		${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
 		${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
@@ -58,5 +58,5 @@ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 
 set(PROJECT_LIBS ${PROJECT_LIBS} interface)
 
-add_executable(Backgamon main.c)
-target_link_libraries(Backgamon ${PROJECT_LIBS})
+add_executable(${PROJECT_NAME} main.c)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
