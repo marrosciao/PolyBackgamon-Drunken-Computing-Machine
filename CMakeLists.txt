@@ -22,7 +22,13 @@ set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-	set(CMAKE_SRCS_DIR "${INTERFACE_DIR} ${STRATEGY_DIR}")
+	set(CMAKE_SRCS_DIR 
+		"
+		${INTERFACE_DIR}/${INTERFACE_SRC_DIR} 
+		${INTERFACE_DIR}/${INTERFACE_HEADER_DIR} 
+		${STRATEGY_DIR}/${STRATEGY_SRC_DIR} 
+		${STRATEGY_DIR}/${STRATEGY_HEADER_DIR}
+		")#laisser un espace après chaque fichier
 	set(CMAKE_PROJECT_EXT "*.h *.c")
 	set(CMAKE_PROJECT_NAME ${PORJECT_NAME})
 	configure_file(

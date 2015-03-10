@@ -10,6 +10,9 @@ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 set(HEADER_DIR "./include")
 set(SRC_DIR "./src")
 
+set(STRATEGY_SRC_DIR ${SRC_DIR})
+set(STRATEGY_HEADER_DIR ${HEADER_DIR})
+
 add_subdirectory(${HEADER_DIR})
 add_subdirectory(${SRC_DIR})
 
