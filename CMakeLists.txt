@@ -1,4 +1,5 @@
 #TODO : tester pour voir si ça marche
+#TODO : ajouter la regle pour chercher les .h au bon endroit
 
 # Project Info
 cmake_minimum_required(VERSION 2.6)
@@ -17,6 +18,25 @@ add_test(BackgamonRun Backgamon)
 
 set(INTERFACE_DIR "${PROJECT_BINARY_DIR}/interface")
 set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
+
+# add a target to generate API documentation with Doxygen
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+	set(CMAKE_SRCS_DIR "${INTERFACE_DIR} ${STRATEGY_DIR}")
+	set(CMAKE_PROJECT_EXT "*.h *.c")
+	set(CMAKE_PROJECT_NAME ${PORJECT_NAME})
+	configure_file(
+		${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+		${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
+		)
+	add_custom_target(doc 
+		ALL 
+		${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMENT "Generating API documentation with Doxygen" VERBATIM
+	)
+endif(DOXYGEN_FOUND)
+
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
