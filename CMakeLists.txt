@@ -19,6 +19,11 @@ add_test(BackgamonRun Backgamon)
 set(INTERFACE_DIR "${PROJECT_BINARY_DIR}/interface")
 set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
 
+include(FindPkgConfig)
+pkg_search_module(SDL2 REQUIRED sdl2)
+include_directories(${SDL2_INCLUDE_DIRS})
+#target_link_libraries(sdl2test ${SDL2_LIBRARIES}) # utilité ?????
+
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
