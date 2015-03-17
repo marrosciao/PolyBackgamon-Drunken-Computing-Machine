@@ -5,7 +5,6 @@ It's a project for 3rd year in IT ingeneering school with C programming language
 
 ## Authors
 
-
 ## Installation
 
 ## Use
