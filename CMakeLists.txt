@@ -1,4 +1,3 @@
-#TODO : tester pour voir si ça marche
 #TODO : ajouter la regle pour chercher les .h au bon endroit
 #TODO : faire la rêgle install
 #TODO : ajouter règle pour l'endroit ou creer l'executable
