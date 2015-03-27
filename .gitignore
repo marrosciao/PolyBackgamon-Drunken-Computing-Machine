@@ -10,6 +10,7 @@
 #Cmake generated file
 CMakeFiles/
 CMakeFiles/*
+CMakeCache.txt
 *.cmake
 Makefile
 #TODO : enlever les fichiers codeblock
