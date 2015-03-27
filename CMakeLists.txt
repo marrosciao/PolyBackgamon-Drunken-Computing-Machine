@@ -1,6 +1,7 @@
 #TODO : tester pour voir si ça marche
 #TODO : ajouter la regle pour chercher les .h au bon endroit
 #TODO : faire la rêgle install
+#TODO : ajouter règle pour l'endroit ou creer l'executable
 
 # Project Info
 cmake_minimum_required(VERSION 2.6)
@@ -23,6 +24,12 @@ set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
 include_directories(${SDL2_INCLUDE_DIRS})
+
+file(WRITE ".vimprojects" "My Project=${PROJECT_BINARY_DIR} CD=. {\n
+	CMakeLists.txt\n
+	${STRATEGY_VIMPROJECT}\n
+	${INTERFACE_VIMPROJECT}\n
+	}") #déplacer dans chaque sous-partie ???
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
@@ -58,5 +65,5 @@ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 
 set(PROJECT_LIBS ${PROJECT_LIBS} interface)
 
-add_executable(${PROJECT_NAME} main.c)
+add_executable(${PROJECT_NAME} "${INTERFACE_DIR}/main.c")
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})

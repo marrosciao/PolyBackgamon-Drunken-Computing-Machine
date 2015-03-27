@@ -1,4 +1,5 @@
-#TODO : tester
+cmake_minimum_required(VERSION 2.8)
+project(Strategy)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
@@ -10,6 +11,8 @@ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 set(HEADER_DIR "./include")
 set(SRC_DIR "./src")
 
+set(STRATEGY_VIMPROJECT "Strategy Files=. filter=${HEADER_FILES} ${SRC_FILES}{\n}\n")
+
 set(STRATEGY_SRC_DIR ${SRC_DIR})
 set(STRATEGY_HEADER_DIR ${HEADER_DIR})
 
@@ -20,5 +23,7 @@ include_directories(${HEADER_DIR})
 
 set(STRATEGY_LIBS ${PROJECT_LIBS} sources)
 
-add_library(strategy SHARED ${STRATEGY_LIBS})
-target_link_libraries(strategy ${STRATEGY_LIBS}
+file(GLOB SRC ${SRC_DIR} *.c)
+add_library(${PROJECT_NAME} SHARED ${SRC})
+target_link_libraries(${PROJECT_NAME} ${STRATEGY_LIBS})
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
