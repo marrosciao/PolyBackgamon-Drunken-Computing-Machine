@@ -19,12 +19,12 @@ set(INTERFACE_SRC_DIR ${SRC_DIR})
 set(INTERFACE_HEADER_DIR ${HEADER_DIR})
 set(STRATEGY_VIMPROJECT "Strategy Files=. filter=${HEADER_FILES} ${SRC_FILES}{\n}\n")
 
-add_subdirectory(${HEADER_DIR})
-add_subdirectory(${SRC_DIR})
-
 include_directories(${HEADER_DIR})
 include_directories(${SDL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+
+add_subdirectory(${HEADER_DIR})
+add_subdirectory(${SRC_DIR})
 
 set(INTERFACE_LIBS ${PROJECT_LIBS} sources)
 
