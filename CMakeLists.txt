@@ -2,6 +2,7 @@
 #TODO : faire la rêgle install
 #TODO : ajouter règle pour l'endroit ou creer l'executable
 #TODO : regler PB recherche ressources
+#TODO : refaire la compilation de tout
 
 # Project Info
 cmake_minimum_required(VERSION 2.6)
@@ -55,6 +56,12 @@ if(DOXYGEN_FOUND)
 	)
 endif(DOXYGEN_FOUND)
 
+file(
+	COPY
+	${STRATEGY_DIR}/${STRATEGY_SRC_DIR}/libstrategy.so
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+)
+
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto")
@@ -69,9 +76,10 @@ INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
 
 link_libraries (
 	SDL2
-   ${SDL_LIBRARY}
-   ${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
-   SDLmain # Sadly not included in SDL_LIBRARY variable
+	${SDL_LIBRARY}
+	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
+	SDLmain # Sadly not included in SDL_LIBRARY variable
+	dl
 )
 
 add_executable(${PROJECT_NAME} "${INTERFACE_DIR}/main.c")

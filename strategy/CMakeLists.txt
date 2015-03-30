@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(Strategy)
+project(strategy)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
@@ -21,9 +21,7 @@ include_directories(${HEADER_DIR})
 add_subdirectory(${HEADER_DIR})
 add_subdirectory(${SRC_DIR})
 
-set(STRATEGY_LIBS ${PROJECT_LIBS} sources)
-
-file(GLOB SRC ${SRC_DIR} *.c)
+file(GLOB SRC "src/*.c" *.c)
+message(${SRC})
 add_library(${PROJECT_NAME} SHARED ${SRC})
-target_link_libraries(${PROJECT_NAME} ${STRATEGY_LIBS})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)

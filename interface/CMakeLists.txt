@@ -7,7 +7,7 @@ PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto -rdynamic")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2 -DNDEBUG")
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
@@ -31,9 +31,10 @@ INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
 
 link_libraries (
 	SDL2
-   ${SDL_LIBRARY}
-   ${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
-   SDLmain # Sadly not included in SDL_LIBRARY variable
+	${SDL_LIBRARY}
+	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
+	SDLmain # Sadly not included in SDL_LIBRARY variable
+	dl
 )
 
 add_executable(${PROJECT_NAME} "main.c")
