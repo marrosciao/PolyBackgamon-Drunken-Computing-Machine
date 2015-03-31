@@ -31,7 +31,7 @@ void EndMatch()
 
 }
 
-void DoubleStack(const SGameState * const gameState)
+int DoubleStack(const SGameState * const gameState)
 {
     // on ne double jamais la mise en debut de tour
     return false ;
