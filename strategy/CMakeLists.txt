@@ -18,10 +18,11 @@ set(STRATEGY_HEADER_DIR ${HEADER_DIR})
 
 include_directories(${HEADER_DIR})
 
-add_subdirectory(${HEADER_DIR})
 add_subdirectory(${SRC_DIR})
 
 file(GLOB SRC "src/*.c" *.c)
-message(${SRC})
+set(STRATEGY_SRC ${SRC})
+set(STRATEGY_NAME ${PROJECT_NAME})
+set(PROJECT_LIBS ${PROJECT_LIBS} ${PROJECT_NAME})
 add_library(${PROJECT_NAME} SHARED ${SRC})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)

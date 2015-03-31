@@ -19,6 +19,13 @@ set(INTERFACE_SRC_DIR ${SRC_DIR})
 set(INTERFACE_HEADER_DIR ${HEADER_DIR})
 set(STRATEGY_VIMPROJECT "Strategy Files=. filter=${HEADER_FILES} ${SRC_FILES}{\n}\n")
 
+set(RC_PATH "${PROJECT_BINARY_DIR}/rc")
+set(LIB_PATH "${PROJECT_BINARY_DIR}")
+configure_file(
+	"${HEADER_DIR}/config.h.in"
+	"${HEADER_DIR}/config.h"
+)
+
 include_directories(${HEADER_DIR})
 
 add_subdirectory(${HEADER_DIR})

@@ -7,13 +7,6 @@
 # Project Info
 cmake_minimum_required(VERSION 2.6)
 project(PolyBackgamon)
-message("Project C : Backgamon")
-message("Graphique interface :")
-message("\t Source   directory : ${interface_SOURCE_DIR}")
-message("\t Binarie  directory : ${interface_BINARY_DIR}")
-message("Strategy :")
-message("\t Source   directory : ${strategy_SOURCE_DIR}")
-message("\t Binarie  directory : ${strategy_BINARY_DIR}")
 
 # Testing
 enable_testing()
@@ -21,6 +14,14 @@ add_test("${PROJECT_NAME}Run" ${PROJECT_NAME})
 
 set(INTERFACE_DIR "${PROJECT_BINARY_DIR}/interface")
 set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
+include_directories("${INTERFACE_DIR}/include")
+include_directories("${STRATEGY_DIR}/include")
+
+message("Project C : Backgamon")
+message("Graphic interface :")
+message("\tDirectory : ${INTERFACE_DIR}")
+message("Strategy :")
+message("\tDirectory : ${STRATEGY_DIR}")
 
 include(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
@@ -55,12 +56,19 @@ if(DOXYGEN_FOUND)
 		COMMENT "Generating API documentation with Doxygen" VERBATIM
 	)
 endif(DOXYGEN_FOUND)
-
-file(
-	COPY
-	${STRATEGY_DIR}/${STRATEGY_SRC_DIR}/libstrategy.so
-	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+set(RC_PATH "${INTERFACE_DIR}/rc")
+set(LIB_PATH "${PROJECT_BINARY_DIR}")
+configure_file(
+	"${INTERFACE_DIR}/include/config.h.in"
+	"${INTERFACE_DIR}/include/config.h"
 )
+
+
+#file(
+	#COPY
+	#${STRATEGY_DIR}/${STRATEGY_SRC_DIR}libstrategy.so
+	#DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+#)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
@@ -81,6 +89,12 @@ link_libraries (
 	SDLmain # Sadly not included in SDL_LIBRARY variable
 	dl
 )
-
+#Compilation de l'executable
 add_executable(${PROJECT_NAME} "${INTERFACE_DIR}/main.c")
 #target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
+#add_subdirectory(${INTERFACE_DIR})
+
+#compilation de la lib
+add_subdirectory(${STRATEGY_DIR})
+#add_library(${STRATEGY_NAME} SHARED ${STRATEGY_SRC})
+#SET_TARGET_PROPERTIES(${STRATEGY_NAME} PROPERTIES LINKER_LANGUAGE C)
