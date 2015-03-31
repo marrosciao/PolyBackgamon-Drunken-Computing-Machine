@@ -1,9 +1,12 @@
 #include <stdbool.h>
+#include <string.h>
+
 #include "backgammon.h"
 
 void InitLibrary(char name[50])
 {
-    name = "La meilleure IA des meilleurs potes";
+    
+    strcpy(name,"La meilleure IA des meilleurs potes");
 
     // Code d'initialisation ici.
 }
