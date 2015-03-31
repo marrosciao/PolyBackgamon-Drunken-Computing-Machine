@@ -1,9 +1,12 @@
 #include <stdbool.h>
+#include <string.h>
+
 #include "backgammon.h"
 
 void InitLibrary(char name[50])
 {
-    name = "La meilleure IA des meilleurs potes";
+    
+    strcpy(name,"La meilleure IA des meilleurs potes");
 
     // Code d'initialisation ici.
 }
@@ -28,7 +31,7 @@ void EndMatch()
 
 }
 
-void DoubleStack(const SGameState * const gameState)
+int DoubleStack(const SGameState * const gameState)
 {
     // on ne double jamais la mise en debut de tour
     return false ;
