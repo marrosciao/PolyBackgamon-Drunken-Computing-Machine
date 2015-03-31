@@ -1,4 +1,4 @@
 # inutile
 file(GLOB SRC . *.c)
-set(SRC_FILE ${SRC})
-add_library(sources ${SRC})
+#set(PROJECT_LIBS ${SRC})
+#add_library(sources ${SRC})

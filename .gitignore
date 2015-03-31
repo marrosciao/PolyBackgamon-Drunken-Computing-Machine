@@ -13,4 +13,5 @@ CMakeFiles/*
 CMakeCache.txt
 *.cmake
 Makefile
+.vimprojects
 #TODO : enlever les fichiers codeblock

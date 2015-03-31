@@ -1,7 +1,8 @@
-#TODO : tester pour voir si ça marche
 #TODO : ajouter la regle pour chercher les .h au bon endroit
 #TODO : faire la rêgle install
 #TODO : ajouter règle pour l'endroit ou creer l'executable
+#TODO : regler PB recherche ressources
+#TODO : refaire la compilation de tout
 
 # Project Info
 cmake_minimum_required(VERSION 2.6)
@@ -22,8 +23,8 @@ set(INTERFACE_DIR "${PROJECT_BINARY_DIR}/interface")
 set(STRATEGY_DIR "${PROJECT_BINARY_DIR}/strategy")
 
 include(FindPkgConfig)
-pkg_search_module(SDL2 REQUIRED sdl2)
-include_directories(${SDL2_INCLUDE_DIRS})
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 file(WRITE ".vimprojects" "My Project=${PROJECT_BINARY_DIR} CD=. {\n
 	CMakeLists.txt\n
@@ -55,15 +56,31 @@ if(DOXYGEN_FOUND)
 	)
 endif(DOXYGEN_FOUND)
 
+file(
+	COPY
+	${STRATEGY_DIR}/${STRATEGY_SRC_DIR}/libstrategy.so
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2 -DNDEBUG")
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 
 set(PROJECT_LIBS ${PROJECT_LIBS} interface)
 
+include_directories(${SDL_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+
+link_libraries (
+	SDL2
+	${SDL_LIBRARY}
+	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
+	SDLmain # Sadly not included in SDL_LIBRARY variable
+	dl
+)
+
 add_executable(${PROJECT_NAME} "${INTERFACE_DIR}/main.c")
-target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
+#target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
