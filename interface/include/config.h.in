@@ -1,0 +1,7 @@
+#ifndef _CONFIG_INCLUDED
+#define _CONFIG_INCLUDED
+
+#define RC_DIR "@RC_PATH@"
+#define LIB_PATH "@LIB_PATH@"
+
+#endif
