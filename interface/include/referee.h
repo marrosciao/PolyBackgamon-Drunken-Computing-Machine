@@ -39,14 +39,12 @@ int check_move(const SMove, Dice[], cuint, const Player, SGameState * const);
  * @param state    état du jeux
  * @param moves    liste des mouvements à effectuer
  * @param nb_moves nombre de mouvement à effectuer
- * @param player   joueur en train de jouer
  * @param dices    valeur du lancé des dés
  * @param nb_dices nombre de dés lancé
  * @param player   joueur dont c'est le tour
  * @return nombre de mouvement faux
  */
-int move_all(SGameState * const, SMove const * const,
-		cuint, Dice[], cuint, const Player);
+int move_all(SGameState * const, SMove const * const, cuint, Dice[], cuint, const Player);
 
 /**
  * @fn void move(SGameState * const state, SMove const move, const Player player)
