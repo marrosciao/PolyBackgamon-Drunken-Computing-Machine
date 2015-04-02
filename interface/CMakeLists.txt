@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.6)
 project(Interface)
 
 include(FindPkgConfig)
-PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+PKG_SEARCH_MODULE(SDL REQUIRED sdl)
+PKG_SEARCH_MODULE(SDLIMAGE REQUIRED SDL_image>=2.0.0)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
@@ -27,10 +27,10 @@ add_subdirectory(${SRC_DIR})
 set(INTERFACE_LIBS ${PROJECT_LIBS} sources)
 
 include_directories(${SDL_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS} ${SDLIMAGE_INCLUDE_DIRS})
 
 link_libraries (
-	SDL2
+	SDL
 	${SDL_LIBRARY}
 	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
 	SDLmain # Sadly not included in SDL_LIBRARY variable
