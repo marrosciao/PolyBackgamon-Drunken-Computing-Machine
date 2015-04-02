@@ -3,7 +3,8 @@ project(Interface)
 
 include(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL REQUIRED sdl)
-PKG_SEARCH_MODULE(SDLIMAGE REQUIRED SDL_image>=2.0.0)
+#PKG_SEARCH_MODULE(SDLIMAGE REQUIRED SDL_image>=2.0.0)
+PKG_SEARCH_MODULE(SDLIMAGE REQUIRED SDL_ttf>=2.0.0)
 
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
@@ -27,12 +28,14 @@ add_subdirectory(${SRC_DIR})
 set(INTERFACE_LIBS ${PROJECT_LIBS} sources)
 
 include_directories(${SDL_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS} ${SDLIMAGE_INCLUDE_DIRS})
+#INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS} ${SDLIMAGE_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS} ${SDLTTF_INCLUDE_DIRS})
 
 link_libraries (
 	SDL
 	${SDL_LIBRARY}
-	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
+	#${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
+	${SDLTTF_LIBRARY} # if using SDL_ttf, obviously
 	SDLmain # Sadly not included in SDL_LIBRARY variable
 	dl
 )
