@@ -16,7 +16,7 @@
 //TODO : appliquer clang-format
 
 void err(String str){
-	fprintf(stderr, "%s : %s\n", str, dlerror());
+	fprintf(stderr, "%s -> %s\n",str, dlerror());
 	exit(EXIT_FAILURE);
 }
 
@@ -57,7 +57,7 @@ int main(){
 		black_funcs.startGame(BLACK);
 		white_funcs.startGame(WHITE);
 		bool end_of_round = false;
-		uint score = 1;//TODO : Voir avec stake dans SGameState
+		state.stake = 1;//TODO : Voir avec stake dans SGameState
 		Player winner = NOBODY;
 		while(!end_of_round){
 			//TODO : faire les copies de state
@@ -66,14 +66,14 @@ int main(){
 					end_of_round = true;
 					winner = WHITE;
 				} else {
-					score*=2;
+					state.stake*=2;
 				}
 			} else if( black_funcs.doubleStack(&state) ) {
 				if( !white_funcs.takeDouble(&state) ){
 					end_of_round = true;
 					winner = BLACK;
 				} else {
-					score *= 2;
+					state.stake *= 2;
 				}
 			}
 			//TODO : reste
@@ -89,6 +89,8 @@ int main(){
 	// --- Fermeture des bibliothèques {{{
 	dlclose(white_handle);
 	dlclose(black_handle);
+	free(white_path);
+	free(black_path);
 	// }}}
 	return EXIT_SUCCESS;
 }

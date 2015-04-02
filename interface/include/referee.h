@@ -6,7 +6,7 @@
 /**
  * @file referee.h
  * @author Vincent BONNEVALLE
- * @brief Définie les fonctions nécessaires au déplacement des pions
+ * @brief Défini les fonctions nécessaires au déplacement des pions
  * @todo Vérifier qu'on utilise le max de dés possible (on doit utiliser le max de dé)
  */
 
@@ -36,10 +36,14 @@ int check_move(const SMove, Dice[], cuint, const Player, SGameState * const);
 /**
  * @fn int move_all(SGameState * const state, SMove const * const moves, cuint nb_moves, Dice dices[], cuint nb_dices, const Player player)
  * @brief Déplace les pions selon les mouvements (valide) passé en paramêtre
- * @param state   état du jeux
- * @param moves   liste des mouvements à effectuer
- * @param nbMoves nombre de mouvement à effectuer
- * @param player  joueur en train de jouer
+ * @param state    état du jeux
+ * @param moves    liste des mouvements à effectuer
+ * @param nb_moves nombre de mouvement à effectuer
+ * @param player   joueur en train de jouer
+ * @param dices    valeur du lancé des dés
+ * @param nb_dices nombre de dés lancé
+ * @param player   joueur dont c'est le tour
+ * @return nombre de mouvement faux
  */
 int move_all(SGameState * const, SMove const * const,
 		cuint, Dice[], cuint, const Player);

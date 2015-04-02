@@ -36,13 +36,7 @@ file(WRITE ".vimprojects" "My Project=${PROJECT_BINARY_DIR} CD=. {\n
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-	set(CMAKE_SRCS_DIR 
-		"
-		${INTERFACE_DIR}/${INTERFACE_SRC_DIR} 
-		${INTERFACE_DIR}/${INTERFACE_HEADER_DIR} 
-		${STRATEGY_DIR}/${STRATEGY_SRC_DIR} 
-		${STRATEGY_DIR}/${STRATEGY_HEADER_DIR}
-		")#laisser un espace après chaque fichier
+	set(CMAKE_SRCS_DIR "${INTERFACE_DIR}/include/ ${INTERFACE_DIR}/src/ ${STRATEGY_DIR}/src/ ${STRATEGY_DIR}/include ")
 	set(CMAKE_PROJECT_EXT "*.h *.c")
 	set(CMAKE_PROJECT_NAME ${PROJECT_NAME})
 	configure_file(
@@ -63,38 +57,24 @@ configure_file(
 	"${INTERFACE_DIR}/include/config.h"
 )
 
-
-#file(
-	#COPY
-	#${STRATEGY_DIR}/${STRATEGY_SRC_DIR}libstrategy.so
-	#DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
-#)
-
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2 -DNDEBUG")
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
+set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.so)
 
-set(PROJECT_LIBS ${PROJECT_LIBS} interface)
+add_subdirectory("${INTERFACE_DIR}/src/")
+set(PROJECT_LIBS ${PROJECT_LIBS} sources)
 
 include_directories(${SDL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
 
-link_libraries (
-	SDL2
-	${SDL_LIBRARY}
-	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
-	SDLmain # Sadly not included in SDL_LIBRARY variable
-	dl
-)
+link_libraries( SDL2 ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} SDLmain dl )
 #Compilation de l'executable
 add_executable(${PROJECT_NAME} "${INTERFACE_DIR}/main.c")
-#target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
-#add_subdirectory(${INTERFACE_DIR})
+target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
 
 #compilation de la lib
 add_subdirectory(${STRATEGY_DIR})
-#add_library(${STRATEGY_NAME} SHARED ${STRATEGY_SRC})
-#SET_TARGET_PROPERTIES(${STRATEGY_NAME} PROPERTIES LINKER_LANGUAGE C)

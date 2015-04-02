@@ -5,23 +5,25 @@
 
 void init_func(void* handle, Functions* func, err_func err)
 {
-	// TODO : faire le test si les fonctions ont bien été chargé
+	//A cause de problème de conversion void* <-> pointeur de fonction,
+	//les appels à dlsym causent des warnings (avec l'option -pedantic).
+	//Ils sont dues à un défaut de conception de dlsym
 	func->initLibrary = (pfInitLibrary)dlsym(handle, "InitLibrary");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->startMatch  = (pfStartMatch)dlsym(handle, "StartMatch");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->startGame   = (pfStartGame)dlsym(handle, "StartGame");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->endGame	  = (pfEndGame)dlsym(handle, "EndGame");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->endMatch 	  = (pfEndMatch)dlsym(handle, "EndMatch");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->doubleStack = (pfDoubleStack)dlsym(handle, "DoubleStack");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->takeDouble  = (pfTakeDouble)dlsym(handle, "TakeDouble");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 	func->playTurn    = (pfPlayTurn)dlsym(handle, "PlayTurn");
-	test(!dlerror(), err);
+	test(dlerror(), err);
 }
 
 void init_lib(const char* lib_path, void** handle, Functions* func, err_func err)
@@ -50,12 +52,24 @@ void init_state(SGameState* state)
 		}
 		else if(i==1 || i==24)
 		{
-			//TODO : finie
 			state->board[i].nbDames = 2;
 			if(i==1) state->board[i].owner = WHITE;
 			else 	 state->board[i].owner = BLACK;
 		}
-		state->board[i].owner = NOBODY;
-		state->board[i].nbDames = 0;
+		else
+		{
+			state->board[i].owner = NOBODY;
+			state->board[i].nbDames = 0;
+		}
 	}
+	for(unsigned int i=0; i<2; ++i)
+	{
+		state->bar[i] = 0;
+		state->out[i] = 0;
+	}
+	state->stake = 1;
+	state->turn = 0;
+	state->whiteScore = 0;
+	state->blackScore = 0;
 }
+

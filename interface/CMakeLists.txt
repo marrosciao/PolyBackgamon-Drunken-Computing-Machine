@@ -36,13 +36,7 @@ set(INTERFACE_LIBS ${PROJECT_LIBS} sources)
 include_directories(${SDL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
 
-link_libraries (
-	SDL2
-	${SDL_LIBRARY}
-	${SDLIMAGE_LIBRARY} # if using SDL_image, obviously
-	SDLmain # Sadly not included in SDL_LIBRARY variable
-	dl
-)
+link_libraries( SDL2 ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} SDLmain dl )
 
 add_executable(${PROJECT_NAME} "main.c")
 target_link_libraries(${PROJECT_NAME} ${INTERFACE_LIBS})
