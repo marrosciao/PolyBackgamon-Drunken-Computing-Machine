@@ -16,9 +16,9 @@ void init_func(void* handle, Functions* func, err_func err)
     test(!dlerror() && func->startMatch, err);
     func->startGame   = (pfStartGame)dlsym(handle, "StartGame");
     test(!dlerror() && func->startGame, err);
-    func->endGame      = (pfEndGame)dlsym(handle, "EndGame");
+    func->endGame     = (pfEndGame)dlsym(handle, "EndGame");
     test(!dlerror() && func->endGame, err);
-    func->endMatch       = (pfEndMatch)dlsym(handle, "EndMatch");
+    func->endMatch    = (pfEndMatch)dlsym(handle, "EndMatch");
     test(!dlerror() && func->endMatch, err);
     func->doubleStack = (pfDoubleStack)dlsym(handle, "DoubleStack");
     test(!dlerror() && func->doubleStack, err);
@@ -30,11 +30,13 @@ void init_func(void* handle, Functions* func, err_func err)
 
 void init_lib(const char* lib_path, void** handle, Functions* func, err_func err)
 {
-    printf("path : %s\n", lib_path);
     *handle = dlopen(lib_path, RTLD_NOW);
-    test(*handle == NULL, err);
+    test(*handle != NULL, err);
     dlerror();
-    init_func(*handle, func, err);
+    func->initLibrary = (pfInitLibrary)dlsym(*handle, "InitLibrary");
+    const char* error = dlerror();
+    if(error) printf("%s\n", error);
+    /*init_func(*handle, func, err);*/
     assert(func->initLibrary);
 }
 

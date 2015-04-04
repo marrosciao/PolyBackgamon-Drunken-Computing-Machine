@@ -12,7 +12,8 @@
 #include"init.h"
 #include"game.h"
 
-#define enum_to_string(val) #val
+#define STRINGIFY_HELPER( str ) #str
+#define STRINGIFY( str ) STRINGIFY_HELPER( str )
 
 //TODO : faire les test et merge la branche
 //TODO : appliquer clang-format
@@ -37,29 +38,19 @@ Player choose_start_player()
 }
 
 int main(){
+    const char* enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     IA players[2];
-    /*void* handle = dlopen("strategy/libstrategy.so", RTLD_NOW);*/
-    /*printf("%s\n", dlerror());*/
-    /*fflush(stdout);*/
-    /*pfInitLibrary fn = (pfInitLibrary)dlsym(handle, "InitLibrary");*/
-    /*printf("%s\n", dlerror());*/
-    /*fflush(stdout);*/
-    /*char name[50];*/
-    /*fn(name);*/
-    /*printf("%s\n", name);*/
 	//TODO : faire la gestion des paramêtres en ligne de commande
 	// --- Initialisation des bibliothèques {{{
     for(unsigned int i=0; i<2; ++i)
     {
-        players[i].lib_handle = NULL;
-        players[i].lib_path = calloc(strlen("../strategy/libstrategy.so")+1, sizeof(char));
-        sprintf( (players[i].lib_path) , "../strategy/libstrategy.so");
+        players[i].lib_path = calloc(strlen(LIB_PATH) + strlen("/strategy/libstrategy.so")+1, sizeof(char));
+        sprintf( players[i].lib_path , "%s/strategy/libstrategy.so", LIB_PATH);
         players[i].func = malloc( sizeof(Functions) );
-        init_lib( (players[i].lib_path) , &(players[i].lib_handle), players[i].func, err);
-        //players[i].func.initLibrary( (players[i].name) );
-        printf("%p\n", players[i].func->endMatch);
-        players[i].func->endMatch();
-        printf("%s I.A. : %s\n", enum_to_string(i),players[i].name );
+        players[i].lib_handle = NULL;
+        init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
+        players[i].func->initLibrary( (players[i].name) );
+        printf("%s I.A. : %s\n", enumToStr[i+1],players[i].name );
     }
 	// }}}
     /*
