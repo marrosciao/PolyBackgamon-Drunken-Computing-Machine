@@ -1,10 +1,14 @@
-#include "backgammon.h"
+#pragma once
+
 #include <stdlib.h>
 // size_t
 
 #include <stdbool.h>
 #include <assert.h>
 #include <limits.h>
+
+#include "backgammon.h"
+#include "arraylist.h"
 
 typedef struct AIListPossibilities AIListPossibilities ;
 typedef struct AIListMoves AIListMoves ;
