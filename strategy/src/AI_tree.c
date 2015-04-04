@@ -1,32 +1,12 @@
 #include "AI_tree.h"
+#include "possibilities.h"
 
-struct AIListPossibilities
-{    
-    AIListMoves* liste_mouvements;
-    //! tableau des listes de mouvements
-    // Pour aller à la position liste_noeuds[i], il faut faire les mouvements liste_mouvements[i]
-
-    size_t taille ;
-    //! taille du tableau des possibilites
-};
-
-
-// structure qui stocke une liste de mouvements faits en 1 tour
-struct AIListMoves 
+void genererDes(char des[2][2])
 {
-    SMove mouvement[4] ;
-    // tableau des mouvements, jusqu'à 4 possibles
-    
-    int nombre_mouvements ;
-    // nombre de mouvements viables dans cette structure ( entre 0 et 4)
-};
-
-void genererDes(char des[21][2])
-{
-    int i = 0 ;
-    for (int x = 1 ; x <= 6 ; x++)
+    size_t i = 0 ;
+    for (size_t x = 1 ; x <= 6 ; x++)
     {
-        for (int y = x ; y <= x ;y++)
+        for (size_t y = x ; y <= x ;y++)
         {
             des[++i][0] = x ;
             des[i][0] = y ;
@@ -45,15 +25,15 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     des[0] = 2 ; des[0] = 3 ;
     // des test pour l'instant
     
-    AIListPossibilities liste_possibilites 
-    = retrieveEveryPossibility(etat_jeu,joueur_calcule,des) ;
+    ArrayList *liste_possibilites = retrieveEveryPossibility(etat_jeu,joueur_calcule,des);
     if (joueur_calcule == AI_player)
     {
         long v = LONG_MIN ; // equivaut à moins l'infini
-        for (int i = 0 ; i < liste_possibilites.taille ; i++)
+        for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
         {
-            
-            long alpha_calcul = alphabeta( gameStateFromMovement(etat_jeu, liste_possibilites.liste_mouvements[i]) 
+            AIListMoves moves;
+            list_get(liste_possibilites, i, &moves);
+            long alpha_calcul = alphabeta( gameStateFromMovement(etat_jeu, moves)
                                     ,profondeur - 1 
                                     ,alpha
                                     ,beta
@@ -72,9 +52,11 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     else
     {
         long v = LONG_MAX ; // equivaut à plus l'infini
-        for (int i = 0 ; i < liste_possibilites.taille ; i++)
+        for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
         {
-            long alpha_calcul = alphabeta( gameStateFromMovement(etat_jeu, liste_possibilites.liste_mouvements[i]) 
+            AIListMoves moves;
+            list_get(liste_possibilites, i, &moves);
+            long alpha_calcul = alphabeta( gameStateFromMovement(etat_jeu, moves)
                                     ,profondeur - 1 
                                     ,alpha
                                     ,beta
@@ -92,41 +74,26 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     }
 }
 
-AIListMoves getBestMoves(SGameState etat_jeu, Player player)
+ArrayList *getBestMoves(SGameState etat_jeu, Player player)
 {
-
-    AIListMoves moves ;
-    moves.nombre_mouvements = 0 ;
-    
-    return moves ;
+    return list_new();
 }
 
 int getValueFromGameState(SGameState etat_jeu, Player player)
 {
     // pour une valeur de jeu donnée, renvoie un entier;
     // plus l'entier est grand, plus le joueur est en bonne position
-    
     return 0 ;
 }
 
 SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements)
 {
     // a partir d'un etat de jeu et de mouvements définis, renvoie un autre etat de jeux.
+    // TODO: FIXME !!!
+    return (SGameState) {};
 }
 
-AIListPossibilities retrieveEveryPossibility(SGameState game, Player player, const unsigned char dices[2] )
+bool isGameFinished(SGameState etat_jeu)
 {
-    // renvoie une liste de toutes les possibilités à partir d'un GameState et de dés donnés
-    
-    AIListPossibilities liste_possibilites ;
-    liste_possibilites.taille = 0 ;
-    
-    // renvoie une liste vide pour l'instant (pour les tests)
-    return liste_possibilites ;
-}
-
-int isGameFinished( const SGameState etat_jeu)
-{
-    
     return false ;
 }
