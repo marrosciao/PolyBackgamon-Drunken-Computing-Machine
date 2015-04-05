@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdbool.h>
 
 #include "backgammon.h"
 
@@ -22,3 +23,5 @@ bool list_get(ArrayList *list, size_t i, TypeContent *item);
 bool list_set(ArrayList *list, size_t i, TypeContent item);
 bool list_splice(ArrayList *list, size_t i, size_t len);
 size_t list_size(ArrayList *list);
+
+void list_foreach(ArrayList *list, TypeContent fn(TypeContent));
