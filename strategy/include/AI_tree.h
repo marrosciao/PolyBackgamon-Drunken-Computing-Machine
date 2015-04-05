@@ -17,8 +17,8 @@ int ai_player ;
 
 
 int getValueFromGameState(SGameState etat_jeu, Player player);
-void genererDes(char des[21][2]);
-long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves);
+void genererDes(unsigned char des[21][2]);
+long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves,const unsigned char des[2]);
 AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char dices[2]);
 SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements, Player player);
 ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsigned char dices[2] );

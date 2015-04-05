@@ -1,6 +1,33 @@
 #include "AI_tree.h"
+#include <math.h>
 
-void genererDes(char des[21][2])
+long moyenne(long alpha_valeurs[21])
+{
+	long alpha = 0;
+
+	// MOYENNE
+	
+	for (int i = 0 ; i < 21 ; i++)
+	{
+		alpha += alpha_valeurs[i] ;
+	}
+
+	alpha = alpha / 21 ;
+
+	// DISTANCE D'EUCLIDE
+
+	/*
+	for (int i = 0 ; i < 21 ; i++)
+	{
+		alpha += alpha_valeurs[i] * alpha_valeurs[i] ;
+	}
+	alpha = (long) sqrt(alpha);
+	*/
+
+	return alpha;
+}
+
+void genererDes(unsigned char des[21][2])
 {
     size_t i = 0 ;
     for (size_t x = 1 ; x <= 6 ; x++)
@@ -15,14 +42,14 @@ void genererDes(char des[21][2])
      
 }
 
-long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves ) 
+long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2]) 
 {
     if (profondeur == 0 || isGameFinished(etat_jeu))
         return getValueFromGameState(etat_jeu, AI_player) ;
     
-    unsigned char des[2] ;
-    des[0] = 2 ; des[0] = 3 ;
-    // des test pour l'instant
+    unsigned char toutes_combinaisons_des[21][2] ;
+	genererDes(toutes_combinaisons_des);
+    // on genere toutes les combinaisons de des possibles pour la suite
     
     ArrayList *liste_possibilites = retrieveEveryPossibility(etat_jeu,joueur_calcule,des);
     if (joueur_calcule == AI_player)
@@ -32,13 +59,20 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
         {
             AIListMoves temp_moves;
             list_get(liste_possibilites, i, &temp_moves);
-            long alpha_calcul = alphabeta( gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                                    ,profondeur - 1 
-                                    ,alpha
-                                    ,beta
-                                    ,(joueur_calcule == BLACK)?WHITE:BLACK
-                                    ,AI_player
-									,moves);
+            long alpha_valeurs[21] ;
+			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
+			{
+				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
+											,profondeur - 1 
+											,alpha
+											,beta
+											,(joueur_calcule == BLACK)?WHITE:BLACK
+											,AI_player
+											,moves
+											,toutes_combinaisons_des[combinaison_de]);
+			}
+			long alpha_calcul = moyenne(alpha_valeurs);
+
             if (v < alpha_calcul)
 			{
 				*moves = temp_moves ;
@@ -59,13 +93,19 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
         {
             AIListMoves temp_moves;
             list_get(liste_possibilites, i, &temp_moves);
-            long alpha_calcul = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
+			long alpha_valeurs[21] ;
+			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
+			{
+				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
 											,profondeur - 1 
 											,alpha
 											,beta
 											,(joueur_calcule == BLACK)?WHITE:BLACK
 											,AI_player
-											,moves);
+											,moves
+											,toutes_combinaisons_des[combinaison_de]);
+			}
+			long alpha_calcul = moyenne(alpha_valeurs);
             if (v > alpha_calcul)
 			{
 				*moves = temp_moves ;
@@ -112,8 +152,8 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 				LONG_MAX, // plus l'infini version machine
 				player, // quel joueur nous sommes
 				player, // quel joueur nous simulons le tour de jeu (au debut, nous, apr_s, l'adversaire)
-				&moves);// il faut bien recuperer les mouvements qu'on a fait au final, c'est en envoyant ce pointeur qu'on le fait
-
+				&moves,// il faut bien recuperer les mouvements qu'on a fait au final, c'est en envoyant ce pointeur qu'on le fait
+				dices);// dés à disposition
 	// 
     return moves ;
 }
@@ -152,7 +192,7 @@ int getValueFromGameState(SGameState etat_jeu, Player player)
 		}
 		else if (current_square.owner == BLACK)
 		{
-			heuristic_value -= current_square.nbDames * (INPLAY_VALUE_BASE + ((25-i) * INPLAY_VALUE_DELTA));
+			heuristic_value -= current_square.nbDames * (INPLAY_VALUE_BASE + ((24-i) * INPLAY_VALUE_DELTA));
 		}
 	}
 
