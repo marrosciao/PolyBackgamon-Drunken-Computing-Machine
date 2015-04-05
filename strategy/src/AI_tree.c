@@ -1,6 +1,4 @@
 #include "AI_tree.h"
-#include "possibilities.h"
-#include <assert.h>
 
 void genererDes(char des[21][2])
 {
@@ -84,7 +82,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 }
 
 // objectif : a partir d'un GameState, trouver le meilleur set de mouvement
-AIListMoves getBestMoves(SGameState etat_jeu, Player player)
+AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char dices[2])
 {
 	/*
 	solution : algorithme alpha beta
@@ -119,6 +117,8 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player)
 	// 
     return moves ;
 }
+
+
 
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
