@@ -1,15 +1,15 @@
 #include "AI_tree.h"
 #include "possibilities.h"
 
-void genererDes(char des[2][2])
+void genererDes(char des[21][2])
 {
     size_t i = 0 ;
     for (size_t x = 1 ; x <= 6 ; x++)
     {
         for (size_t y = x ; y <= x ;y++)
         {
-            des[++i][0] = x ;
-            des[i][0] = y ;
+            des[i][0] = x ;
+            des[i++][1] = y ;
         } 
     }
     // renvoie toutes les combinaisosn de des possibles
