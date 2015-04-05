@@ -4,7 +4,7 @@
 
 #include "arraylist.h"
 
-#define LIST_MIN_SIZE 10
+const size_t list_min_size = 10;
 
 struct ArrayList {
     TypeContent *array;
@@ -93,7 +93,7 @@ size_t list_size(ArrayList *list) {
 }
 
 void list_resize(ArrayList *list) {
-    list->len_array = max(2 * list->len_content, LIST_MIN_SIZE);
+    list->len_array = max(2 * list->len_content, list_min_size);
     list->array = realloc(list->array, list->len_array * sizeof (*list->array));
 }
 
