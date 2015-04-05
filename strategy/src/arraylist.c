@@ -13,18 +13,13 @@ struct ArrayList {
 };
 
 void list_resize(ArrayList *list);
-size_t min(size_t a, size_t b);
+size_t max(size_t a, size_t b);
 
 ArrayList *list_new() {
-    ArrayList *list = malloc(sizeof *list);
+    ArrayList *list = calloc(1, sizeof *list);
     assert(list);
 
-    *list = (ArrayList) {
-        .array = malloc(10 * sizeof (*list)),
-        .len_content = 0,
-        .len_array = LIST_MIN_SIZE,
-    };
-    assert(list->array);
+    list_resize(list);
 
     return list;
 }
@@ -79,6 +74,7 @@ bool list_push(ArrayList *list, TypeContent item) {
 
 bool list_splice(ArrayList *list, size_t i, size_t len) {
     if ((i + 1)       > list->len_content ||
+
         (i + 1) + len > list->len_content) {
         return false;
     }
@@ -96,12 +92,12 @@ size_t list_size(ArrayList *list) {
 }
 
 void list_resize(ArrayList *list) {
-    list->len_array = min(2 * list->len_content, LIST_MIN_SIZE);
+    list->len_array = max(2 * list->len_content, LIST_MIN_SIZE);
     list->array = realloc(list->array, list->len_array * sizeof (*list->array));
 }
 
-size_t min(size_t a, size_t b) {
-    return a <= b ? a : b;
+size_t max(size_t a, size_t b) {
+    return a >= b ? a : b;
 }
 
 void list_foreach(ArrayList *list, TypeContent fn(TypeContent)) {
