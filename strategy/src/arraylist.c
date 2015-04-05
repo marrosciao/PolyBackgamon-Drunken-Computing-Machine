@@ -73,8 +73,9 @@ bool list_push(ArrayList *list, TypeContent item) {
 }
 
 bool list_splice(ArrayList *list, size_t i, size_t len) {
+    // Plusieurs vérifications pour gérer les overflow.
     if ((i + 1)       > list->len_content ||
-
+        len           > list->len_content ||
         (i + 1) + len > list->len_content) {
         return false;
     }
