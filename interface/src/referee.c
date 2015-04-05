@@ -24,7 +24,7 @@ int check_move(const SMove move,
 	{
 		//TODO : 0 -> zone out
 		//TODO : 25 -> zone de fin
-		const bool has_out         = state->out[player]>0;
+		const bool has_out         = state->bar[player]>0;
 		const bool authorized_move = dices[i]==delta_move;
 		const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
 		const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
@@ -78,23 +78,23 @@ void move(SGameState * const state, SMove const movement, const Player player)
 
 void move_from_out(SGameState * const state, SMove const movement, const Player player)
 {
-	state->out[player]--;
-	put_on(state->board, state->out, movement.dest_point, player);
+	state->bar[player]--;
+	put_on(state->board, state->bar, movement.dest_point, player);
 }
 
 void move_to_end(SGameState * const state, SMove const movement, const Player player)
 {
 	take_from(state->board, movement.src_point);
-	state->bar[player]++;
+	state->out[player]++;
 }
 
 void move_in_board(SGameState * const state, SMove const movement, const Player player)
 {
 	take_from(state->board, movement.src_point);
-	put_on(state->board, state->out, movement.dest_point, player);
+	put_on(state->board, state->bar, movement.dest_point, player);
 }
 
-void put_on(Square board[24], uint out[2], cuint dest, const Player p)
+void put_on(Square board[24], uint bar[2], cuint dest, const Player p)
 {
 
 	if(
@@ -103,7 +103,7 @@ void put_on(Square board[24], uint out[2], cuint dest, const Player p)
 	  ){
 		board[dest-1].owner = p;
 		board[dest-1].nbDames = 0;
-		out[1-p]++;
+		bar[1-p]++;
 	}
 	board[dest-1].nbDames++;
 }
