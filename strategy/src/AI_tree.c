@@ -21,7 +21,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     if (profondeur == 0 || isGameFinished(etat_jeu))
         return getValueFromGameState(etat_jeu, AI_player) ;
     
-    char des[2] ;
+    unsigned char des[2] ;
     des[0] = 2 ; des[0] = 3 ;
     // des test pour l'instant
     
@@ -81,9 +81,39 @@ ArrayList *getBestMoves(SGameState etat_jeu, Player player)
 
 int getValueFromGameState(SGameState etat_jeu, Player player)
 {
+
+	const int BAR_VALUE = -5 ;
+	const int OUT_VALUE = 35 ;
+	const int INPLAY_VALUE_BASE = 0 ;
+	const int INPLAY_VALUE_DELTA = 1 ;
+
+	int heuristic_value = 0 ;
+	// calcul de la valeur heuristique en partant du principe qu'on est le joueur WHITE
+	// (on multipliera par -1 si on est en réalité le joueur BLACK) 
+
+	heuristic_value += etat_jeu.bar[WHITE]* BAR_VALUE;	
+	heuristic_value -= etat_jeu.bar[BLACK]* BAR_VALUE;
+	// prise en compte des pions sur la barre verticale
+
+	heuristic_value += etat_jeu.out[WHITE]* OUT_VALUE;	
+	heuristic_value -= etat_jeu.out[BLACK]* OUT_VALUE;
+	// prise en compte des pions sortis du jeu
+
+	for (int i = 0 ; i < 24 ; i++)
+	{
+		Square current_square = etat_jeu.board[i] ;
+		if (current_square.owner == WHITE)
+		{
+			heuristic_value += current_square.nbDames * (INPLAY_VALUE_BASE + ((i+1) * INPLAY_VALUE_DELTA));	
+		}
+		else if (current_square.owner == BLACK)
+		{
+			heuristic_value -= current_square.nbDames * (INPLAY_VALUE_BASE + ((i+1) * INPLAY_VALUE_DELTA));
+		}
+	}
     // pour une valeur de jeu donnée, renvoie un entier;
     // plus l'entier est grand, plus le joueur est en bonne position
-    return 0 ;
+    return heuristic_value ;
 }
 
 SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements)
