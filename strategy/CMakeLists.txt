@@ -5,7 +5,7 @@ project(strategy)
 ## Set the compile option
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g -fsanitize=address")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2 -DNDEBUG")
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 
@@ -22,7 +22,6 @@ include_directories(${HEADER_DIR})
 # Compilation des sources
 file(GLOB SRC "src/*.c" *.c)
 # add_library(nom_biblio SHARED sources ...) -> construit une bibliothèque dynamique
-message("sources : ${SRC}")
 add_library(${PROJECT_NAME} SHARED ${SRC})
 # Il faut indiquer le langage pour le linker si on fait un bibliothèque dynamique
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)

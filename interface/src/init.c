@@ -33,10 +33,7 @@ void init_lib(const char* lib_path, void** handle, Functions* func, err_func err
     *handle = dlopen(lib_path, RTLD_NOW);
     test(*handle != NULL, err);
     dlerror();
-    func->initLibrary = (pfInitLibrary)dlsym(*handle, "InitLibrary");
-    const char* error = dlerror();
-    if(error) printf("%s\n", error);
-    /*init_func(*handle, func, err);*/
+    init_func(*handle, func, err);
     assert(func->initLibrary);
 }
 
@@ -48,19 +45,19 @@ void init_state(SGameState* state)
         {
             state->board[i].nbDames = 5;
             if(i==12 || 19)         state->board[i].owner = WHITE;
-            else if(i==13 || i==6)     state->board[i].owner = BLACK;
+            else if(i==13 || i==6)  state->board[i].owner = BLACK;
         }
         else if(i==8 || i==17)
         {
             state->board[i].nbDames = 3;
             if(i==8) state->board[i].owner = BLACK;
-            else      state->board[i].owner = WHITE;
+            else     state->board[i].owner = WHITE;
         }
         else if(i==1 || i==24)
         {
             state->board[i].nbDames = 2;
             if(i==1) state->board[i].owner = WHITE;
-            else      state->board[i].owner = BLACK;
+            else     state->board[i].owner = BLACK;
         }
         else
         {

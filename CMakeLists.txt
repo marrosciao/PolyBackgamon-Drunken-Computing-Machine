@@ -53,12 +53,12 @@ if(DOXYGEN_FOUND)
 	)
 
 	# Ajout de la regle doc pour générer la doc
-    add_custom_target(doc 
-        ALL 
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-    )
+    #add_custom_target(doc 
+        #ALL 
+        #${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        #WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        #COMMENT "Generating API documentation with Doxygen" VERBATIM
+    #)
 endif(DOXYGEN_FOUND)
 
 # Création d'un fichier de config contenant des variables utiles
