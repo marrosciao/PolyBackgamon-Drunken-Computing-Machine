@@ -18,7 +18,7 @@ void roll_dice(unsigned char dice[2]){
 }
 
 SGameState* copy_state(SGameState state){
-    SGameState *copy = malloc(sizeof *copy);
+    SGameState *copy = (SGameState*)malloc(sizeof *copy);
     *copy = state;
     return copy;
 }
@@ -30,7 +30,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     printf("\t\trésultat des dés : %d, %d\n", dices[0], dices[1]);
     SGameState* state_copy = copy_state(*state);
     bool end_of_round = false;
-    *winner = NOBODY;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( *lastStaker!=current && player[current].func->doubleStack(state_copy) )
     {
@@ -39,13 +38,13 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
         {
             printf("\t\t %s ne suit pas\n", enumToStr[(1-current)+1]);
             end_of_round = true;
-            *winner = current;
+            *winner      = current;
         }
         else
         {
             printf("\t\t %s suit\n", enumToStr[(1-current)+1]);
             state->stake *= 2;
-            *lastStaker = current;
+            *lastStaker   = current;
         }
     }
     if( !end_of_round )
@@ -58,7 +57,10 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                 player[current].tries
         );
         for(unsigned int i=0; i<player[current].nb_moves; ++i){
-            printf("%s : %d -> %d\n", enumToStr[current+1], player[current].moves[i].src_point, player[current].moves[i].dest_point);
+            printf("%s : %d -> %d\n",
+                    enumToStr[current+1],
+                    player[current].moves[i].src_point,
+                    player[current].moves[i].dest_point);
         }
         player[current].tries -= move_all(
                 state,

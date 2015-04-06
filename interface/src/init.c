@@ -11,21 +11,21 @@ void init_func(void* handle, Functions* func, err_func err)
     //les appels à dlsym causent des warnings (avec l'option -pedantic).
     //Ils sont dues à un défaut de conception de dlsym
     func->initLibrary = (pfInitLibrary)dlsym(handle, "InitLibrary");
-    test(!dlerror() && func->initLibrary, err);
+    test(!dlerror()   && func->initLibrary, err);
     func->startMatch  = (pfStartMatch)dlsym(handle, "StartMatch");
-    test(!dlerror() && func->startMatch, err);
+    test(!dlerror()   && func->startMatch, err);
     func->startGame   = (pfStartGame)dlsym(handle, "StartGame");
-    test(!dlerror() && func->startGame, err);
+    test(!dlerror()   && func->startGame, err);
     func->endGame     = (pfEndGame)dlsym(handle, "EndGame");
-    test(!dlerror() && func->endGame, err);
+    test(!dlerror()   && func->endGame, err);
     func->endMatch    = (pfEndMatch)dlsym(handle, "EndMatch");
-    test(!dlerror() && func->endMatch, err);
+    test(!dlerror()   && func->endMatch, err);
     func->doubleStack = (pfDoubleStack)dlsym(handle, "DoubleStack");
-    test(!dlerror() && func->doubleStack, err);
+    test(!dlerror()   && func->doubleStack, err);
     func->takeDouble  = (pfTakeDouble)dlsym(handle, "TakeDouble");
-    test(!dlerror() && func->takeDouble, err);
+    test(!dlerror()   && func->takeDouble, err);
     func->playTurn    = (pfPlayTurn)dlsym(handle, "PlayTurn");
-    test(!dlerror() && func->playTurn, err);
+    test(!dlerror()   && func->playTurn, err);
 }
 
 void init_lib(const char* lib_path, void** handle, Functions* func, err_func err)
@@ -34,7 +34,6 @@ void init_lib(const char* lib_path, void** handle, Functions* func, err_func err
     test(*handle != NULL, err);
     dlerror();
     init_func(*handle, func, err);
-    assert(func->initLibrary);
 }
 
 void init_state(SGameState* state)
@@ -70,8 +69,8 @@ void init_state(SGameState* state)
         state->bar[i] = 0;
         state->out[i] = 0;
     }
-    state->stake = 1;
-    state->turn = 0;
+    state->stake      = 1;
+    state->turn       = 0;
     state->whiteScore = 0;
     state->blackScore = 0;
 }

@@ -22,6 +22,7 @@
 //TODO : appliquer clang-format
 //TODO : refactoring pour que ça soit plus propre
 //TODO : gestion erreur
+//TODO : faire la gestion des paramêtres en ligne de commande
 //TODO : faire le test si on utilise le max des dés
 
 void err(String str){
@@ -47,7 +48,6 @@ int main(){
     //init_logger();
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     IA players[2];
-    //TODO : faire la gestion des paramêtres en ligne de commande
     // --- Initialisation des bibliothèques 
     for(unsigned int i=0; i<2; ++i)
     {
@@ -80,20 +80,21 @@ int main(){
         printf("Début de la manche %d\n", turn_num);
         Player current = choose_start_player(0);
         printf("\t%s commence\n", enumToStr[current+1]);
-        for(unsigned int i=0; i<2; ++i){
-            players[i].func->startGame((Player)i);
+        for(unsigned int i=0; i<2; ++i)
+        {
+            players[i].func->startGame( (Player)i );
             players[i].tries = 3;
         }
-        bool end_of_round = false;
-        state.stake = 1;
-        Player winner = NOBODY;
-        Player lastStaker = NOBODY;
-        unsigned int round_num = 1;
+        bool end_of_round      = false;
+        state.stake            = 1;
+        Player winner          = NOBODY;
+        Player lastStaker      = NOBODY;
+        state.turn             = 1;
         while(!end_of_round)
         {
-            printf("\tDébut du tour %d\n\t\tJoueur : %s\n", round_num, enumToStr[current+1]);
+            printf("\tDébut du tour %d\n\t\tJoueur : %s\n", state.turn, enumToStr[current+1]);
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner);
-            printf("\tfin du tour %d\n", round_num);
+            printf("\tfin du tour %d\n", state.turn);
             current = (Player)(1-current);
         }
         for(unsigned int i=0; i<2; ++i) players[i].func->endGame();
@@ -107,8 +108,8 @@ int main(){
             state.blackScore+=state.stake;
             finished = state.blackScore==maxScore;
         }
-        printf("fin de la manche %d\n", turn_num);
         printf("gagnant : %s\n", enumToStr[winner+1]);
+        printf("fin de la manche %d\n", turn_num);
         ++turn_num;
     }
     for(unsigned int i=0; i<2; ++i) players[i].func->endMatch();
