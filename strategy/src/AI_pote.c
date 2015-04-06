@@ -2,6 +2,8 @@
 #include <string.h>
 
 #include "backgammon.h"
+#include "AI_tree.h"
+
 
 void InitLibrary(char name[50])
 {
@@ -9,44 +11,53 @@ void InitLibrary(char name[50])
     strcpy(name,"La meilleure IA des meilleurs potes");
 
     // Code d'initialisation ici.
+
+	// Sauf qu'on a pas d'intialisation à faire vu notre algorithme
+	// Tout va bien
 }
 
 void StartMatch(const unsigned int target_score)
 {
-    // TODO : pitetre stocker target_score dans une var globale ?
+    // Non utilisé
 }
 
 void StartGame(Player p)
 {
-
+	// ai_player est une var globale !
+	ai_player = p ;
 }
 
 void EndGame()
 {
-
+	// Pas de var globale, non utilisé	
 }
 
 void EndMatch()
 {
-
+	// Pas de var globale, non utilisé
 }
 
 int DoubleStack(const SGameState * const gameState)
 {
-    // on ne double jamais la mise en debut de tour
-    return false ;
+    const int value_to_double_stake = 60 ;
+    return getValueFromGameState(*gameState,ai_player) >= value_to_double_stake;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
-    // on accepte toujours le videau
-    return true ;
+    const int value_to_surrender_stake = -100 ;
+    return getValueFromGameState(*gameState,ai_player) > value_to_surrender_stake;
 }
 
 void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
 {
-    // TODO : prog l'IA
+	AIListMoves tmp_moves = getBestMoves(*gameState,ai_player,dices);
 
-    // pour l'instant elle ne fait aucun mouvement jusqu'à ce qu'elle perde
-    *nbMove = 0 ;
+	moves[0] = tmp_moves.mouvement[0] ;
+	moves[1] = tmp_moves.mouvement[1] ;
+	moves[2] = tmp_moves.mouvement[2] ;
+	moves[3] = tmp_moves.mouvement[3] ;
+	// la flemme d'utiliser memcpy pour 4 lignes
+
+    *nbMove = tmp_moves.nombre_mouvements ;
 }
