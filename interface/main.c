@@ -22,6 +22,7 @@
 //TODO : appliquer clang-format
 //TODO : refactoring pour que ça soit plus propre
 //TODO : gestion erreur
+//TODO : faire le test si on utilise le max des dés
 
 void err(String str){
     fprintf(stderr, "%s -> %s\n",str, dlerror());

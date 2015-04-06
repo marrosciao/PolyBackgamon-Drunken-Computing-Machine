@@ -4,6 +4,7 @@
 
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : refactoring ?
+//TODO : verif de l'utilisation max des dés
 int check_move(const SMove move,
 		Dice dices[],
 		cuint nb_dices,

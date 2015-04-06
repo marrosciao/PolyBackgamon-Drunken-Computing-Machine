@@ -34,6 +34,7 @@ configure_file(
 
 # Ajout du répertoire contenant les headers
 include_directories(${HEADER_DIR})
+include_directories("../strategy/include")
 
 # Ajout de la compilation des sources
 add_subdirectory(${SRC_DIR})

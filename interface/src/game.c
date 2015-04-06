@@ -20,9 +20,9 @@ void roll_dice(unsigned char dice[2]){
 
 void copy_state(SGameState state, SGameState* copy){
     copy = (SGameState*)malloc(sizeof(SGameState));
-    memcpy((void*)state.board, (void*)copy->board, 24);
-    memcpy((void*)state.out,   (void*)copy->out,   2);
-    memcpy((void*)state.bar,   (void*)copy->bar,   2);
+    memcpy((void*)copy->board, (void*)state.board, 24);
+    memcpy((void*)copy->out,   (void*)state.out,   2);
+    memcpy((void*)copy->bar,   (void*)state.bar,   2);
     copy->whiteScore = state.whiteScore;
     copy->blackScore = state.blackScore;
     copy->turn = state.turn;
