@@ -1,10 +1,19 @@
 #include"referee.h"
 
 #include<stdbool.h>
+#include<stdio.h>
+
+#include"error.h"
+
+static void errf(String err)
+{
+    printf("error : %s\n", err);
+}
 
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : refactoring ?
 //TODO : verif de l'utilisation max des dés
+//TODO : verifier que tout les pions sont du même coté avant de pouvoir en sortir
 int check_move(const SMove move,
         Dice dices[],
         cuint nb_dices,
@@ -35,6 +44,10 @@ int check_move(const SMove move,
             !can_put_to || 
             (has_out && move.src_point!=0))
         {
+            test(authorized_move, errf);
+            test(can_take_from, errf);
+            test(can_put_to, errf);
+            test(!has_out || move.src_point==0 , errf);
             err = 1;
         }
     }

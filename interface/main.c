@@ -44,7 +44,8 @@ Player choose_start_player(unsigned int i)
     return tmp;
 }
 
-int main(){
+int main(int ARGC, const char* ARGV[])
+{
     //init_logger();
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     IA players[2];
@@ -101,12 +102,12 @@ int main(){
         if(winner==WHITE)
         {
             state.whiteScore+=state.stake;
-            finished = state.whiteScore==maxScore;
+            finished = state.whiteScore>=maxScore;
         }
         else
         {
             state.blackScore+=state.stake;
-            finished = state.blackScore==maxScore;
+            finished = state.blackScore>=maxScore;
         }
         printf("gagnant : %s\n", enumToStr[winner+1]);
         printf("fin de la manche %d\n", turn_num);
