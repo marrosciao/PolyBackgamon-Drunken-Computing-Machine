@@ -78,7 +78,7 @@ ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsign
                          player,
                          &max_nb_dices_used,
                          0,
-                         4,
+                         2,
                          dices_tmp,
                          list,
                          (AIListMoves) { .nombre_mouvements = 0 });
@@ -88,7 +88,7 @@ ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsign
                          player,
                          &max_nb_dices_used,
                          0,
-                         4,
+                         2,
                          dices_tmp,
                          list,
                          (AIListMoves) { .nombre_mouvements = 0 });
@@ -122,7 +122,7 @@ static void insert_all_dices(SGameState game,
     for (uint i = 0; nb_dices && i <= 24; i++) {
         SMove move = {
             .src_point = i,
-            .dest_point = dices[0],
+            .dest_point = i + dices[0],
         };
         if (is_valide_move(&game, player, move)) {
             AIListMoves moves_tmp = moves;
