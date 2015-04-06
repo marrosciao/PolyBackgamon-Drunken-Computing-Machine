@@ -39,16 +39,20 @@ int check_move(const SMove move,
         const bool authorized_move = dices[i]==delta_move;
         const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
         const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
+        const bool can_put_out     = check_side(state, player);
 
         if( !authorized_move ||
             !can_take_from ||
             !can_put_to || 
-            (has_out && move.src_point!=0))
+            (has_out && move.src_point!=0) ||
+            (move.dest_point==25 && !can_put_out)
+          )
         {
             test(authorized_move, errf);
             test(can_take_from, errf);
             test(can_put_to, errf);
             test(!has_out || move.src_point==0 , errf);
+            test(move.dest_point==25 && !can_put_out, errf);
             err = 1;
             printf("\n");
         }
@@ -56,6 +60,28 @@ int check_move(const SMove move,
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     printf("%s : Une erreur\n\n",enumToStr[player+1]);
     return err;
+}
+
+int check_side(SGameState const * const state, const Player player)
+{
+    int err            = false;
+    unsigned int index = 6;
+    unsigned int end   = 24;
+    if(player == WHITE)
+    {
+        index = 1;
+        end   = 19;
+    }
+    while(index<end && !err)
+    {
+        if( state->board[index].owner == player)
+        {
+            err = true;
+        }
+        ++index;
+    }
+    return err;
+    
 }
 
 //TODO : changer les paramêtres pour enlever les trucs inutiles

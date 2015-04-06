@@ -33,6 +33,8 @@ typedef unsigned int uint;
  */
 int check_move(const SMove, Dice[], cuint, const Player, SGameState * const);
 
+int check_side(SGameState const * const, const Player);
+
 /**
  * @fn int move_all(SGameState * const state, SMove const * const moves, cuint nb_moves, Dice dices[], cuint nb_dices, const Player player)
  * @brief Déplace les pions selon les mouvements (valide) passé en paramêtre
