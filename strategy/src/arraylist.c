@@ -12,8 +12,8 @@ struct ArrayList {
     size_t len_array;
 };
 
-void list_resize(ArrayList *list);
-size_t max(size_t a, size_t b);
+static void list_resize(ArrayList *list);
+static size_t max(size_t a, size_t b);
 
 ArrayList *list_new() {
     ArrayList *list = calloc(1, sizeof *list);
@@ -92,12 +92,12 @@ size_t list_size(ArrayList *list) {
     return list->len_content;
 }
 
-void list_resize(ArrayList *list) {
+static void list_resize(ArrayList *list) {
     list->len_array = max(2 * list->len_content, list_min_size);
     list->array = realloc(list->array, list->len_array * sizeof (*list->array));
 }
 
-size_t max(size_t a, size_t b) {
+static size_t max(size_t a, size_t b) {
     return a >= b ? a : b;
 }
 

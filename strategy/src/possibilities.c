@@ -6,14 +6,21 @@
 
 typedef unsigned char uc;
 
-SGameState  apply_move(SGameState, Player, SMove);
-void        insert_all_dices(SGameState game, Player player, size_t *max_nb_dice_used, size_t nb_dices_used, size_t nb_dices, const uc dices[nb_dices], ArrayList *list, AIListMoves moves);
-bool        is_move_possible(SGameState *game, Player player, uint location);
-bool        is_valide_move(SGameState *, Player, SMove);
-SGameState  reverse_game(SGameState);
-AIListMoves reverse_moves(AIListMoves);
+static SGameState  apply_move(SGameState, Player, SMove);
+static void        insert_all_dices(SGameState game,
+                                    Player player,
+                                    size_t *max_nb_dice_used,
+                                    size_t nb_dices_used,
+                                    size_t nb_dices,
+                                    const uc dices[nb_dices],
+                                    ArrayList *list,
+                                    AIListMoves moves);
+static bool        is_move_possible(SGameState *game, Player player, uint location);
+static bool        is_valide_move(SGameState *, Player, SMove);
+static SGameState  reverse_game(SGameState);
+static AIListMoves reverse_moves(AIListMoves);
 
-bool is_valide_move(SGameState *game, Player player, SMove move) {
+static bool is_valide_move(SGameState *game, Player player, SMove move) {
     uint from = move.src_point, len = move.dest_point - move.src_point;
     if (from > 25 ||
         (from + len) >= 25) {
@@ -39,7 +46,7 @@ bool is_valide_move(SGameState *game, Player player, SMove move) {
     }
 }
 
-bool is_move_possible(SGameState *game, Player player, uint location) {
+static bool is_move_possible(SGameState *game, Player player, uint location) {
     if (game->board[location].owner == player ||
         game->board[location].owner == NOBODY) {
         return true;
@@ -105,14 +112,14 @@ ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsign
     return list;
 }
 
-void insert_all_dices(SGameState game,
-                      Player player,
-                      size_t *max_nb_dice_used,
-                      size_t nb_dices_used,
-                      size_t nb_dices,
-                      const uc dices[nb_dices],
-                      ArrayList *list,
-                      AIListMoves moves) {
+static void insert_all_dices(SGameState game,
+                             Player player,
+                             size_t *max_nb_dice_used,
+                             size_t nb_dices_used,
+                             size_t nb_dices,
+                             const uc dices[nb_dices],
+                             ArrayList *list,
+                             AIListMoves moves) {
     for (uint i = 0; nb_dices && i <= 24; i++) {
         SMove move = {
             .src_point = i,
@@ -138,7 +145,7 @@ void insert_all_dices(SGameState game,
     }
 }
 
-SGameState reverse_game(SGameState game) {
+static SGameState reverse_game(SGameState game) {
     Square board[24];
 
     for (size_t i = 0; i < 24; i++) {
@@ -152,7 +159,7 @@ SGameState reverse_game(SGameState game) {
     return game;
 }
 
-AIListMoves reverse_moves(AIListMoves moves) {
+static AIListMoves reverse_moves(AIListMoves moves) {
     for (size_t i = 0; i < moves.nombre_mouvements; i++) {
         moves.mouvement[i].src_point = 25 - moves.mouvement[i].src_point;
         moves.mouvement[i].dest_point = 25 - moves.mouvement[i].dest_point;
@@ -161,7 +168,7 @@ AIListMoves reverse_moves(AIListMoves moves) {
     return moves;
 }
 
-SGameState apply_move(SGameState game, Player player, SMove move) {
+static SGameState apply_move(SGameState game, Player player, SMove move) {
     if (move.src_point == 0) {
         game.bar[player] -= 1;
         game.board[move.dest_point - 1].nbDames += 1;
