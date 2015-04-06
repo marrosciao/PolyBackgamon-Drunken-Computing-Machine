@@ -12,7 +12,7 @@
 #include "arraylist.h"
 
 // VAR GLOBALE ATTENTION NE PAS TOUCHER !!!!
-int ai_player ;
+Player ai_player ;
 //!!!!! !!!!!
 
 
