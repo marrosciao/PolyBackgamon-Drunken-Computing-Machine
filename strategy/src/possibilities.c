@@ -136,12 +136,14 @@ static void insert_all_dices(SGameState game,
                              dices + 1,
                              list,
                              moves_tmp);
-        } else if (nb_dices_used >= *max_nb_dice_used) {
-            // TODO: plein de mouvements sont en double
-            *max_nb_dice_used = nb_dices_used;
-            list_push(list, moves);
         }
     }
+
+    if (nb_dices_used >= *max_nb_dice_used) {
+        *max_nb_dice_used = nb_dices_used;
+        list_push(list, moves);
+    }
+
 }
 
 static SGameState reverse_game(SGameState game) {
