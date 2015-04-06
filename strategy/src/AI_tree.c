@@ -1,5 +1,6 @@
 #include "AI_tree.h"
 #include <math.h>
+#include <string.h>
 
 long moyenne(long alpha_valeurs[21])
 {
@@ -118,8 +119,10 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			long alpha_valeurs[21] ;
 			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
-				unsigned char set_de_actuel[2] ;
-                *set_de_actuel = *toutes_combinaisons_des[combinaison_de];
+                unsigned char set_de_actuel[2] ;
+                memcpy(set_de_actuel,toutes_combinaisons_des,2*sizeof(set_de_actuel[0]));
+//				unsigned char set_de_actuel[2] ;
+//              *set_de_actuel = *toutes_combinaisons_des[combinaison_de];
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
 
 				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
