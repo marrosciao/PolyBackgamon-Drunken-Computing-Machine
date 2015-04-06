@@ -4,25 +4,38 @@
 
 /** Pour toutes les fonctions ici, SGameState est normalisé. */
 
+typedef unsigned char uc;
+
+SGameState  apply_move(SGameState, Player, SMove);
+void        insert_all_dices(SGameState game, Player player, size_t *max_nb_dice_used, size_t nb_dices_used, size_t nb_dices, const uc dices[nb_dices], ArrayList *list, AIListMoves moves);
 bool        is_move_possible(SGameState *game, Player player, uint location);
-bool        is_valide_move(SGameState *game, Player player, uint from, uint len);
+bool        is_valide_move(SGameState *, Player, SMove);
 SGameState  reverse_game(SGameState);
 AIListMoves reverse_moves(AIListMoves);
 
-bool is_valide_move(SGameState *game, Player player, uint from, uint len) {
-    if (from > 25 || (from + len) >= 25) {
+bool is_valide_move(SGameState *game, Player player, SMove move) {
+    uint from = move.src_point, len = move.dest_point - move.src_point;
+    if (from > 25 ||
+        (from + len) >= 25) {
+        // On est hors du cadre.
         return false;
-    }
-
-    if (from && game->bar[player]) {
+    } else if (from &&
+               game->bar[player]) {
+        // il y a des dames sur la barre.
         return false;
-    }
-
-    if (from == 0) {
-        return is_move_possible(game, player, from + len);
-    } else if (from + len == 25) {
-
+    } else if (from == 0 &&
+               game->bar[player]) {
+        //On part de la barre.
+        return is_move_possible(game, player, from + len - 1);
+    } else if (from + len == 25 &&
+               game->board[from - 1].owner == player) {
+        //On sort un pion.
+        // TODO: vérifier que toutes les dames sont du bon côté
+        return true;
+    } else if (game->board[from - 1].owner == player){
+        return is_move_possible(game, player, from + len - 1);
     } else {
+        return false;
     }
 }
 
@@ -41,13 +54,88 @@ ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsign
     }
 
     ArrayList *list = list_new();
+    size_t max_nb_dices_used = 0;
 
-    // TODO: implémenter !
+    if (dices[0] == dices[1]) {
+        uc dices_tmp[4] = {dices[0], dices[0], dices[0], dices[0]};
+        insert_all_dices(game,
+                         player,
+                         &max_nb_dices_used,
+                         0,
+                         4,
+                         dices_tmp,
+                         list,
+                         (AIListMoves) { .nombre_mouvements = 0 });
+    } else {
+        uc dices_tmp[2] = {dices[0], dices[1]};
+        insert_all_dices(game,
+                         player,
+                         &max_nb_dices_used,
+                         0,
+                         4,
+                         dices_tmp,
+                         list,
+                         (AIListMoves) { .nombre_mouvements = 0 });
+        dices_tmp[0] = dices[1];
+        dices_tmp[1] = dices[0];
+        insert_all_dices(game,
+                         player,
+                         &max_nb_dices_used,
+                         0,
+                         4,
+                         dices_tmp,
+                         list,
+                         (AIListMoves) { .nombre_mouvements = 0 });
+
+    }
+
+    {
+        // On vire les mouvements qui utilisent le moins de dés. Par
+        // construction, ils sont tous au début.
+        size_t i = 0;
+        AIListMoves moves;
+        for (; list_get(list, i, &moves) && moves.nombre_mouvements < max_nb_dices_used; i++);
+
+        list_splice(list, 0, i);
+    }
 
     if (player == BLACK) {
         list_foreach(list, reverse_moves);
     }
     return list;
+}
+
+void insert_all_dices(SGameState game,
+                      Player player,
+                      size_t *max_nb_dice_used,
+                      size_t nb_dices_used,
+                      size_t nb_dices,
+                      const uc dices[nb_dices],
+                      ArrayList *list,
+                      AIListMoves moves) {
+    for (uint i = 0; nb_dices && i <= 24; i++) {
+        SMove move = {
+            .src_point = i,
+            .dest_point = dices[0],
+        };
+        if (is_valide_move(&game, player, move)) {
+            AIListMoves moves_tmp = moves;
+            moves_tmp.mouvement[moves_tmp.nombre_mouvements] = move;
+            moves_tmp.nombre_mouvements += 1;
+            insert_all_dices(apply_move(game, player, move),
+                             player,
+                             max_nb_dice_used,
+                             nb_dices_used + 1,
+                             nb_dices - 1,
+                             dices + 1,
+                             list,
+                             moves_tmp);
+        } else if (nb_dices_used >= *max_nb_dice_used) {
+            // TODO: plein de mouvements sont en double
+            *max_nb_dice_used = nb_dices_used;
+            list_push(list, moves);
+        }
+    }
 }
 
 SGameState reverse_game(SGameState game) {
@@ -71,4 +159,19 @@ AIListMoves reverse_moves(AIListMoves moves) {
     }
 
     return moves;
+}
+
+SGameState apply_move(SGameState game, Player player, SMove move) {
+    if (move.src_point == 0) {
+        game.bar[player] -= 1;
+        game.board[move.dest_point - 1].nbDames += 1;
+    } else if (move.dest_point == 25) {
+        game.board[move.src_point - 1].nbDames -= 1;
+        game.out[player] += 1;
+    } else {
+        game.board[move.src_point - 1].nbDames -= 1;
+        game.board[move.dest_point - 1].nbDames += 1;
+    }
+
+    return game;
 }

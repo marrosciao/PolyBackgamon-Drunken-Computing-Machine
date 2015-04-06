@@ -9,7 +9,7 @@ typedef struct ArrayList ArrayList;
 typedef struct {
     SMove mouvement[4] ;
     // tableau des mouvements, jusqu'à 4 possibles
-    int nombre_mouvements ;
+    size_t nombre_mouvements ;
     // nombre de mouvements viables dans cette structure ( entre 0 et 4)
 } AIListMoves;
 typedef AIListMoves TypeContent;

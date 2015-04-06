@@ -52,9 +52,11 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     // on genere toutes les combinaisons de des possibles pour la suite
     
     ArrayList *liste_possibilites = retrieveEveryPossibility(etat_jeu,joueur_calcule,des);
+    long v;
+
     if (joueur_calcule == AI_player)
     {
-        long v = LONG_MIN ; // equivaut à moins l'infini
+        v = LONG_MIN ; // equivaut à moins l'infini
         for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
@@ -84,11 +86,10 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                 break;
             
         }
-        return v ;
     }
     else
     {
-        long v = LONG_MAX ; // equivaut à plus l'infini
+        v = LONG_MAX ; // equivaut à plus l'infini
         for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
@@ -117,8 +118,10 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                 break;
             
         }
-        return v ;
     }
+
+    list_free(liste_possibilites);
+    return v;
 }
 
 // objectif : a partir d'un GameState, trouver le meilleur set de mouvement
@@ -208,7 +211,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 	// WARNING : CELA NE VERIFIE PAS QUE LE MOUVEMENT EST VALIDE !
 	// A UTILISER AVEC PARCIMONIE !
 
-	for (int i = 0 ; i < mouvements.nombre_mouvements ; i++)
+	for (size_t i = 0 ; i < mouvements.nombre_mouvements ; i++)
 	{
 		SMove current_move = mouvements.mouvement[i] ;
 		if (current_move.src_point == 0 || current_move.src_point == 25)
