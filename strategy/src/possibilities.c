@@ -148,7 +148,7 @@ static SGameState reverse_game(SGameState game) {
     Square board[24];
 
     for (size_t i = 0; i < 24; i++) {
-        board[i] = game.board[24 - i];
+        board[i] = game.board[23 - i];
     }
 
     for (size_t i = 0; i < 24; i++) {
