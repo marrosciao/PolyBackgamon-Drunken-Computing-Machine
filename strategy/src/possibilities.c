@@ -30,10 +30,9 @@ static bool is_valide_move(SGameState *game, Player player, SMove move) {
                game->bar[player]) {
         // il y a des dames sur la barre.
         return false;
-    } else if (from == 0 &&
-               game->bar[player]) {
+    } else if (from == 0) {
         //On part de la barre.
-        return is_move_possible(game, player, from + len - 1);
+        return game->bar[player] && is_move_possible(game, player, from + len - 1);
     } else if (from + len == 25 &&
                game->board[from - 1].owner == player) {
         //On sort un pion.
