@@ -13,6 +13,7 @@
 #include"config.h"
 #include"init.h"
 #include"game.h"
+//#include"logger.h"
 
 #define STRINGIFY_HELPER( str ) #str
 #define STRINGIFY( str ) STRINGIFY_HELPER( str )
@@ -43,6 +44,7 @@ Player choose_start_player(unsigned int i)
 }
 
 int main(){
+    //init_logger();
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     IA players[2];
     //TODO : faire la gestion des paramêtres en ligne de commande
