@@ -68,9 +68,9 @@ int main(int ARGC, const char* ARGV[])
     const unsigned int target_score = 1;
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);
-    bool finished = false;
+    bool finished               = false;
     const unsigned int maxScore = 3;
-    unsigned int turn_num = 1;
+    unsigned int turn_num       = 1;
     srand(time(NULL));
 
     // --- Boucle principale
@@ -97,6 +97,7 @@ int main(int ARGC, const char* ARGV[])
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner);
             printf("\tfin du tour %d\n", state.turn);
             current = (Player)(1-current);
+            ++state.turn;
         }
         for(unsigned int i=0; i<2; ++i) players[i].func->endGame();
         if(winner==WHITE)

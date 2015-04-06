@@ -13,6 +13,7 @@ static void errf(String err)
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : refactoring ?
 //TODO : verif de l'utilisation max des dés
+//TODO : verifier qu'on utilise pas deux fois le même dé
 //TODO : verifier que tout les pions sont du même coté avant de pouvoir en sortir
 int check_move(const SMove move,
         Dice dices[],
@@ -49,8 +50,11 @@ int check_move(const SMove move,
             test(can_put_to, errf);
             test(!has_out || move.src_point==0 , errf);
             err = 1;
+            printf("\n");
         }
     }
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
+    printf("%s : Une erreur\n\n",enumToStr[player+1]);
     return err;
 }
 

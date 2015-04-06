@@ -56,7 +56,8 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                 &(player[current].nb_moves),
                 player[current].tries
         );
-        for(unsigned int i=0; i<player[current].nb_moves; ++i){
+        for(unsigned int i=0; i<player[current].nb_moves; ++i)
+        {
             printf("%s : %d -> %d\n",
                     enumToStr[current+1],
                     player[current].moves[i].src_point,
