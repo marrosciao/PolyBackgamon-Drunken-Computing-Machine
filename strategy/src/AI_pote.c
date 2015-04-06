@@ -39,31 +39,14 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
-	const int value_to_double_stake = 60 ;
-	if (getValueFromGameState(*gameState,ai_player) >= value_to_double_stake)
-	{
-		return true ;
-		// on est en bonne position, on double la mise !
-	}
-	else
-	{
-		return false ;
-		// pas assez confiant pour doubler la mise, on garde le videau
-	}
+    const int value_to_double_stake = 60 ;
+    return getValueFromGameState(*gameState,ai_player) >= value_to_double_stake;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
-	const int value_to_surrender_stake = -100 ;
-	if (getValueFromGameState(*gameState,ai_player) <= value_to_surrender_stake)
-	{
-		return false ;
-		// c'est vraiment trop la merde, on abandonne
-	}
-	else
-	{
-		return true ;
-	}
+    const int value_to_surrender_stake = -100 ;
+    return getValueFromGameState(*gameState,ai_player) > value_to_surrender_stake;
 }
 
 void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
