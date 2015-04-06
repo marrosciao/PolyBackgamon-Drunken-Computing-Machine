@@ -26,6 +26,6 @@ int gamePlayTurn(SGameState* state, IA players[2], Player current, Player* lastS
 
 void roll_dice(unsigned char dice[2]);
 
-void copy_state(SGameState state, SGameState* copy);
+SGameState* copy_state(SGameState state);
 
 #endif

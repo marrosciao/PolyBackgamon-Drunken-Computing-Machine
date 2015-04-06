@@ -12,14 +12,13 @@
 static Dice rand_dice(){
     return (Dice)(rand()%6)+1;
 }
-
 void roll_dice(unsigned char dice[2]){
     dice[0] = rand_dice();
     dice[1] = rand_dice();
 }
 
-void copy_state(SGameState state, SGameState* copy){
-    copy = (SGameState*)malloc(sizeof(SGameState));
+SGameState* copy_state(SGameState state){
+    SGameState* copy = (SGameState*)malloc(sizeof(SGameState));
     memcpy((void*)copy->board, (void*)state.board, 24);
     memcpy((void*)copy->out,   (void*)state.out,   2);
     memcpy((void*)copy->bar,   (void*)state.bar,   2);
@@ -27,6 +26,7 @@ void copy_state(SGameState state, SGameState* copy){
     copy->blackScore = state.blackScore;
     copy->turn = state.turn;
     copy->stake = state.stake;
+    return copy;
 }
 
 int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastStaker, Player* winner)
@@ -34,8 +34,7 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     unsigned char dices[2];
     roll_dice(dices);
     printf("\t\trésultat des dés : %d, %d\n", dices[0], dices[1]);
-    SGameState* state_copy = NULL;
-    copy_state(*state, state_copy);
+    SGameState* state_copy = copy_state(*state);
     bool end_of_round = false;
     *winner = NOBODY;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
