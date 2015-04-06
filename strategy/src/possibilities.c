@@ -170,13 +170,18 @@ static AIListMoves reverse_moves(AIListMoves moves) {
 static SGameState apply_move(SGameState game, Player player, SMove move) {
     if (move.src_point == 0) {
         game.bar[player] -= 1;
-        game.board[move.dest_point - 1].nbDames += 1;
-    } else if (move.dest_point == 25) {
-        game.board[move.src_point - 1].nbDames -= 1;
-        game.out[player] += 1;
     } else {
         game.board[move.src_point - 1].nbDames -= 1;
+        if (game.board[move.src_point - 1].nbDames == 0) {
+            game.board[move.src_point - 1].owner = NOBODY;
+        }
+    }
+
+    if (move.dest_point == 25) {
+        game.out[player] += 1;
+    } else {
         game.board[move.dest_point - 1].nbDames += 1;
+        game.board[move.dest_point - 1].owner = player;
     }
 
     return game;
