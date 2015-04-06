@@ -18,14 +18,8 @@ void roll_dice(unsigned char dice[2]){
 }
 
 SGameState* copy_state(SGameState state){
-    SGameState* copy = (SGameState*)malloc(sizeof(SGameState));
-    memcpy((void*)copy->board, (void*)state.board, 24);
-    memcpy((void*)copy->out,   (void*)state.out,   2);
-    memcpy((void*)copy->bar,   (void*)state.bar,   2);
-    copy->whiteScore = state.whiteScore;
-    copy->blackScore = state.blackScore;
-    copy->turn = state.turn;
-    copy->stake = state.stake;
+    SGameState *copy = malloc(sizeof *copy);
+    *copy = state;
     return copy;
 }
 
