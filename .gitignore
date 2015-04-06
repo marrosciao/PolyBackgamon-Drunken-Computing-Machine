@@ -16,3 +16,5 @@ Makefile
 .vimprojects
 #TODO : enlever les fichiers codeblock
 interface/Interface
+Doxyfile
+interface/include/config.h
