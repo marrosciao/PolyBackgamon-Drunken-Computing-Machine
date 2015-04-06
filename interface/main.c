@@ -13,7 +13,6 @@
 #include"config.h"
 #include"init.h"
 #include"game.h"
-#include"logger.h"
 
 #define STRINGIFY_HELPER( str ) #str
 #define STRINGIFY( str ) STRINGIFY_HELPER( str )
