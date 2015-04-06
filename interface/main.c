@@ -42,7 +42,6 @@ Player choose_start_player(unsigned int i)
 }
 
 int main(){
-    init_logger();
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     IA players[2];
     //TODO : faire la gestion des paramêtres en ligne de commande
