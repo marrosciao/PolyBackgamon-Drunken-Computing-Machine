@@ -58,8 +58,12 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     // on verifie que les dés envoyés sont valides
 
     if (profondeur == 0 || isGameFinished(etat_jeu))
-        return getValueFromGameState(etat_jeu, AI_player) ;
-    
+	{
+		int heuristic_value = getValueFromGameState(etat_jeu,AI_player);
+		//printf("NOEUD FINAL : VALUE %i\n",heuristic_value);
+        return heuristic_value ;
+    }
+
     unsigned char toutes_combinaisons_des[21][2] ;
 	genererDes(toutes_combinaisons_des);
     // on genere toutes les combinaisons de des possibles pour la suite
@@ -68,7 +72,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     assert(liste_possibilites);
 
     long v;
-
+	printf("AI %i NOMBRES DE POSSIBILITES POUR DES %i %i : %i (depth %i)\n",joueur_calcule,des[0],des[1],list_size(liste_possibilites),profondeur);
     if (joueur_calcule == AI_player)
     {
         v = LONG_MIN ; // equivaut à moins l'infini
@@ -83,7 +87,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
                 unsigned char set_de_actuel[2] ;
-                memcpy(set_de_actuel,toutes_combinaisons_des,2*sizeof(set_de_actuel[0]));
+                memcpy(set_de_actuel,toutes_combinaisons_des[combinaison_de],2*sizeof(set_de_actuel[0]));
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
 
 				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
@@ -120,9 +124,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
                 unsigned char set_de_actuel[2] ;
-                memcpy(set_de_actuel,toutes_combinaisons_des,2*sizeof(set_de_actuel[0]));
-//				unsigned char set_de_actuel[2] ;
-//              *set_de_actuel = *toutes_combinaisons_des[combinaison_de];
+                memcpy(set_de_actuel,toutes_combinaisons_des[combinaison_de],2*sizeof(set_de_actuel[0]));
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
 
 				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
@@ -178,7 +180,7 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 	AIListMoves moves ;
 	// appel theorique de alphabeta : alphabeta(Noeud,profondeur_de_base,-infini,+infini)
 	alphabeta(	etat_jeu, // etat du jeu courant, necessaire pour calculer les possibilites
-				3, // profondeur de calcul souhaité, attention, augmenter de 1 peut prendre beaucou plus de temps!
+				2, // profondeur de calcul souhaité, attention, augmenter de 1 peut prendre beaucou plus de temps!
 				LONG_MIN, // moins l'infini version machine
 				LONG_MAX, // plus l'infini version machine
 				player, // quel joueur nous sommes
