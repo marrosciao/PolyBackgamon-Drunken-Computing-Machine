@@ -32,7 +32,7 @@ void genererDes(unsigned char des[21][2])
     size_t i = 0 ;
     for (size_t x = 1 ; x <= 6 ; x++)
     {
-        for (size_t y = x ; y <= x ;y++)
+        for (size_t y = x ; y <= 6 ;y++)
         {
             des[i][0] = x ;
             des[i++][1] = y ;
@@ -220,11 +220,13 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 		}
 		else
 		{
-			int nbDames = --etat_jeu.board[current_move.src_point-1].nbDames ;
+
+            etat_jeu.board[current_move.src_point-1].nbDames -= 1 ;
+			int nbDames = etat_jeu.board[current_move.src_point-1].nbDames ;
+            assert(nbDames >= 0);
+
 			if(nbDames == 0)
 				etat_jeu.board[current_move.src_point-1].owner = NOBODY;
-			else if (nbDames < 0)
-				assert(0);
 			
 		}
 
