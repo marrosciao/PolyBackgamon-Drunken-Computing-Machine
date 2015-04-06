@@ -46,14 +46,47 @@ Player choose_start_player(unsigned int i)
 
 int main(int ARGC, const char* ARGV[])
 {
+    int target_score = 15 ;	
+	
+	if (ARGC >= 2)
+	{
+		char* pEnd;
+		target_score = (int) strtol(ARGV[1],&pEnd,0);
+
+		if (strcmp(pEnd,"\0") != 0)
+		{
+			//Erreur de target_score ...
+			perror("ERREUR : Invalide parametre target_score (doit etre entier et 1er parametre)");
+			exit(EXIT_FAILURE);
+		}
+
+		if (target_score <= 0)
+		{
+			//stupide de faire un score nul comem objectif ...
+			perror("ERRUER : target_score negatif ou nul");
+			exit(EXIT_FAILURE);
+		}
+		printf("Lecture de target_score : %i\n",target_score);
+	}
+	else
+	{
+		printf("Pas de target_score fourni, pas defaut %i\n",target_score);
+	}
+
     //init_logger();
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
+	
     IA players[2];
+	players[0].lib_path="./strategy/libstrategy.so";
+	players[1].lib_path="./strategy/libstrategy.so";
     // --- Initialisation des bibliothèques 
     for(unsigned int i=0; i<2; ++i)
     {
-        players[i].lib_path = (char*)calloc(strlen(LIB_PATH) + strlen("/strategy/libstrategy.so")+1, sizeof(char));
-        sprintf( players[i].lib_path , "%s/strategy/libstrategy.so", LIB_PATH);
+        if (ARGC >= 3+i)
+		{
+			players[i].lib_path=calloc(strlen(ARGV[2+i])+1,sizeof(char));
+			strcpy(players[i].lib_path,ARGV[2+i]);
+		}
         players[i].func = (Functions*)malloc( sizeof(Functions) );
         players[i].lib_handle = NULL;
         init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
@@ -65,7 +98,6 @@ int main(int ARGC, const char* ARGV[])
     SGameState state;
     init_state(&state);
 
-    const unsigned int target_score = 1;
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);
     bool finished               = false;
@@ -120,7 +152,8 @@ int main(int ARGC, const char* ARGV[])
     for(unsigned int i=0; i<2; ++i)
     {
         dlclose(players[i].lib_handle);
-        free(players[i].lib_path);
+		if (ARGC >= 3+i)
+			free(players[i].lib_path);
     }
     return EXIT_SUCCESS;
 }
