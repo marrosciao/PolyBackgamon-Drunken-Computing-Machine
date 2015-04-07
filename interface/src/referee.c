@@ -78,10 +78,10 @@ int check_move(const SMove move,
          (has_out && move.src_point!=0) ||
          (move.dest_point==25 && !can_put_out))
     {
-        test(can_take_from, errf);
-        test(can_put_to, errf);
-        test(!has_out || move.src_point==0 , errf);
-        test(move.dest_point==25 && !can_put_out, errf);
+        if( !can_take_from )                     printf("can't take from %d\n", move.src_point);
+        if( !can_put_to )                        printf("can't out to %d\n", move.dest_point);
+        if( has_out && move.src_point!=0 )       printf("has piece out\n");
+        if( !can_put_out && move.dest_point==25) printf("can't put piece to the end\n");
         err = 1;
         printf("\n");
     }
