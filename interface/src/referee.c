@@ -67,6 +67,7 @@ int check_move(const SMove move,
     //les joueurs (black sort au niveau des ~20)
     uint err                   = 0;
     int delta_move            = (move.dest_point - move.src_point);
+    if(move.src_point==0) delta_move = 24-move.dest_point;
     if(delta_move<0) delta_move=-delta_move;
     bool can_take_from   = false;
     if(move.src_point==0) can_take_from = state->bar[player]>0;
