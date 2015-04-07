@@ -80,7 +80,7 @@ int main(int ARGC, const char* ARGV[])
 	players[0].lib_path=(char*)"./strategy/libstrategy.so";
 	players[1].lib_path=(char*)"./strategy/libstrategy.so";
     // --- Initialisation des bibliothèques 
-    for(unsigned int i=0; i<2; ++i)
+    for(int i=0; i<2; ++i)
     {
         if (ARGC >= 3+i)
 		{
@@ -153,7 +153,7 @@ int main(int ARGC, const char* ARGV[])
     for(unsigned int i=0; i<2; ++i) players[i].func->endMatch();
 
     // --- Fermeture des bibliothèques 
-    for(unsigned int i=0; i<2; ++i)
+    for(int i=0; i<2; ++i)
     {
         dlclose(players[i].lib_handle);
 		if (ARGC >= 3+i)

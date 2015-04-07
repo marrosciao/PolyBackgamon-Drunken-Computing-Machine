@@ -1,6 +1,7 @@
 #include "AI_tree.h"
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 
 static unsigned int somme_plateau(SGameState * etat_jeu,Player player)
 {
