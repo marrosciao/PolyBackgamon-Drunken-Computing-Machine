@@ -65,13 +65,25 @@ int check_move(const SMove move,
     //TODO : 25 -> zone de fin
     //TODO : faire en sorte que ça marche pour la sortie de la zone out pour tout
     //les joueurs (black sort au niveau des ~20)
-    uint err                   = 0;
-    int delta_move            = (move.dest_point - move.src_point);
-    if(move.src_point==0 && player==BLACK) delta_move = 24-move.dest_point;
-    if(delta_move<0) delta_move=-delta_move;
+    uint err = 0;
+    int delta_move = (move.dest_point - move.src_point);
+    if(move.src_point==0 && player==BLACK)
+    {
+        delta_move = 25-move.dest_point;
+    }
+    if(delta_move<0)
+    {
+       delta_move=-delta_move;
+    }
     bool can_take_from   = false;
-    if(move.src_point==0) can_take_from = state->bar[player]>0;
-    else                  can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
+    if(move.src_point==0)
+    {
+        can_take_from = state->bar[player]>0;
+    }
+    else
+    {
+        can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
+    }
     //TODO : verif overflow
     const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
     const bool has_out         = state->bar[player]>0;
