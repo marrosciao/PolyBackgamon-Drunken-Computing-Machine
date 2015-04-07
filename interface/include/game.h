@@ -24,8 +24,19 @@ typedef struct{
 
 int gamePlayTurn(SGameState* state, IA players[2], Player current, Player* lastStaker, Player* winner);
 
+/**
+ * @fn void roll_dice(unsigned char dice[2])
+ * @brief Éffectue un lancé de dés
+ * @param dice tableau des dés dont il faut généré les valeurs²
+ */
 void roll_dice(unsigned char dice[2]);
 
+/**
+ * @fn SGameState* copy_state(SGameState state)
+ * @brief Copie un SGameState
+ * @param state état à copier
+ * @return pointeurs vers la copie de l'état
+ */
 SGameState* copy_state(SGameState state);
 
 #endif

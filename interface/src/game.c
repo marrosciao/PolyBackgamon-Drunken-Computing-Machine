@@ -78,5 +78,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
         *winner = (Player)(1-current);
         end_of_round = true;
     }
+    free(state_copy);
     return end_of_round;
 }
