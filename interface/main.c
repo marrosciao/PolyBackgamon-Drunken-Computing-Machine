@@ -100,7 +100,7 @@ int main(int ARGC, const char* ARGV[])
 
     for(unsigned int i=0; i<24; ++i)
     {
-        printf("case %d : owner %s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
+        printf("case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
     }
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);
