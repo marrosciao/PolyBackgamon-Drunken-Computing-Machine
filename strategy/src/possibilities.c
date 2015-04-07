@@ -6,7 +6,6 @@
 
 typedef unsigned char uc;
 
-static SGameState  apply_move(SGameState, Player, SMove);
 static void        insert_all_dices(SGameState game,
                                     Player player,
                                     size_t *max_nb_dice_used,
