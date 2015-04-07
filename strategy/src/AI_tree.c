@@ -230,6 +230,7 @@ int getValueFromGameState(SGameState etat_jeu, Player player)
 	const int OUT_VALUE = 35 ;
 	const int INPLAY_VALUE_BASE = 0 ;
 	const int INPLAY_VALUE_DELTA = 1 ;
+    const int INPLAY_MALUS_ALONE = 10 ;
 
 	int heuristic_value = 0 ;
 	// calcul de la valeur heuristique en partant du principe qu'on est le joueur WHITE
@@ -248,10 +249,16 @@ int getValueFromGameState(SGameState etat_jeu, Player player)
 		Square current_square = etat_jeu.board[i] ;
 		if (current_square.owner == WHITE)
 		{
+            if (current_square.nbDames == 1)
+                heuristic_value -= INPLAY_MALUS_ALONE ;
+                // on enleve des points si le pion est tout seul
+
 			heuristic_value += current_square.nbDames * (INPLAY_VALUE_BASE + ((i+1) * INPLAY_VALUE_DELTA));	
 		}
 		else if (current_square.owner == BLACK)
 		{
+            if (current_square.nbDames == 1)
+                heuristic_value += INPLAY_MALUS_ALONE ;
 			heuristic_value -= current_square.nbDames * (INPLAY_VALUE_BASE + ((24-i) * INPLAY_VALUE_DELTA));
 		}
 	}
