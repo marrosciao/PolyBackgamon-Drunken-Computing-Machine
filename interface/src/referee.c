@@ -56,7 +56,7 @@ int check_move(const SMove move,
         Dice dices[],
         cuint nb_dices,
         const Player player,
-        SGameState * const state)
+        SGameState const * const state)
 {
     uint err = 0;
     // Si player==BLACK 1-player == WHITE, de même si player==WHITE.

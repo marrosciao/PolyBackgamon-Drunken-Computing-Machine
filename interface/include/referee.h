@@ -31,7 +31,7 @@ typedef unsigned int uint;
  * @param state    état du jeux
  * @return 0 -> pas d'erreur, 1 -> le mouvement est invalide
  */
-int check_move(const SMove, Dice[], cuint, const Player, SGameState * const);
+int check_move(const SMove, Dice[], cuint, const Player, SGameState const * const);
 
 int check_number_dices(const SGameState * const, Dice[], cuint, const Player);
 
