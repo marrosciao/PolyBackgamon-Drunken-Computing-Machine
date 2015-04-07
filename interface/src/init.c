@@ -65,13 +65,17 @@ void init_board(SGameState* state)
         {.owner = NOBODY},
         {.owner = BLACK, .nbDames = 2},
     };
+    int tmp[2] = {0,0};
     memcpy(state->board, board, sizeof board);
+    memcpy(state->out, tmp, sizeof tmp);
+    memcpy(state->bar, tmp, sizeof tmp);
+
 }
 
 void init_state(SGameState* state)
 {
-    init_board(state);
     *state = (SGameState) {
         .stake = 1,
     };
+    init_board(state);
 }

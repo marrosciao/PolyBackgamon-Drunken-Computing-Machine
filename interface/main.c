@@ -114,7 +114,7 @@ int main(int ARGC, const char* ARGV[])
     {
         //TODO : faire des affichages pour voir si les fonctions sont bien lancé
         //TODO : faire un logger basic
-        init_board(&state);
+        //TODO : RAZ du board
         printf("Début de la manche %d\n", turn_num);
         Player current = choose_start_player(0);
         printf("\t%s commence\n", enumToStr[current+1]);
@@ -128,6 +128,7 @@ int main(int ARGC, const char* ARGV[])
         Player winner          = NOBODY;
         Player lastStaker      = NOBODY;
         state.turn             = 1;
+        init_board(&state);
         while(!end_of_round)
         {
             printf("\tDébut du tour %d\n\t\tJoueur : %s\n", state.turn, enumToStr[current+1]);
