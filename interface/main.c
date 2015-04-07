@@ -146,7 +146,9 @@ int main(int ARGC, const char* ARGV[])
             state.blackScore+=state.stake;
             finished = state.blackScore>=maxScore;
         }
-        printf("gagnant : %s\n", enumToStr[winner+1]);
+        int score = state.blackScore;
+        if(winner==WHITE) score = state.whiteScore;
+        printf("gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
         printf("fin de la manche %d\n", turn_num);
         ++turn_num;
     }
