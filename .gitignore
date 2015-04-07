@@ -19,3 +19,5 @@ interface/Interface
 Doxyfile
 interface/include/config.h
 PolyBackgamon
+html/
+latex/
