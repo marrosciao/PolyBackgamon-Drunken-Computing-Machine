@@ -22,8 +22,8 @@ static AIListMoves reverse_moves(AIListMoves);
 
 static bool is_valide_move(SGameState *game, Player player, SMove move) {
     uint from = move.src_point, len = move.dest_point - move.src_point;
-    if (from > 25 ||
-        (from + len) >= 25) {
+    if (from >= 25 ||
+        (from + len) > 25) {
         // On est hors du cadre.
         return false;
     } else if (from &&
@@ -32,25 +32,25 @@ static bool is_valide_move(SGameState *game, Player player, SMove move) {
         return false;
     } else if (from == 0) {
         //On part de la barre.
-        return game->bar[player] && is_move_possible(game, player, from + len - 1);
+        return game->bar[player] && is_move_possible(game, player, from + len);
     } else if (from + len == 25 &&
                game->board[from - 1].owner == player) {
         //On sort un pion.
         // TODO: vérifier que toutes les dames sont du bon côté
         return true;
     } else if (game->board[from - 1].owner == player){
-        return is_move_possible(game, player, from + len - 1);
+        return is_move_possible(game, player, from + len);
     } else {
         return false;
     }
 }
 
 static bool is_move_possible(SGameState *game, Player player, uint location) {
-    if (game->board[location].owner == player ||
-        game->board[location].owner == NOBODY) {
+    if (game->board[location - 1].owner == player ||
+        game->board[location - 1].owner == NOBODY) {
         return true;
     } else {
-        return game->board[location].nbDames < 2;
+        return game->board[location - 1].nbDames < 2;
     }
 }
 
