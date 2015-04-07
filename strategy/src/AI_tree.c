@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-static Player opposing_player(Player player)
+Player opposing_player(Player player)
 {
     assert(player != NOBODY);
     if (player == WHITE)

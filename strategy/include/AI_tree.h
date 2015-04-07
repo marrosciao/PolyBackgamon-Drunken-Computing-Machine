@@ -23,3 +23,4 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements, Player player);
 ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsigned char dices[2] );
 bool isGameFinished(SGameState etat_jeu);
+Player opposing_player(Player player);

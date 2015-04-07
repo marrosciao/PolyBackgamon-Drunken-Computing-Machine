@@ -1,6 +1,7 @@
 #include <stdbool.h>
 
 #include "possibilities.h"
+#include "AI_tree.h"
 
 /** Pour toutes les fonctions ici, SGameState est normalisé. */
 
