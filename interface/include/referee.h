@@ -48,7 +48,7 @@ int check_number_dices(const SGameState * const, Dice[], cuint, const Player);
  * @brief Vérifie qu'on peut mettre un pion dans la zone de fin
  * @param state  Etat du jeux
  * @param player joueur courant
- * @return true -> pas d'erreur, false -> on ne peut pas sortir de pion
+ * @return false -> pas d'erreur, true -> on ne peut pas sortir de pion
  */
 int check_side(SGameState const * const, const Player);
 

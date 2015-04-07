@@ -87,7 +87,7 @@ int check_move(const SMove move,
     //TODO : verif overflow
     const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
     const bool has_out         = state->bar[player]>0;
-    const bool can_put_out     = check_side(state, player);
+    const bool can_put_out     = !check_side(state, player);
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if ( !can_take_from ||
          !can_put_to || 
