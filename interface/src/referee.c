@@ -168,6 +168,7 @@ int move_all(
     uint i = 0;
     while(i<nb_moves && errors==0)
     {
+        printf("verif : %d -----> %d\n", moves[i].src_point, moves[i].dest_point);
         if(check_move(moves[i], dices, nb_dices, player, state))
         {
             ++errors;
@@ -180,7 +181,8 @@ int move_all(
         {
             //TODO : 0 -> zone out
             //TODO : 25 -> zone de fin
-            move(state, moves[i], player);
+            printf("move : %d -----> %d\n", moves[j].src_point, moves[j].dest_point);
+            move(state, moves[j], player);
         }
     }
     return errors;
