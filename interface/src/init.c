@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include<assert.h>
 #include<stdio.h>
+#include <string.h>
 
 void init_func(void* handle, Functions* func, err_func err)
 {
@@ -38,40 +39,35 @@ void init_lib(const char* lib_path, void** handle, Functions* func, err_func err
 
 void init_state(SGameState* state)
 {
-    for(unsigned int i=1; i<25; ++i)
-    {
-        if(i==12 || i==13 || i==6 || i==19)
-        {
-            state->board[i-1].nbDames = 5;
-            if(i==12 || 19)         state->board[i-1].owner = WHITE;
-            else if(i==13 || i==6)  state->board[i-1].owner = BLACK;
-        }
-        else if(i==8 || i==17)
-        {
-            state->board[i].nbDames = 3;
-            if(i==8) state->board[i-1].owner = BLACK;
-            else     state->board[i-1].owner = WHITE;
-        }
-        else if(i==1 || i==24)
-        {
-            state->board[i].nbDames = 2;
-            if(i==1) state->board[i-1].owner = WHITE;
-            else     state->board[i-1].owner = BLACK;
-        }
-        else
-        {
-            state->board[i-1].owner = NOBODY;
-            state->board[i-1].nbDames = 0;
-        }
-    }
-    for(unsigned int i=0; i<2; ++i)
-    {
-        state->bar[i] = 0;
-        state->out[i] = 0;
-    }
-    state->stake      = 1;
-    state->turn       = 0;
-    state->whiteScore = 0;
-    state->blackScore = 0;
-}
+    Square board[24] = {
+        {.owner = WHITE, .nbDames = 2},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = BLACK, .nbDames = 5},
+        {.owner = NOBODY},
+        {.owner = BLACK, .nbDames = 3},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = WHITE, .nbDames = 5},
+        {.owner = BLACK, .nbDames = 5},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = WHITE, .nbDames = 3},
+        {.owner = NOBODY},
+        {.owner = WHITE, .nbDames = 5},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = NOBODY},
+        {.owner = BLACK, .nbDames = 2},
+    };
 
+    *state = (SGameState) {
+        .stake = 1,
+    };
+    memcpy(state->board, board, sizeof board);
+}
