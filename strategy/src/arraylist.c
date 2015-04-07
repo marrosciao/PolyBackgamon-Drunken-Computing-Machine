@@ -4,12 +4,18 @@
 
 #include "arraylist.h"
 
+/** Taille minimim arbitraire de la liste. */
 const size_t list_min_size = 10;
 
+/**
+ * @brief Implémentation d'une ArrayList.
+ *
+ * Voir Wikiédia(en) pour la complexité.
+ */
 struct ArrayList {
-    TypeContent *array;
-    size_t len_content;
-    size_t len_array;
+    TypeContent *array; /**< Pointeur vers les données. */
+    size_t len_content; /**< Nombre d'éléments effectivement dans la liste */
+    size_t len_array;   /**< Taille de `array` en nombre d'éléments. */
 };
 
 static void list_resize(ArrayList *list);
@@ -93,6 +99,7 @@ size_t list_size(ArrayList *list) {
 }
 
 static void list_resize(ArrayList *list) {
+    // On redimentionne le tableau à deux fois la dimension de son contenu.
     list->len_array = max(2 * list->len_content, list_min_size);
     list->array = realloc(list->array, list->len_array * sizeof (*list->array));
 }
