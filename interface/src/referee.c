@@ -84,15 +84,22 @@ int check_move(const SMove move,
     {
         can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
     }
-    //TODO : verif overflow
-    const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
+    //TODO : verif pour les noirs (25-6 >> 6)
+    bool can_put_to = false;
+    if(move.dest_point==25)
+    {
+        can_put_to = !check_side(state, player);
+    }
+    else
+    {
+        can_put_to = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
+    }
     const bool has_out         = state->bar[player]>0;
-    const bool can_put_out     = !check_side(state, player);
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if ( !can_take_from ||
          !can_put_to || 
-         (has_out && move.src_point!=0) ||
-         (move.dest_point==25 && !can_put_out))
+         (has_out && move.src_point!=0)
+         )
     {
         if( !can_take_from )
             printf("\t\t%s : can't take from %d : owner %s, nbDames %d\n", enumToStr[player+1], move.src_point, enumToStr[state->board[move.src_point-1].owner+1], state->board[move.src_point-1].nbDames);
@@ -100,8 +107,6 @@ int check_move(const SMove move,
             printf("\t\t%s : can't put to %d : owner %s, nbDames %d\n", enumToStr[player+1], move.dest_point, enumToStr[state->board[move.dest_point-1].owner+1], state->board[move.dest_point-1].nbDames);
         if( has_out && move.src_point!=0 )
             printf("\t\t%s : has piece out\n", enumToStr[player+1]);
-        if( !can_put_out && move.dest_point==25)
-            printf("\t\t%s : can't put piece to the end\n", enumToStr[player+1]);
         err = 1;
     }
     else
@@ -110,7 +115,6 @@ int check_move(const SMove move,
         uint i=0;
         while(i<nb_dices && err!=0)
         {
-            /*const bool authorized_move = dices[i]==delta_move;*/
             if( dices[i]!=delta_move)
             {
                 printf("\t\t%s : Can't move from %d to %d, dice result is %d, delta_move=%d\n", enumToStr[player+1], move.src_point, move.dest_point, dices[i], delta_move);
@@ -131,7 +135,7 @@ int check_move(const SMove move,
 int check_side(SGameState const * const state, const Player player)
 {
     int err            = false;
-    unsigned int index = 6;
+    unsigned int index = 7;
     unsigned int end   = 24;
     if(player == WHITE)
     {
@@ -168,13 +172,16 @@ int move_all(
         {
             ++errors;
         }
-        else
+        ++i;
+    }
+    if(errors == 0)
+    {
+        for(unsigned int j=0; j<nb_moves; ++j)
         {
             //TODO : 0 -> zone out
             //TODO : 25 -> zone de fin
-            move(state, moves[i], player);
+            move(state, moves[j], player);
         }
-        ++i;
     }
     return errors;
 }
