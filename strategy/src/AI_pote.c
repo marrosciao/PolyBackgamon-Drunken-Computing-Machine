@@ -39,14 +39,12 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
-    const int value_to_double_stake = 60 ;
-    return getValueFromGameState(*gameState,ai_player) >= value_to_double_stake;
+	return false ;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
-    const int value_to_surrender_stake = -100 ;
-    return getValueFromGameState(*gameState,ai_player) < value_to_surrender_stake;
+	return true ;
 }
 
 void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
