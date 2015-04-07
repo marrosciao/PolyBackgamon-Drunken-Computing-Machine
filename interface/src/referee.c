@@ -69,9 +69,9 @@ int check_move(const SMove move,
     //TODO : 0 -> zone out
     //TODO : 25 -> zone de fin
     uint delta_move = (-1*(1-player)) * (move.dest_point - move.src_point);
-    const bool has_out         = state->bar[player]>0;
     const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
     const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
+    const bool has_out         = state->bar[player]>0;
     const bool can_put_out     = check_side(state, player);
     if ( !can_take_from ||
          !can_put_to || 
