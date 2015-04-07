@@ -16,6 +16,7 @@ Player ai_player ;
 //!!!!! !!!!!
 
 
+unsigned int somme_plateau(SGameState etat_jeu, Player player);
 int getValueFromGameState(SGameState etat_jeu, Player player);
 void genererDes(unsigned char des[21][2]);
 long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves,const unsigned char des[2]);

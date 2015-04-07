@@ -13,7 +13,7 @@ Player opposing_player(Player player)
         return WHITE ;
 }
 
-static unsigned int somme_plateau(SGameState etat_jeu,Player player)
+unsigned int somme_plateau(SGameState etat_jeu,Player player)
 {
     unsigned int somme = 0 ;
     somme += etat_jeu.bar[player];
