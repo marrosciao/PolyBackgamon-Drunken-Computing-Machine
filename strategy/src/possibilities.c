@@ -163,7 +163,7 @@ static SGameState reverse_game(SGameState game) {
 static AIListMoves reverse_moves(AIListMoves moves) {
     for (size_t i = 0; i < moves.nombre_mouvements; i++) {
         if (moves.mouvement[i].src_point > 0 &&
-            moves.mouvement[i].src_point < 25) {
+            moves.mouvement[i].dest_point < 25) {
             moves.mouvement[i].src_point = 25 - moves.mouvement[i].src_point;
             moves.mouvement[i].dest_point = 25 - moves.mouvement[i].dest_point;
         }
