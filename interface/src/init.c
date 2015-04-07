@@ -38,30 +38,30 @@ void init_lib(const char* lib_path, void** handle, Functions* func, err_func err
 
 void init_state(SGameState* state)
 {
-    for(unsigned int i=0; i<24; ++i)
+    for(unsigned int i=1; i<25; ++i)
     {
         if(i==12 || i==13 || i==6 || i==19)
         {
-            state->board[i].nbDames = 5;
-            if(i==12 || 19)         state->board[i].owner = WHITE;
-            else if(i==13 || i==6)  state->board[i].owner = BLACK;
+            state->board[i-1].nbDames = 5;
+            if(i==12 || 19)         state->board[i-1].owner = WHITE;
+            else if(i==13 || i==6)  state->board[i-1].owner = BLACK;
         }
         else if(i==8 || i==17)
         {
             state->board[i].nbDames = 3;
-            if(i==8) state->board[i].owner = BLACK;
-            else     state->board[i].owner = WHITE;
+            if(i==8) state->board[i-1].owner = BLACK;
+            else     state->board[i-1].owner = WHITE;
         }
         else if(i==1 || i==24)
         {
             state->board[i].nbDames = 2;
-            if(i==1) state->board[i].owner = WHITE;
-            else     state->board[i].owner = BLACK;
+            if(i==1) state->board[i-1].owner = WHITE;
+            else     state->board[i-1].owner = BLACK;
         }
         else
         {
-            state->board[i].owner = NOBODY;
-            state->board[i].nbDames = 0;
+            state->board[i-1].owner = NOBODY;
+            state->board[i-1].nbDames = 0;
         }
     }
     for(unsigned int i=0; i<2; ++i)
