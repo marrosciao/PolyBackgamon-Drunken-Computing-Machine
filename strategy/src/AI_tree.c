@@ -99,7 +99,6 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     assert(liste_possibilites);
 
     long v;
-	printf("AI %i NOMBRES DE POSSIBILITES POUR DES %i %i : %i (depth %i)\n",joueur_calcule,des[0],des[1],list_size(liste_possibilites),profondeur);
     if (joueur_calcule == AI_player)
     {
         v = LONG_MIN ; // equivaut à moins l'infini
