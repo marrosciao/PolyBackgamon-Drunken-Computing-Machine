@@ -63,4 +63,6 @@ void init_lib(const char*, void**, Functions*, err_func);
  * @warning init_state n'est pas resopnsable de state
  */
 void init_state(SGameState*);
+
+void init_board(SGameState*);
 #endif
