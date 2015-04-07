@@ -89,8 +89,8 @@ int check_move(const SMove move,
     {
         for(uint i=0; i<nb_dices; ++i)
         {
-            const bool authorized_move = dices[i]==delta_move;
-            if( !authorized_move )
+            /*const bool authorized_move = dices[i]==delta_move;*/
+            if( dices[i]!=delta_move)
             {
                 printf("\t\t%s : Can't move from %d to %d, dice result is %d, delta_move=%d\n", enumToStr[player+1], move.src_point, move.dest_point, dices[0], delta_move);
                 err = 1;
@@ -155,6 +155,8 @@ int move_all(
 
 void move(SGameState * const state, SMove const movement, const Player player)
 {
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
+    printf("\t\t\t%s : move from %d to %d", enumToStr[player+1], movement.src_point, movement.src_point);
     if(movement.dest_point == 25)
         move_to_end(state, movement, player);
     else if(movement.src_point == 0)

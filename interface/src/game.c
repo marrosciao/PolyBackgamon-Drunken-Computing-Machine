@@ -49,30 +49,36 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     }
     if( !end_of_round )
     {
-        player[current].func->playTurn(
+
+        unsigned int errors = 1;
+        while(errors>0 && player[current].tries>0)
+        {
+            player[current].func->playTurn(
                 state_copy,
                 dices,
                 player[current].moves,
                 &(player[current].nb_moves),
                 player[current].tries
-        );
-        for(unsigned int i=0; i<player[current].nb_moves; ++i)
-        {
-            printf("%s : %d -> %d\n",
-                    enumToStr[current+1],
-                    player[current].moves[i].src_point,
-                    player[current].moves[i].dest_point);
+            );
+            for(unsigned int i=0; i<player[current].nb_moves; ++i)
+            {
+                printf("%s : %d -> %d\n",
+                        enumToStr[current+1],
+                        player[current].moves[i].src_point,
+                        player[current].moves[i].dest_point);
+            }
+            errors = move_all(
+                    state,
+                    player[current].moves,
+                    player[current].nb_moves,
+                    dices,
+                    2,
+                    current
+            );
+            player[current].tries -= errors;
         }
-        player[current].tries -= move_all(
-                state,
-                player[current].moves,
-                player[current].nb_moves,
-                dices,
-                2,
-                current
-        );
     }
-    if(player[current].tries<0)
+    if(player[current].tries<=0)
     {
         printf("\t\t%s a fait trop d'erreurs\n", enumToStr[current+1]);
         *winner = (Player)(1-current);
