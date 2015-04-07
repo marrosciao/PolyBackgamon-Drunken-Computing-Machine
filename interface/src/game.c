@@ -33,7 +33,7 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( *lastStaker!=current && player[current].func->doubleStack(state_copy) )
     {
-        printf("\t\t %s double la mise\n", enumToStr[current+1]);
+        printf("\t\t %s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
         if( !player[1-current].func->takeDouble(state_copy) )
         {
             printf("\t\t %s ne suit pas\n", enumToStr[(1-current)+1]);
