@@ -196,7 +196,7 @@ void put_on(Square board[24], uint bar[2], cuint dest, const Player p)
         board[dest-1].nbDames = 0;
     }
     board[dest-1].nbDames++;
-    printf("\t\t\t%d as now %d piece and is owned by %s\n", dest, board[dest-1].nbDames, enumToStr[board[dest-1].owner+1]);
+    printf("\t\t\t%d has now %d piece and is owned by %s\n", dest, board[dest-1].nbDames, enumToStr[board[dest-1].owner+1]);
 }
 
 void take_from(Square board[24], cuint src)
@@ -204,5 +204,5 @@ void take_from(Square board[24], cuint src)
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     board[src-1].nbDames--;
     if(board[src-1].nbDames==0) board[src-1].owner=NOBODY;
-    printf("\t\t\t%d as now %d piece and is owned by %s\n", src, board[src-1].nbDames, enumToStr[board[src-1].owner+1]);
+    printf("\t\t\t%d has now %d piece and is owned by %s\n", src, board[src-1].nbDames, enumToStr[board[src-1].owner+1]);
 }
