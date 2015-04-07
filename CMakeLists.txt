@@ -4,7 +4,7 @@
 
 # Project Info
 cmake_minimum_required(VERSION 2.6)
-project(PolyBackgamon)
+project(PolyBackgammon)
 
 # Testing
 enable_testing()

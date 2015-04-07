@@ -5,10 +5,6 @@
 
 #include"error.h"
 
-static void errf(String err)
-{
-    printf("error : %s\n", err);
-}
 //TODO : tester et vérifier si c'est bon
 //TODO : faire le cas où il y a des pions dans la zone out et zone de fin
 int check_number_dices(
@@ -73,17 +69,21 @@ int check_move(const SMove move,
     const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
     const bool has_out         = state->bar[player]>0;
     const bool can_put_out     = check_side(state, player);
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if ( !can_take_from ||
          !can_put_to || 
          (has_out && move.src_point!=0) ||
          (move.dest_point==25 && !can_put_out))
     {
-        if( !can_take_from )                     printf("can't take from %d\n", move.src_point);
-        if( !can_put_to )                        printf("can't out to %d\n", move.dest_point);
-        if( has_out && move.src_point!=0 )       printf("has piece out\n");
-        if( !can_put_out && move.dest_point==25) printf("can't put piece to the end\n");
+        if( !can_take_from )
+            printf("\t\t%s : can't take from %d : owner %s, nbDames %d\n", enumToStr[player+1], move.src_point, enumToStr[state->board[move.src_point].owner+1], state->board[move.src_point].nbDames);
+        if( !can_put_to )
+            printf("\t\t%s : can't put to %d : owner %s, nbDames %d\n", enumToStr[player+1], move.dest_point, enumToStr[state->board[move.dest_point].owner+1], state->board[move.dest_point].nbDames);
+        if( has_out && move.src_point!=0 )
+            printf("\t\t%s : has piece out\n", enumToStr[player+1]);
+        if( !can_put_out && move.dest_point==25)
+            printf("\t\t%s : can't put piece to the end\n", enumToStr[player+1]);
         err = 1;
-        printf("\n");
     }
     else
     {
@@ -92,9 +92,8 @@ int check_move(const SMove move,
             const bool authorized_move = dices[i]==delta_move;
             if( !authorized_move )
             {
-                printf("Can't move from %d to %d, the dice result is %d\n", move.src_point, move.dest_point, dices[i]);
+                printf("\t\t%s : Can't move from %d to %d, dice result is %d, delta_move=%d\n", enumToStr[player+1], move.src_point, move.dest_point, dices[0], delta_move);
                 err = 1;
-                printf("\n");
             }
             else
             {
@@ -102,8 +101,7 @@ int check_move(const SMove move,
             }
         }
     }
-    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
-    printf("%s : %d erreur\n\n", enumToStr[player+1], err);
+    printf("\t\t%s : %d erreur\n\n", enumToStr[player+1], err);
     return err;
 }
 
