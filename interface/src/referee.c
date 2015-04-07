@@ -9,12 +9,49 @@ static void errf(String err)
 {
     printf("error : %s\n", err);
 }
+//TODO : tester et vérifier si c'est bon
+//TODO : faire le cas où il y a des pions dans la zone out et zone de fin
+int check_number_dices(
+        const SGameState * const state,
+        Dice dices[],
+        cuint nb_moves,
+        const Player player)
+{
+    uint err = false;
+    if(
+        !(dices[0]==dices[1] && nb_moves==4) &&
+        !(dices[0]!=dices[1] && nb_moves==2)
+        )
+    {
+        uint dice_nb   = 0;
+        uint idx       = 0;
+        uint num_moves = 0;
+        while( idx<24 && (
+                    (num_moves<=2 && dices[0]!=dices[1]) ||
+                    (num_moves<=4 && dices[0]==dices[1])
+                ) )
+        {
+            if( state->board[idx].owner==player)
+            {
+                SMove move = { idx+1, idx+1+dices[dice_nb] };
+                if(!check_move(move, dices, 2, player, state))
+                {
+                    dice_nb = (dice_nb+1)%2;
+                    ++num_moves;
+                    idx = 0;
+                }
+            }
+            ++idx;
+        }
+        err = !( num_moves==nb_moves );
+    }
+    return err;
+}
 
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : refactoring ?
-//TODO : verif de l'utilisation max des dés
 //TODO : verifier qu'on utilise pas deux fois le même dé
-//TODO : verifier que tout les pions sont du même coté avant de pouvoir en sortir
+//TODO : verif de l'utilisation max des dés
 int check_move(const SMove move,
         Dice dices[],
         cuint nb_dices,
@@ -29,32 +66,40 @@ int check_move(const SMove move,
     // Pour vérifier si le déplacement est valide, on prend la valeur absolue 
     // de la différence dest - src en multipliant par -1 si le joueur est 
     // le joueur noir et par 1 si il est blanc.
+    //TODO : 0 -> zone out
+    //TODO : 25 -> zone de fin
     uint delta_move = (-1*(1-player)) * (move.dest_point - move.src_point);
-
-    for(uint i=0; i<nb_dices; ++i)
+    const bool has_out         = state->bar[player]>0;
+    const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
+    const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
+    const bool can_put_out     = check_side(state, player);
+    if ( !can_take_from ||
+         !can_put_to || 
+         (has_out && move.src_point!=0) ||
+         (move.dest_point==25 && !can_put_out))
     {
-        //TODO : 0 -> zone out
-        //TODO : 25 -> zone de fin
-        const bool has_out         = state->bar[player]>0;
-        const bool authorized_move = dices[i]==delta_move;
-        const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
-        const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
-        const bool can_put_out     = check_side(state, player);
-
-        if( !authorized_move ||
-            !can_take_from ||
-            !can_put_to || 
-            (has_out && move.src_point!=0) ||
-            (move.dest_point==25 && !can_put_out)
-          )
+        test(can_take_from, errf);
+        test(can_put_to, errf);
+        test(!has_out || move.src_point==0 , errf);
+        test(move.dest_point==25 && !can_put_out, errf);
+        err = 1;
+        printf("\n");
+    }
+    else
+    {
+        for(uint i=0; i<nb_dices; ++i)
         {
-            test(authorized_move, errf);
-            test(can_take_from, errf);
-            test(can_put_to, errf);
-            test(!has_out || move.src_point==0 , errf);
-            test(move.dest_point==25 && !can_put_out, errf);
-            err = 1;
-            printf("\n");
+            const bool authorized_move = dices[i]==delta_move;
+            if( !authorized_move )
+            {
+                test(authorized_move, errf);
+                err = 1;
+                printf("\n");
+            }
+            else
+            {
+                err = 0;
+            }
         }
     }
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};

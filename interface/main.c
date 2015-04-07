@@ -46,12 +46,12 @@ Player choose_start_player(unsigned int i)
 
 int main(int ARGC, const char* ARGV[])
 {
-    int target_score = 15 ;	
+    unsigned int target_score = 15 ;
 	
 	if (ARGC >= 2)
 	{
 		char* pEnd;
-		target_score = (int) strtol(ARGV[1],&pEnd,0);
+		target_score = (int)strtol(ARGV[1],&pEnd,0);
 
 		if (strcmp(pEnd,"\0") != 0)
 		{
@@ -63,7 +63,7 @@ int main(int ARGC, const char* ARGV[])
 		if (target_score <= 0)
 		{
 			//stupide de faire un score nul comem objectif ...
-			perror("ERRUER : target_score negatif ou nul");
+			perror("ERREUR : target_score negatif ou nul");
 			exit(EXIT_FAILURE);
 		}
 		printf("Lecture de target_score : %i\n",target_score);
@@ -77,14 +77,14 @@ int main(int ARGC, const char* ARGV[])
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
 	
     IA players[2];
-	players[0].lib_path="./strategy/libstrategy.so";
-	players[1].lib_path="./strategy/libstrategy.so";
+	players[0].lib_path=(char*)"./strategy/libstrategy.so";
+	players[1].lib_path=(char*)"./strategy/libstrategy.so";
     // --- Initialisation des bibliothèques 
     for(unsigned int i=0; i<2; ++i)
     {
         if (ARGC >= 3+i)
 		{
-			players[i].lib_path=calloc(strlen(ARGV[2+i])+1,sizeof(char));
+			players[i].lib_path=(char*)calloc(strlen(ARGV[2+i])+1,sizeof(char));
 			strcpy(players[i].lib_path,ARGV[2+i]);
 		}
         players[i].func = (Functions*)malloc( sizeof(Functions) );
@@ -98,6 +98,10 @@ int main(int ARGC, const char* ARGV[])
     SGameState state;
     init_state(&state);
 
+    for(unsigned int i=0; i<24; ++i)
+    {
+        printf("case %d : owner %s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
+    }
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);
     bool finished               = false;

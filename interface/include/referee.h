@@ -33,6 +33,15 @@ typedef unsigned int uint;
  */
 int check_move(const SMove, Dice[], cuint, const Player, SGameState * const);
 
+int check_number_dices(const SGameState * const, Dice[], cuint, const Player);
+
+/**
+ * @fn int check_side(SGameState const * const state, const Player player)
+ * @brief Vérifie qu'on peut mettre un pion dans la zone de fin
+ * @param state  Etat du jeux
+ * @param player joueur courant
+ * @return true -> pas d'erreur, false -> on ne peut pas sortir de pion
+ */
 int check_side(SGameState const * const, const Player);
 
 /**
