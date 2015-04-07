@@ -103,7 +103,7 @@ int check_move(const SMove move,
         }
     }
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
-    printf("%s : Une erreur\n\n",enumToStr[player+1]);
+    printf("%s : %d erreur\n\n", enumToStr[player+1], err);
     return err;
 }
 
