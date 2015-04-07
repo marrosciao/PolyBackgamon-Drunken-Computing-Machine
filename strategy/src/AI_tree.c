@@ -271,38 +271,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 	for (size_t i = 0 ; i < mouvements.nombre_mouvements ; i++)
 	{
 		SMove current_move = mouvements.mouvement[i] ;
-		if (current_move.src_point == 0)
-		{
-			etat_jeu.bar[player] -= 1 ;
-		}
-		else
-		{
-
-            etat_jeu.board[current_move.src_point-1].nbDames -= 1 ;
-			int nbDames = etat_jeu.board[current_move.src_point-1].nbDames ;
-            assert(nbDames >= 0);
-            
-			if(nbDames == 0)
-				etat_jeu.board[current_move.src_point-1].owner = NOBODY;
-			
-		}
-
-		if (current_move.dest_point == 25)
-		{
-			etat_jeu.out[player] += 1 ;
-		}
-		else if (etat_jeu.board[current_move.dest_point-1].owner!=player && etat_jeu.board[current_move.dest_point-1].nbDames == 1)
-		{// cas où on mange un pion ennemi
-            etat_jeu.bar[opposing_player(player)] += 1 ;
-            etat_jeu.board[current_move.dest_point-1].owner = player ; 
-        }
-        else
-        {
-			etat_jeu.board[current_move.dest_point-1].nbDames += 1 ;
-			etat_jeu.board[current_move.dest_point-1].owner = player ;
-		}
-
-	
+	    etat_jeu = apply_move(etat_jeu,player,current_move);
 	}
 
     return etat_jeu;
