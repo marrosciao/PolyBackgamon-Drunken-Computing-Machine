@@ -2,7 +2,20 @@
 #include <math.h>
 #include <string.h>
 
-long moyenne(long alpha_valeurs[21])
+static unsigned int somme_plateau(SGameState * etat_jeu,Player player)
+{
+    unsigned int somme = 0 ;
+    somme += etat_jeu->bar[player];
+    for (int i = 0 ; i < 24 ; i++ )
+    {
+        if (etat_jeu->board[i].owner == player)
+            somme += etat_jeu->board[i].nbDames ;
+    }
+    somme += etat_jeu->out[player];
+    return somme;
+}
+
+static long moyenne(long alpha_valeurs[21])
 {
 	long alpha = 0;
 
@@ -56,6 +69,9 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 
     assert(des[0] >= 1 && des[0] <= 6 && des[1] >= 1 && des[1] <= 6 );
     // on verifie que les dés envoyés sont valides
+
+    assert(somme_plateau(&etat_jeu,WHITE) == 15 );
+    assert(somme_plateau(&etat_jeu,BLACK) == 15 );
 
     if (profondeur == 0 || isGameFinished(etat_jeu))
 	{
