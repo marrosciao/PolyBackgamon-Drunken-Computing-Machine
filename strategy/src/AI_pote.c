@@ -49,8 +49,7 @@ int TakeDouble(const SGameState * const gameState)
 
 void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
 {
-    assert(somme_plateau(*gameState,WHITE)==15);
-    assert(somme_plateau(*gameState,BLACK)==15);
+    
 	AIListMoves tmp_moves = getBestMoves(*gameState,ai_player,dices);
     
 	moves[0] = tmp_moves.mouvement[0] ;
