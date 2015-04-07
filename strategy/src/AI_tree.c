@@ -154,7 +154,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			}
 			long alpha_calcul = moyenne(alpha_valeurs);
             if (v > alpha_calcul)
-			{
+			{ 
 				*moves = temp_moves ;
                 v = alpha_calcul ;
 			}
@@ -260,7 +260,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 	for (size_t i = 0 ; i < mouvements.nombre_mouvements ; i++)
 	{
 		SMove current_move = mouvements.mouvement[i] ;
-		if (current_move.src_point == 0 || current_move.src_point == 25)
+		if (current_move.src_point == 0)
 		{
 			etat_jeu.bar[player] -= 1 ;
 		}
@@ -276,7 +276,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 			
 		}
 
-		if (current_move.dest_point == 0 || current_move.dest_point == 25)
+		if (current_move.dest_point == 25)
 		{
 			etat_jeu.out[player] += 1 ;
 		}
