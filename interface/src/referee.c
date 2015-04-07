@@ -65,8 +65,8 @@ int check_move(const SMove move,
     //TODO : 25 -> zone de fin
     uint err                   = 0;
     uint delta_move            = (-1*(1-player)) * (move.dest_point - move.src_point);
-    const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
-    const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
+    const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
+    const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
     const bool has_out         = state->bar[player]>0;
     const bool can_put_out     = check_side(state, player);
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
@@ -76,9 +76,9 @@ int check_move(const SMove move,
          (move.dest_point==25 && !can_put_out))
     {
         if( !can_take_from )
-            printf("\t\t%s : can't take from %d : owner %s, nbDames %d\n", enumToStr[player+1], move.src_point, enumToStr[state->board[move.src_point].owner+1], state->board[move.src_point].nbDames);
+            printf("\t\t%s : can't take from %d : owner %s, nbDames %d\n", enumToStr[player+1], move.src_point, enumToStr[state->board[move.src_point-1].owner+1], state->board[move.src_point-1].nbDames);
         if( !can_put_to )
-            printf("\t\t%s : can't put to %d : owner %s, nbDames %d\n", enumToStr[player+1], move.dest_point, enumToStr[state->board[move.dest_point].owner+1], state->board[move.dest_point].nbDames);
+            printf("\t\t%s : can't put to %d : owner %s, nbDames %d\n", enumToStr[player+1], move.dest_point, enumToStr[state->board[move.dest_point-1].owner+1], state->board[move.dest_point-1].nbDames);
         if( has_out && move.src_point!=0 )
             printf("\t\t%s : has piece out\n", enumToStr[player+1]);
         if( !can_put_out && move.dest_point==25)
