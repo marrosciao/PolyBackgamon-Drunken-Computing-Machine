@@ -114,6 +114,7 @@ int main(int ARGC, const char* ARGV[])
     {
         //TODO : faire des affichages pour voir si les fonctions sont bien lancé
         //TODO : faire un logger basic
+        init_board(&state);
         printf("Début de la manche %d\n", turn_num);
         Player current = choose_start_player(0);
         printf("\t%s commence\n", enumToStr[current+1]);

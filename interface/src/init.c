@@ -37,7 +37,7 @@ void init_lib(const char* lib_path, void** handle, Functions* func, err_func err
     init_func(*handle, func, err);
 }
 
-void init_state(SGameState* state)
+void init_board(SGameState* state)
 {
     Square board[24] = {
         {.owner = WHITE, .nbDames = 2},
@@ -65,9 +65,13 @@ void init_state(SGameState* state)
         {.owner = NOBODY},
         {.owner = BLACK, .nbDames = 2},
     };
+    memcpy(state->board, board, sizeof board);
+}
 
+void init_state(SGameState* state)
+{
+    init_board(state);
     *state = (SGameState) {
         .stake = 1,
     };
-    memcpy(state->board, board, sizeof board);
 }
