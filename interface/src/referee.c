@@ -58,7 +58,6 @@ int check_move(const SMove move,
         const Player player,
         SGameState const * const state)
 {
-    uint err = 0;
     // Si player==BLACK 1-player == WHITE, de même si player==WHITE.
     // Si player==BLACK==0, 1-player==1, -1*(1-player)==-1, inversement pour player==WHITE.
     // Le joueur noir se déplace de la case
@@ -68,7 +67,8 @@ int check_move(const SMove move,
     // le joueur noir et par 1 si il est blanc.
     //TODO : 0 -> zone out
     //TODO : 25 -> zone de fin
-    uint delta_move = (-1*(1-player)) * (move.dest_point - move.src_point);
+    uint err                   = 0;
+    uint delta_move            = (-1*(1-player)) * (move.dest_point - move.src_point);
     const bool can_take_from   = state->board[move.src_point-1].nbDames>0 && state->board[move.src_point].owner==player;
     const bool can_put_to      = state->board[move.dest_point-1].owner==player || state->board[move.dest_point].nbDames<2;
     const bool has_out         = state->bar[player]>0;
@@ -92,7 +92,7 @@ int check_move(const SMove move,
             const bool authorized_move = dices[i]==delta_move;
             if( !authorized_move )
             {
-                test(authorized_move, errf);
+                printf("Can't move from %d to %d, the dice result is %d\n", move.src_point, move.dest_point, dices[i]);
                 err = 1;
                 printf("\n");
             }
