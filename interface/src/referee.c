@@ -140,7 +140,7 @@ int check_side(SGameState const * const state, const Player player)
     }
     while(index<end && !err)
     {
-        if( state->board[index].owner == player)
+        if( state->board[index-1].owner == player)
         {
             err = true;
         }
