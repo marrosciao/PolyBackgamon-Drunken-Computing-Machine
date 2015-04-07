@@ -19,6 +19,7 @@ static bool        is_move_possible(SGameState *game, Player player, uint locati
 static bool        is_valide_move(SGameState *, Player, SMove);
 static SGameState  reverse_game(SGameState);
 static AIListMoves reverse_moves(AIListMoves);
+static bool        all_dames_in_inner_board(SGameState *game, Player player);
 
 static bool is_valide_move(SGameState *game, Player player, SMove move) {
     uint from = move.src_point, len = move.dest_point - move.src_point;
@@ -36,8 +37,7 @@ static bool is_valide_move(SGameState *game, Player player, SMove move) {
     } else if (from + len == 25 &&
                game->board[from - 1].owner == player) {
         //On sort un pion.
-        // TODO: vérifier que toutes les dames sont du bon côté
-        return true;
+        return all_dames_in_inner_board(game, player);
     } else if (game->board[from - 1].owner == player){
         return is_move_possible(game, player, from + len);
     } else {
@@ -52,6 +52,18 @@ static bool is_move_possible(SGameState *game, Player player, uint location) {
     } else {
         return game->board[location - 1].nbDames < 2;
     }
+}
+
+static bool all_dames_in_inner_board(SGameState *game, Player player) {
+    size_t count = game->bar[player];
+
+    for (size_t i = 0; i < 18; i++) {
+        if (game->board[i].owner == player) {
+            count += game->board[i].nbDames;
+        }
+    }
+
+    return count == 0;
 }
 
 ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsigned char dices[2]) {
