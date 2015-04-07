@@ -1,18 +1,28 @@
 #include "AI_tree.h"
+#include "possibilities.h"
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
 
-static unsigned int somme_plateau(SGameState * etat_jeu,Player player)
+static Player opposing_player(Player player)
+{
+    assert(player != NOBODY);
+    if (player == WHITE)
+        return BLACK ;
+    else
+        return WHITE ;
+}
+
+static unsigned int somme_plateau(SGameState etat_jeu,Player player)
 {
     unsigned int somme = 0 ;
-    somme += etat_jeu->bar[player];
+    somme += etat_jeu.bar[player];
     for (int i = 0 ; i < 24 ; i++ )
     {
-        if (etat_jeu->board[i].owner == player)
-            somme += etat_jeu->board[i].nbDames ;
+        if (etat_jeu.board[i].owner == player)
+            somme += etat_jeu.board[i].nbDames ;
     }
-    somme += etat_jeu->out[player];
+    somme += etat_jeu.out[player];
     return somme;
 }
 
@@ -71,8 +81,8 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     assert(des[0] >= 1 && des[0] <= 6 && des[1] >= 1 && des[1] <= 6 );
     // on verifie que les dés envoyés sont valides
 
-    assert(somme_plateau(&etat_jeu,WHITE) == 15 );
-    assert(somme_plateau(&etat_jeu,BLACK) == 15 );
+    assert(somme_plateau(etat_jeu,WHITE) == 15 );
+    assert(somme_plateau(etat_jeu,BLACK) == 15 );
 
     if (profondeur == 0 || isGameFinished(etat_jeu))
 	{
@@ -271,7 +281,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
             etat_jeu.board[current_move.src_point-1].nbDames -= 1 ;
 			int nbDames = etat_jeu.board[current_move.src_point-1].nbDames ;
             assert(nbDames >= 0);
-
+            
 			if(nbDames == 0)
 				etat_jeu.board[current_move.src_point-1].owner = NOBODY;
 			
@@ -281,9 +291,13 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 		{
 			etat_jeu.out[player] += 1 ;
 		}
-		else
-		{
-			
+		else if (etat_jeu.board[current_move.dest_point-1].owner!=player && etat_jeu.board[current_move.dest_point-1].nbDames == 1)
+		{// cas où on mange un pion ennemi
+            etat_jeu.bar[opposing_player(player)] += 1 ;
+            etat_jeu.board[current_move.dest_point-1].owner = player ; 
+        }
+        else
+        {
 			etat_jeu.board[current_move.dest_point-1].nbDames += 1 ;
 			etat_jeu.board[current_move.dest_point-1].owner = player ;
 		}

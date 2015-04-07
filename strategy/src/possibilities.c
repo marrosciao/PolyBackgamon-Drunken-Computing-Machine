@@ -168,21 +168,38 @@ static AIListMoves reverse_moves(AIListMoves moves) {
     return moves;
 }
 
-static SGameState apply_move(SGameState game, Player player, SMove move) {
-    if (move.src_point == 0) {
-        game.bar[player] -= 1;
-    } else {
-        game.board[move.src_point - 1].nbDames -= 1;
-        if (game.board[move.src_point - 1].nbDames == 0) {
-            game.board[move.src_point - 1].owner = NOBODY;
-        }
+SGameState apply_move(SGameState game, Player player, SMove move) {
+    assert(move.src_point < 25);
+    assert(move.dest_point > 0);
+    if (move.src_point == 0)
+    {
+        game.bar[player] -= 1 ;
+    }
+    else
+    {
+
+        game.board[move.src_point-1].nbDames -= 1 ;
+        int nbDames = game.board[move.src_point-1].nbDames ;
+        assert(nbDames >= 0);
+        
+        if(nbDames == 0)
+            game.board[move.src_point-1].owner = NOBODY;
+        
     }
 
-    if (move.dest_point == 25) {
-        game.out[player] += 1;
-    } else {
-        game.board[move.dest_point - 1].nbDames += 1;
-        game.board[move.dest_point - 1].owner = player;
+    if (move.dest_point == 25)
+    {// on sort le pion du plateau (definitif)
+        game.out[player] += 1 ;
+    }
+    else if (game.board[move.dest_point-1].owner!=player && game.board[move.dest_point-1].nbDames == 1)
+    {// cas où on mange un pion ennemi
+        game.bar[opposing_player(player)] += 1 ;
+        game.board[move.dest_point-1].owner = player ; 
+    }
+    else
+    {
+        game.board[move.dest_point-1].nbDames += 1 ;
+        game.board[move.dest_point-1].owner = player ;
     }
 
     return game;
