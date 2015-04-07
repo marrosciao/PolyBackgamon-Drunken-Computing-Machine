@@ -165,6 +165,8 @@ void move(SGameState * const state, SMove const movement, const Player player)
 
 void move_from_out(SGameState * const state, SMove const movement, const Player player)
 {
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
+    printf("\t\t\t%s : take from bar\n",enumToStr[player+1]);
     state->bar[player]--;
     put_on(state->board, state->bar, movement.dest_point, player);
 }
@@ -172,6 +174,8 @@ void move_from_out(SGameState * const state, SMove const movement, const Player 
 void move_to_end(SGameState * const state, SMove const movement, const Player player)
 {
     take_from(state->board, movement.src_point);
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
+    printf("\t\t\t%s : put piece to end zone\n",enumToStr[player+1]);
     state->out[player]++;
 }
 
@@ -183,17 +187,22 @@ void move_in_board(SGameState * const state, SMove const movement, const Player 
 
 void put_on(Square board[24], uint bar[2], cuint dest, const Player p)
 {
-
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( board[dest-1].owner != p && board[dest-1].nbDames<2 )
     {
+        printf("\t\t\t%d change owner : from %s to %s\n", dest, enumToStr[board[dest-1].owner+1], enumToStr[p+1]);
+        if(board[dest-1].owner!=NOBODY && board[dest-1].nbDames>0) bar[1-p]++;
         board[dest-1].owner = p;
         board[dest-1].nbDames = 0;
-        bar[1-p]++;
     }
     board[dest-1].nbDames++;
+    printf("\t\t\t%d as now %d piece and is owned by %s\n", dest, board[dest-1].nbDames, enumToStr[board[dest-1].owner+1]);
 }
 
 void take_from(Square board[24], cuint src)
 {
+    const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     board[src-1].nbDames--;
+    if(board[src-1].nbDames==0) board[src-1].owner=NOBODY;
+    printf("\t\t\t%d as now %d piece and is owned by %s\n", src, board[src-1].nbDames, enumToStr[board[src-1].owner+1]);
 }
