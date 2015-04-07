@@ -7,7 +7,6 @@
  * @file referee.h
  * @author Vincent BONNEVALLE
  * @brief Défini les fonctions nécessaires au déplacement des pions
- * @todo Vérifier qu'on utilise le max de dés possible (on doit utiliser le max de dé)
  */
 
 //TODO : faire les test (cf CMakeLists.txt)
@@ -22,7 +21,7 @@ typedef const unsigned int cuint;
 typedef unsigned int uint;
 
 /**
- * @fn int check_move(const SMove movement, Dice[] dices, cuint nbDice, const Player player, SGameState * const state)
+ * @fn int check_move(const SMove movement, Dice[] dices, cuint nbDice, const Player player, SGameState const * const state)
  * @brief Vérifie la validité du mouvement
  * @param movement mouvement dont on veut vérifier la validité
  * @param dices    valeur du lancé de dés
@@ -33,6 +32,15 @@ typedef unsigned int uint;
  */
 int check_move(const SMove, Dice[], cuint, const Player, SGameState const * const);
 
+/**
+ * @fn int check_number_dices(const SGameState * const state, Dice[] dice, cuint nb_move, const Player player)
+ * @brief Vérifie qu'on utilise la maximum possible de dés
+ * @param state   état du jeu
+ * @param dice    valeur des dés
+ * @param nb_move nombre de mouvement effectué par le joueur
+ * @param player  joueur courant
+ * @return false -> pas d'erreur, true sinon
+ */
 int check_number_dices(const SGameState * const, Dice[], cuint, const Player);
 
 /**

@@ -36,7 +36,6 @@ typedef struct{
 	pfPlayTurn		playTurn;
 } Functions;
 
-
 /**
  * @fn void init_func(void* handle, Functions* function, err_func errfunc)
  * @brief Initialise les fonctions de la bibliothèque dynamique
