@@ -8,7 +8,7 @@
 void InitLibrary(char name[50])
 {
     
-    strcpy(name,"La meilleure IA des meilleurs potes");
+    strcpy(name,"La plus random des IA");
 
     // Code d'initialisation ici.
 
