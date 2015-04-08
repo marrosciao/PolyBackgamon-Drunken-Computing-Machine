@@ -11,11 +11,11 @@ include_directories(${SDL_INCLUDE_DIRS} ${SDLIMAGE_INCLUDE_DIRS})
 link_libraries( SDL ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} SDLmain dl )
 
 ## Set the compile options
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto -rdynamic")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g -fsanitize=address")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2 -DNDEBUG")
-set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
+#set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wshadow -std=c11 -pipe -fdiagnostics-color=auto -rdynamic")
+#set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -g -fsanitize=address")
+#set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2 -DNDEBUG")
+#set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES *.o)
 
 # Défintion des chemins, ...
 set(HEADER_DIR "include")
