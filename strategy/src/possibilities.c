@@ -19,7 +19,26 @@ static bool        all_dames_in_inner_board(SGameState *game, Player player);
 
 static bool is_valide_move(SGameState *game, Player player, SMove move) {
     uint from = move.src_point, len = move.dest_point - move.src_point;
-    if (from >= 25 ||
+    if (from + len == 25 && from &&
+        game->board[from - 1].owner == player) {
+        return all_dames_in_inner_board(game, player);
+    } else if (from + len > 25 && from &&
+               game->board[from - 1].owner == player) {
+        // On sort un pion. C'est un peu compliqué, pour gérer les sorties, cf
+        // wikipédia.
+        if (!all_dames_in_inner_board(game, player)) {
+            return false;
+        }
+
+        for (size_t i = 18; i < from - 1; i++) {
+            if (game->board[i].nbDames &&
+                game->board[i].owner == player) {
+                return false;
+            }
+        }
+
+        return true;
+    } else if (from >= 25 ||
         (from + len) > 25) {
         // On est hors du cadre.
         return false;
@@ -28,12 +47,8 @@ static bool is_valide_move(SGameState *game, Player player, SMove move) {
         // il y a des dames sur la barre.
         return false;
     } else if (from == 0) {
-        //On part de la barre.
+        // On part de la barre.
         return game->bar[player] && is_move_possible(game, player, from + len);
-    } else if (from + len == 25 &&
-               game->board[from - 1].owner == player) {
-        //On sort un pion.
-        return all_dames_in_inner_board(game, player);
     } else if (game->board[from - 1].owner == player){
         return is_move_possible(game, player, from + len);
     } else {
@@ -133,7 +148,7 @@ static size_t insert_all_dices(SGameState game,
             .dest_point = i + dices[0],
         };
         if (is_valide_move(&game, player, move)) {
-            move.dest_point = max(move.dest_point, 25);
+            move.dest_point = min(move.dest_point, 25);
             AIListMoves moves_tmp = moves;
             moves_tmp.mouvement[moves_tmp.nombre_mouvements] = move;
             moves_tmp.nombre_mouvements += 1;

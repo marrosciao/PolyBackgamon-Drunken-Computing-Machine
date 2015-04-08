@@ -1,4 +1,5 @@
 #include <assert.h>
+
 #include "utils.h"
 
 SGameState reverse_game(SGameState game) {
@@ -82,5 +83,9 @@ long min_long(long a, long b) {
 }
 
 size_t min_size_t(size_t a, size_t b) {
+    return a <= b ? a : b;
+}
+
+uint min_uint(uint a, uint b) {
     return a <= b ? a : b;
 }

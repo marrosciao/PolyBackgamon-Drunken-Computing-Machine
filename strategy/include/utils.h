@@ -18,10 +18,12 @@ uint   max_uint(uint, uint);
 
 #define min(x, y) _Generic((x),\
     size_t: min_size_t,\
-    long: min_long)(x,y)
+    long: min_long,\
+    uint: min_uint)(x,y)
 
 size_t min_size_t(size_t, size_t);
 long   min_long(long, long);
+uint   min_uint(uint, uint);
 
 SGameState  reverse_game(SGameState);
 AIListMoves reverse_moves(AIListMoves);
