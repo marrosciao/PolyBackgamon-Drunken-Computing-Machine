@@ -123,6 +123,7 @@ int check_move(const SMove move,
             else
             {
                 err = 0;
+                if(dices[0] != dices[1]) dices[i] = 7;
             }
             ++i;
         }
