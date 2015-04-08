@@ -14,7 +14,7 @@
 //TODO : revoir les pré/post pour faire plus proche de spec
 
 //! typedef définissant le type d'un dé
-typedef const unsigned char Dice;
+typedef unsigned char Dice;
 //! raccourci pour const unsigned int
 typedef const unsigned int cuint;
 //! raccourci pour unsigned int

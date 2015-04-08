@@ -7,8 +7,11 @@
 #include<string.h>
 #include<stdio.h>
 #include<assert.h>
+#include<SDL/SDL.h>
 
 #include"referee.h"
+#include"graph.h"
+#include"logger.h"
 
 static Dice rand_dice(){
     return (Dice)(rand()%6)+1;
@@ -24,26 +27,32 @@ SGameState* copy_state(SGameState state){
     return copy;
 }
 
-int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastStaker, Player* winner)
+int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastStaker, Player* winner, SDL_Surface* screen)
 {
     unsigned char dices[2];
     roll_dice(dices);
-    fprintf(stderr ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    char mess[50];
+    sprintf(mess ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    logging("referee_logger", mess, INFO);
+    animateDes(dices,screen);
     SGameState* state_copy = copy_state(*state);
     bool end_of_round = false;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( *lastStaker!=current && player[current].func->doubleStack(state_copy) )
     {
-        fprintf(stderr, "\t%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
+        sprintf(mess, "\t%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
+        logging("referee_logger", mess, INFO);
         if( !player[1-current].func->takeDouble(state_copy) )
         {
-            fprintf(stderr, "\t%s ne suit pas\n", enumToStr[(1-current)+1]);
+            sprintf(mess, "\t%s ne suit pas\n", enumToStr[(1-current)+1]);
+            logging("referee_logger", mess, INFO);
             end_of_round = true;
             *winner      = current;
         }
         else
         {
-            fprintf(stderr, "\t%s suit\n", enumToStr[(1-current)+1]);
+            sprintf(mess, "\t%s suit\n", enumToStr[(1-current)+1]);
+            logging("referee_logger", mess, INFO);
             state->stake *= 2;
             *lastStaker   = current;
         }
@@ -62,13 +71,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                 &(player[current].nb_moves),
                 player[current].tries
             );
-            for(unsigned int i=0; i<player[current].nb_moves; ++i)
-            {
-               fprintf(stderr, "\t%s : %d -> %d\n",
-                        enumToStr[current+1],
-                        player[current].moves[i].src_point,
-                        player[current].moves[i].dest_point);
-            }
             errors = move_all(
                     state,
                     player[current].moves,
@@ -78,11 +80,18 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                     current
             );
             player[current].tries -= errors;
+            if(errors>0)
+            {
+                roll_dice(dices);
+                sprintf(mess ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+                logging("referee_logger", mess, INFO);
+            }
         }
     }
     if(player[current].tries<=0)
     {
-        fprintf(stderr, "\t%s a fait trop d'erreurs\n", enumToStr[current+1]);
+        sprintf(mess, "%s a fait trop d'erreur et à perdu\n", enumToStr[current+1]);
+        logging("referee_logger", mess, ERROR);
         *winner = (Player)(1-current);
         end_of_round = true;
     }

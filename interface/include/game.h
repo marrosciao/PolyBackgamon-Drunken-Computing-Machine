@@ -1,6 +1,7 @@
 #ifndef _GAME_INCLUDED
 #define _GAME_INCLUDED
 
+#include<SDL/SDL.h>
 #include"init.h"
 #include"backgammon.h"
 
@@ -24,7 +25,7 @@ typedef struct{
     SMove moves[4];
 }IA;
 
-int gamePlayTurn(SGameState* state, IA players[2], Player current, Player* lastStaker, Player* winner);
+int gamePlayTurn(SGameState* state, IA players[2], Player current, Player* lastStaker, Player* winner, SDL_Surface* screen);
 
 /**
  * @fn void roll_dice(unsigned char dice[2])

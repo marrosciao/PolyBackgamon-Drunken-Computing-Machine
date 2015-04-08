@@ -1,8 +1,14 @@
-#include "AI_tree.h"
-#include "possibilities.h"
+#include <assert.h>
+#include <limits.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "AI_tree.h"
+#include "utils.h"
+#include "possibilities.h"
+
+Player ai_player;
 
 Player opposing_player(Player player)
 {

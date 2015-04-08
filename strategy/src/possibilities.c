@@ -1,11 +1,9 @@
 #include <stdbool.h>
 
 #include "possibilities.h"
-#include "AI_tree.h"
+#include "utils.h"
 
 /** Pour toutes les fonctions ici, SGameState est normalisé. */
-
-typedef unsigned char uc;
 
 static size_t      insert_all_dices(SGameState game,
                                     Player player,
@@ -17,13 +15,30 @@ static size_t      insert_all_dices(SGameState game,
                                     AIListMoves moves);
 static bool        is_move_possible(SGameState *game, Player player, uint location);
 static bool        is_valide_move(SGameState *, Player, SMove);
-static SGameState  reverse_game(SGameState);
-static AIListMoves reverse_moves(AIListMoves);
 static bool        all_dames_in_inner_board(SGameState *game, Player player);
 
 static bool is_valide_move(SGameState *game, Player player, SMove move) {
     uint from = move.src_point, len = move.dest_point - move.src_point;
-    if (from >= 25 ||
+    if (from + len == 25 && from &&
+        game->board[from - 1].owner == player) {
+        return all_dames_in_inner_board(game, player);
+    } else if (from + len > 25 && from &&
+               game->board[from - 1].owner == player) {
+        // On sort un pion. C'est un peu compliqué, pour gérer les sorties, cf
+        // wikipédia.
+        if (!all_dames_in_inner_board(game, player)) {
+            return false;
+        }
+
+        for (size_t i = 18; i < from - 1; i++) {
+            if (game->board[i].nbDames &&
+                game->board[i].owner == player) {
+                return false;
+            }
+        }
+
+        return true;
+    } else if (from >= 25 ||
         (from + len) > 25) {
         // On est hors du cadre.
         return false;
@@ -32,12 +47,8 @@ static bool is_valide_move(SGameState *game, Player player, SMove move) {
         // il y a des dames sur la barre.
         return false;
     } else if (from == 0) {
-        //On part de la barre.
+        // On part de la barre.
         return game->bar[player] && is_move_possible(game, player, from + len);
-    } else if (from + len == 25 &&
-               game->board[from - 1].owner == player) {
-        //On sort un pion.
-        return all_dames_in_inner_board(game, player);
     } else if (game->board[from - 1].owner == player){
         return is_move_possible(game, player, from + len);
     } else {
@@ -137,6 +148,7 @@ static size_t insert_all_dices(SGameState game,
             .dest_point = i + dices[0],
         };
         if (is_valide_move(&game, player, move)) {
+            move.dest_point = min_uint(move.dest_point, 25);
             AIListMoves moves_tmp = moves;
             moves_tmp.mouvement[moves_tmp.nombre_mouvements] = move;
             moves_tmp.nombre_mouvements += 1;
@@ -157,68 +169,4 @@ static size_t insert_all_dices(SGameState game,
     }
 
     return max_nb_dice_used;
-}
-
-static SGameState reverse_game(SGameState game) {
-    Square board[24];
-
-    for (size_t i = 0; i < 24; i++) {
-        board[i] = game.board[23 - i];
-    }
-
-    for (size_t i = 0; i < 24; i++) {
-        game.board[i] = board[i];
-    }
-
-    return game;
-}
-
-static AIListMoves reverse_moves(AIListMoves moves) {
-    for (size_t i = 0; i < moves.nombre_mouvements; i++) {
-        if (moves.mouvement[i].src_point > 0) {
-            moves.mouvement[i].src_point = 25 - moves.mouvement[i].src_point;
-        }
-        if (moves.mouvement[i].dest_point < 25) {
-            moves.mouvement[i].dest_point = 25 - moves.mouvement[i].dest_point;
-        }
-    }
-
-    return moves;
-}
-
-SGameState apply_move(SGameState game, Player player, SMove move) {
-    assert(move.src_point < 25);
-    assert(move.dest_point > 0);
-    if (move.src_point == 0)
-    {
-        game.bar[player] -= 1 ;
-    }
-    else
-    {
-
-        game.board[move.src_point-1].nbDames -= 1 ;
-        int nbDames = game.board[move.src_point-1].nbDames ;
-        assert(nbDames >= 0);
-
-        if(nbDames == 0)
-            game.board[move.src_point-1].owner = NOBODY;
-
-    }
-
-    if (move.dest_point == 25)
-    {// on sort le pion du plateau (definitif)
-        game.out[player] += 1 ;
-    }
-    else if (game.board[move.dest_point-1].owner!=player && game.board[move.dest_point-1].nbDames == 1)
-    {// cas où on mange un pion ennemi
-        game.bar[opposing_player(player)] += 1 ;
-        game.board[move.dest_point-1].owner = player ;
-    }
-    else
-    {
-        game.board[move.dest_point-1].nbDames += 1 ;
-        game.board[move.dest_point-1].owner = player ;
-    }
-
-    return game;
 }

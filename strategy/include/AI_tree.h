@@ -1,19 +1,15 @@
 #pragma once
 
-#include <stdlib.h>
-// size_t
-
+#include <stddef.h>
 #include <stdbool.h>
-#include <assert.h>
-#include <limits.h>
 
-#include "possibilities.h"
 #include "backgammon.h"
 #include "arraylist.h"
 
 // VAR GLOBALE ATTENTION NE PAS TOUCHER !!!!
-Player ai_player ;
+extern Player ai_player ;
 //!!!!! !!!!!
 
 AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char dices[2]);
-Player opposing_player(Player player);
+SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements, Player player);
+bool isGameFinished(SGameState etat_jeu);

@@ -2,11 +2,13 @@
 
 #include<stdbool.h>
 #include<stdlib.h>
+#include<stdio.h>
 
 #include"error.h"
+#include"logger.h"
 
-//TODO : tester et vérifier si c'est bon
-//TODO : faire le cas où il y a des pions dans la zone out et zone de fin
+//TODO : faire la vérif de sortie des dames (cf wikipedia)
+static const char* enumToStr[] = { "NOBODY", "BLACK", "WHITE" };
 int check_number_dices(
         const SGameState * const state,
         Dice dices[],
@@ -44,67 +46,92 @@ int check_number_dices(
     return err;
 }
 
+static int compute_delta_move(cuint src, cuint dest, const Player player)
+{
+    int delta_move = dest - src;
+    if(src==0 && player==BLACK)
+    {
+        delta_move = 25-dest;
+    }
+    else if(dest==25)
+    {
+        delta_move = player==BLACK ? src : dest-src;
+    }
+    return delta_move<0 ? -delta_move : delta_move;
+}
+static bool compute_can_take_from(cuint src, cuint bar[2], const Square board[24], const Player player){
+    bool can_take_from = false;
+    if(src==0)
+    {
+        can_take_from = bar[player]>0;
+    }
+    else
+    {
+        can_take_from = board[src-1].owner==player && board[src-1].nbDames>0;
+    }
+    return can_take_from;
+}
+static bool has_farer_piece(const Square board[24], const Player player)
+{
+    bool has_farer = false;
+    if(player==BLACK)
+    {
+        unsigned int index = 6;
+        unsigned int end   = 0;
+        for(;index>end; --index)
+        {
+            if(board[index-1].owner==player)
+            {
+                has_farer = true;
+            }
+        }
+    }
+    if(player == WHITE)
+    {
+        unsigned int index = 19;
+        unsigned int end   = 25;
+        for(;index>end; ++index)
+        {
+            if(board[index-1].owner==player)
+            {
+                has_farer = true;
+            }
+        }
+    }
+    return has_farer;
+}
+ static bool compute_can_put_to(int delta ,cuint dest, const SGameState* const state, const Player player, Dice dices[2])
+{
+    bool can_put_to = false;
+    if(dest==25)
+    {
+        can_put_to = !check_side(state, player) &&
+                     ( !has_farer_piece(state->board, player) ||
+                       dices[0] == delta ||
+                       dices[1] == delta
+                     );
+    }
+    else
+    {
+        can_put_to = state->board[dest-1].owner==player || state->board[dest-1].nbDames<2;
+    }
+    return can_put_to;
+}
+
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : refactoring ?
-//TODO : verifier qu'on utilise pas deux fois le même dé
-//TODO : verif de l'utilisation max des dés
+//TODO : 0 -> zone out
+//TODO : 25 -> zone de fin
 int check_move(const SMove move,
         Dice dices[],
         cuint nb_dices,
         const Player player,
         SGameState const * const state)
 {
-    // Si player==BLACK 1-player == WHITE, de même si player==WHITE.
-    // Si player==BLACK==0, 1-player==1, -1*(1-player)==-1, inversement pour player==WHITE.
-    // Le joueur noir se déplace de la case
-    // 24 vers la case 0, donc dans le sens négatif.
-    // Pour vérifier si le déplacement est valide, on prend la valeur absolue
-    // de la différence dest - src en multipliant par -1 si le joueur est
-    // le joueur noir et par 1 si il est blanc.
-    //TODO : 0 -> zone out
-    //TODO : 25 -> zone de fin
-    //TODO : faire en sorte que ça marche pour la sortie de la zone out pour tout
-    //les joueurs (black sort au niveau des ~20)
     uint err = 0;
-    int delta_move = (move.dest_point - move.src_point);
-    if(move.src_point==0 && player==BLACK)
-    {
-        delta_move = 25-move.dest_point;
-    }
-    else if(move.dest_point==25)
-    {
-        if(player==BLACK)
-        {
-            delta_move = move.src_point;
-        }
-        else
-        {
-            delta_move = move.dest_point - move.src_point;
-        }
-    }
-    if(delta_move<0)
-    {
-       delta_move=-delta_move;
-    }
-    bool can_take_from   = false;
-    if(move.src_point==0)
-    {
-        can_take_from = state->bar[player]>0;
-    }
-    else
-    {
-        can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
-    }
-    //TODO : faire la vérif de sortie des dames (cf wikipedia)
-    bool can_put_to = false;
-    if(move.dest_point==25)
-    {
-        can_put_to = !check_side(state, player);
-    }
-    else
-    {
-        can_put_to = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
-    }
+    int delta_move = compute_delta_move(move.src_point, move.dest_point, player);
+    bool can_take_from = compute_can_take_from(move.src_point, state->bar, state->board, player);
+    bool can_put_to = compute_can_put_to(delta_move, move.dest_point, state, player, dices);
     const bool has_out = state->bar[player]>0;
     if ( !can_take_from ||
          !can_put_to ||
@@ -119,17 +146,23 @@ int check_move(const SMove move,
         uint i=0;
         while(i<nb_dices && err!=0)
         {
-            if( dices[i]!=delta_move)
+            if( dices[i]!=delta_move || (move.dest_point==25 && dices[i]<delta_move) )
             {
                 err = 1;
             }
             else
             {
                 err = 0;
-                //mettre dice à un valeur invalide
+                if(dices[0] != dices[1]) dices[i] = 7;
             }
             ++i;
         }
+    }
+    if(err>0)
+    {
+        char mess[50];
+        sprintf(mess, "%s à fait une erreur\n", enumToStr[player+1]);
+        logging("referee_logger", mess, WARNING);
     }
     return err;
 }
@@ -149,6 +182,9 @@ int check_side(SGameState const * const state, const Player player)
         if( state->board[index-1].owner == player)
         {
             err = true;
+            char mess[50];
+            sprintf(mess, "%s essaie de sortir un pion alors qu'il lui reste des pions hors de la zone de fin\n", enumToStr[player+1]);
+            logging("referee_logger", mess, WARNING);
         }
         ++index;
     }
@@ -156,8 +192,6 @@ int check_side(SGameState const * const state, const Player player)
 
 }
 
-//TODO : changer les paramêtres pour enlever les trucs inutiles
-//TODO : si erreur -> arrêt
 int move_all(
         SGameState *const state,
         SMove const * const moves,
@@ -187,12 +221,31 @@ int move_all(
 
 void move(SGameState * const state, SMove const movement, const Player player)
 {
+    char mess[50];
+    sprintf(mess, "%s bouge de %d à %d\n", enumToStr[player+1], movement.src_point, movement.dest_point);
+    logging("referee_logger", mess, INFO);
     if(movement.dest_point == 25)
+    {
         move_to_end(state, movement, player);
+    }
     else if(movement.src_point == 0)
+    {
         move_from_out(state, movement, player);
+    }
     else
+    {
         move_in_board(state, movement, player);
+    }
+    unsigned int nbDame = 0;
+    if(movement.src_point>0) nbDame = state->board[movement.src_point-1].nbDames;
+    else nbDame = state->bar[player];
+    sprintf(mess, "la case %2d à %2d pions\n", movement.src_point, nbDame);
+    logging("referee_logger", mess, INFO);
+    nbDame = 0;
+    if(movement.dest_point<24) nbDame = state->out[player];
+    else nbDame = state->board[movement.dest_point-1].nbDames;
+    sprintf(mess, "la case %2d à %2d pions\n", movement.dest_point, nbDame);
+    logging("referee_logger", mess, INFO);
 }
 
 void move_from_out(SGameState * const state, SMove const movement, const Player player)
@@ -217,7 +270,16 @@ void put_on(Square board[24], uint bar[2], cuint dest, const Player p)
 {
     if( board[dest-1].owner != p && board[dest-1].nbDames<2 )
     {
-        if(board[dest-1].owner!=NOBODY && board[dest-1].nbDames>0) bar[1-p]++;
+        if(board[dest-1].owner!=NOBODY && board[dest-1].nbDames>0)
+        {
+            bar[1-p]++;
+            char mess[50];
+            sprintf(mess, "%s mange un pion de %s\n", enumToStr[p+1], enumToStr[(1-p)+1]);
+            logging("referee_logger", mess, INFO);
+        }
+        char mess[50];
+        sprintf(mess, "la case %i passe de %s à %s\n", dest, enumToStr[p+1], enumToStr[board[dest-1].owner+1]);
+        logging("referee_logger", mess, INFO);
         board[dest-1].owner = p;
         board[dest-1].nbDames = 0;
     }
