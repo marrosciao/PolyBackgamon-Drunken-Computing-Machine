@@ -126,8 +126,9 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                     toutes_combinaisons_des[combinaison_de][1],
                 };
 
-                alpha_valeurs[combinaison_de] = alphabeta(    gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                                            ,profondeur - 1
+                alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
+                        ,profondeur - 1 
+                        ,profondeur_initial
                                             ,alpha
                                             ,beta
                                             ,opposing_player(joueur_calcule)
@@ -137,7 +138,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
             }
             long alpha_calcul = moyenne(alpha_valeurs);
 
-            if (v < alpha_calcul)
+            if (v < alpha_calcul && profondeur_initial == profondeur)
             {
                 *moves = temp_moves ;
             }
@@ -163,7 +164,8 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                 };
 
                 alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                        ,profondeur - 1 
+                        ,profondeur - 1
+                        ,profondeur_initial
                         ,alpha
                         ,beta
                         ,opposing_player(joueur_calcule)
@@ -172,10 +174,6 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                         ,set_de_actuel);
             }
             long alpha_calcul = moyenne(alpha_valeurs);
-            if (v > alpha_calcul)
-            {
-                *moves = temp_moves ;
-            }
 
             v = min(v, alpha_calcul);
             beta = min(beta, v);
@@ -212,7 +210,8 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
     AIListMoves moves ;
     // appel theorique de alphabeta : alphabeta(Noeud,profondeur_de_base,-infini,+infini)
     alphabeta(    etat_jeu, // etat du jeu courant, necessaire pour calculer les possibilites
-                2, // profondeur de calcul souhaité, attention, augmenter de 1 peut prendre beaucou plus de temps!
+                2,
+                2,// profondeur de calcul souhaité, attention, augmenter de 1 peut prendre beaucou plus de temps!
                 LONG_MIN, // moins l'infini version machine
                 LONG_MAX, // plus l'infini version machine
                 player, // quel joueur nous sommes
