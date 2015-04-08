@@ -8,6 +8,7 @@
     p_logging(name, __FILE__, __func__, __LINE__, message, lvl)
 
 typedef enum{
+    NONE    = -1,
     ERROR   = 0,
     WARNING = 1,
     INFO    = 2
