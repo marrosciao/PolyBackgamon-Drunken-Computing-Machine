@@ -162,14 +162,14 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                     toutes_combinaisons_des[combinaison_de][1],
                 };
 
-                alpha_valeurs[combinaison_de] = alphabeta(    gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                                            ,profondeur - 1
-                                            ,alpha
-                                            ,beta
-                                            ,opposing_player(joueur_calcule)
-                                            ,AI_player
-                                            ,moves
-                                            ,set_de_actuel);
+                alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
+                        ,profondeur - 1 
+                        ,alpha
+                        ,beta
+                        ,opposing_player(joueur_calcule)
+                        ,AI_player
+                        ,moves
+                        ,set_de_actuel);
             }
             long alpha_calcul = moyenne(alpha_valeurs);
             if (v > alpha_calcul)
