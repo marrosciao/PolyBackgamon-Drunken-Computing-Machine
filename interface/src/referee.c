@@ -59,9 +59,7 @@ static int compute_delta_move(cuint src, cuint dest, const Player player)
     }
     return delta_move<0 ? -delta_move : delta_move;
 }
-
-//TODO : ici ----
-static bool compute_can_take_from(cuint src, cuint bar[2], const Square sqr, const Player player){
+static bool compute_can_take_from(cuint src, cuint bar[2], const Square board[24], const Player player){
     bool can_take_from = false;
     if(src==0)
     {
@@ -69,9 +67,22 @@ static bool compute_can_take_from(cuint src, cuint bar[2], const Square sqr, con
     }
     else
     {
-        can_take_from = sqr.owner==player && sqr.nbDames>0;
+        can_take_from = board[src-1].owner==player && board[src-1].nbDames>0;
     }
     return can_take_from;
+}
+ static bool compute_can_put_to(cuint dest, const SGameState* const state, const Player player)
+{
+    bool can_put_to = false;
+    if(dest==25)
+    {
+        can_put_to = !check_side(state, player);
+    }
+    else
+    {
+        can_put_to = state->board[dest-1].owner==player || state->board[dest-1].nbDames<2;
+    }
+    return can_put_to;
 }
 
 //TODO : changer les paramêtres pour enlever les trucs inutiles
@@ -86,24 +97,8 @@ int check_move(const SMove move,
 {
     uint err = 0;
     int delta_move = compute_delta_move(move.src_point, move.dest_point, player);
-    bool can_take_from   = false;
-    if(move.src_point==0)
-    {
-        can_take_from = state->bar[player]>0;
-    }
-    else
-    {
-        can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
-    }
-    bool can_put_to = false;
-    if(move.dest_point==25)
-    {
-        can_put_to = !check_side(state, player);
-    }
-    else
-    {
-        can_put_to = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
-    }
+    bool can_take_from = compute_can_take_from(move.src_point, state->bar, state->board, player);
+    bool can_put_to = compute_can_put_to(move.dest_point, state, player);
     const bool has_out = state->bar[player]>0;
     if ( !can_take_from ||
          !can_put_to ||
