@@ -68,8 +68,8 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                 printf("player : %s\n", enumToStr[current+1]);
                 printf("mouv num : %d/%d\n",i, player[current].nb_moves);
                 fflush(stdout);
-        assert(0<=player[current].moves[i].src_point && player[current].moves[i].src_point<=25);
-        assert(0<=player[current].moves[i].dest_point && player[current].moves[i].dest_point<=25);
+        assert(player[current].moves[i].src_point<=25);
+        assert(player[current].moves[i].dest_point<=25);
                 printf("%s : %d -> %d\n",
                         enumToStr[current+1],
                         player[current].moves[i].src_point,
