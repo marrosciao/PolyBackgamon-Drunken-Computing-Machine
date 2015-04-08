@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdio.h>
 
+Player ai_player;
+
 Player opposing_player(Player player)
 {
     assert(player != NOBODY);
