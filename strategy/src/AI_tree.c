@@ -201,7 +201,7 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 	on arrete le calcul pour ce set de branche
 	(plus de détail sur l'algorithme : chercher AlphaBeta Pruning sur un moteur de recherche)
 	*/
-
+    assert(!isGameFinished(etat_jeu));
 
 	AIListMoves moves ;
 	// appel theorique de alphabeta : alphabeta(Noeud,profondeur_de_base,-infini,+infini)
