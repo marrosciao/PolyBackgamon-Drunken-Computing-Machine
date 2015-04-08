@@ -1,8 +1,12 @@
-#include "AI_tree.h"
-#include "possibilities.h"
+#include <assert.h>
+#include <limits.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "AI_tree.h"
+#include "utils.h"
+#include "possibilities.h"
 
 Player ai_player;
 
@@ -13,14 +17,6 @@ Player opposing_player(Player player)
         return BLACK ;
     else
         return WHITE ;
-}
-
-static long max(long a, long b) {
-    return a >= b ? a : b;
-}
-
-static long min(long a, long b) {
-    return a <= b ? a : b;
 }
 
 unsigned int somme_plateau(SGameState etat_jeu,Player player)

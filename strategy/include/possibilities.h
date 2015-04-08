@@ -10,9 +10,6 @@
 #include "backgammon.h"
 #include "arraylist.h"
 
-/** uint est plus court que unsigned int ^^ */
-typedef unsigned int uint;
-
 /**
  * @brief Retourne tous les états possibles du jeu à la fin d'un tour.
  *
@@ -27,14 +24,3 @@ typedef unsigned int uint;
  * @return Une ArrayList des mouvements possibles.
  */
 ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsigned char dices[2]);
-
-/**
- * @brief Applique un mouvement sur le plateau.
- *
- * @param game L'état du jeu concerné.
- * @param player Le joueur courant.
- * @param move Le mouvement à appliquer.
- *
- * @return L'état du jeu modifié.
- */
-SGameState apply_move(SGameState, Player, SMove);
