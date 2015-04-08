@@ -5,10 +5,10 @@ project(Interface)
 # Recherche de la SDL
 include(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL REQUIRED sdl)
-PKG_SEARCH_MODULE(SDLIMAGE REQUIRED SDL_ttf>=2.0.0)
+PKG_SEARCH_MODULE(SDLIMAGE REQUIRED SDL_ttf>=1.2.0)
 include_directories(${SDL_INCLUDE_DIRS})
 include_directories(${SDL_INCLUDE_DIRS} ${SDLIMAGE_INCLUDE_DIRS})
-link_libraries( SDL ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} SDLmain dl )
+link_libraries( SDL ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} SDL_ttf SDLmain dl )
 
 ## Set the compile options
 #set(CMAKE_BUILD_TYPE Debug)

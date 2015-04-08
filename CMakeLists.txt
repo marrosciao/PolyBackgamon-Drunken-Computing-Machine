@@ -32,10 +32,10 @@ message("\tDirectory : ${STRATEGY_DIR}")
 include(FindPkgConfig)
 # PKG_SEARCH_MODULE(variable REQUIRED module)
 PKG_SEARCH_MODULE(SDL REQUIRED sdl)
-PKG_SEARCH_MODULE(SDLTTF REQUIRED SDL_ttf>=2.0.0)
+PKG_SEARCH_MODULE(SDLTTF REQUIRED SDL_ttf>=1.2.0)
 include_directories(${SDL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS} ${SDLTTF_INCLUDE_DIRS})
-link_libraries( SDL ${SDL_LIBRARY} ${SDLTTF_LIBRARY} SDLmain dl )
+link_libraries( SDL ${SDL_LIBRARY} ${SDLTTF_LIBRARY} SDL_ttf SDLmain dl )
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
