@@ -12,10 +12,10 @@ TARGETDIR     := bin
 DOCDIR        := doc
 
 #Flags, Libraries and Includes
-CFLAGS        += -std=c11 -Wall -Wextra -pedantic -pipe -fdiagnostics-color=auto -fPIC
-CFLAGS_DEBUG  += -Og -g
-CFLAGS_PROD   += -O2 -s
-CPPFLAGS      += -MMD -MP -I $(INCDIR)
+CFLAGS        += -fPIC
+CFLAGS_DEBUG  +=
+CFLAGS_PROD   +=
+CPPFLAGS      +=
 LDFLAGS       += -shared
 LDLIBS        +=
 
