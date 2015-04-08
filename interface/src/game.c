@@ -83,7 +83,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
             if(errors>0)
             {
                 roll_dice(dices);
-                char mess[50];
                 sprintf(mess ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
                 logging("referee_logger", mess, INFO);
             }
@@ -91,7 +90,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     }
     if(player[current].tries<=0)
     {
-        char mess[50];
         sprintf(mess, "%s a fait trop d'erreur et à perdu\n", enumToStr[current+1]);
         logging("referee_logger", mess, ERROR);
         *winner = (Player)(1-current);

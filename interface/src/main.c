@@ -11,7 +11,6 @@
 #include<SDL/SDL_ttf.h>
 
 #include"backgammon.h"
-#include"config.h"
 #include"init.h"
 #include"game.h"
 #include"graph.h"

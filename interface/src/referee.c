@@ -7,10 +7,8 @@
 #include"error.h"
 #include"logger.h"
 
+//TODO : faire la vérif de sortie des dames (cf wikipedia)
 static const char* enumToStr[] = { "NOBODY", "BLACK", "WHITE" };
-//TODO : tester et vérifier si c'est bon
-//TODO : faire le cas où il y a des pions dans la zone out et zone de fin
-//TODO : vérifier qu'on utilise les plus grands dés
 int check_number_dices(
         const SGameState * const state,
         Dice dices[],
@@ -48,10 +46,36 @@ int check_number_dices(
     return err;
 }
 
+static int compute_delta_move(cuint src, cuint dest, const Player player)
+{
+    int delta_move = dest - src;
+    if(src==0 && player==BLACK)
+    {
+        delta_move = 25-dest;
+    }
+    else if(dest==25)
+    {
+        delta_move = player==BLACK ? src : dest-src;
+    }
+    return delta_move<0 ? -delta_move : delta_move;
+}
+
+//TODO : ici ----
+static bool compute_can_take_from(cuint src, cuint bar[2], const Square sqr, const Player player){
+    bool can_take_from = false;
+    if(src==0)
+    {
+        can_take_from = bar[player]>0;
+    }
+    else
+    {
+        can_take_from = sqr.owner==player && sqr.nbDames>0;
+    }
+    return can_take_from;
+}
+
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : refactoring ?
-//TODO : verifier qu'on utilise pas deux fois le même dé
-//TODO : verif de l'utilisation max des dés
 //TODO : 0 -> zone out
 //TODO : 25 -> zone de fin
 int check_move(const SMove move,
@@ -61,26 +85,7 @@ int check_move(const SMove move,
         SGameState const * const state)
 {
     uint err = 0;
-    int delta_move = (move.dest_point - move.src_point);
-    if(move.src_point==0 && player==BLACK)
-    {
-        delta_move = 25-move.dest_point;
-    }
-    else if(move.dest_point==25)
-    {
-        if(player==BLACK)
-        {
-            delta_move = move.src_point;
-        }
-        else
-        {
-            delta_move = move.dest_point - move.src_point;
-        }
-    }
-    if(delta_move<0)
-    {
-       delta_move=-delta_move;
-    }
+    int delta_move = compute_delta_move(move.src_point, move.dest_point, player);
     bool can_take_from   = false;
     if(move.src_point==0)
     {
@@ -90,7 +95,6 @@ int check_move(const SMove move,
     {
         can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
     }
-    //TODO : faire la vérif de sortie des dames (cf wikipedia)
     bool can_put_to = false;
     if(move.dest_point==25)
     {
@@ -160,8 +164,6 @@ int check_side(SGameState const * const state, const Player player)
 
 }
 
-//TODO : changer les paramêtres pour enlever les trucs inutiles
-//TODO : si erreur -> arrêt
 int move_all(
         SGameState *const state,
         SMove const * const moves,
