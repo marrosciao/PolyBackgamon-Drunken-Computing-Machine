@@ -82,9 +82,8 @@ int drawDes(unsigned char dices[2], SDL_Surface* screen){
         return EXIT_SUCCESS;
 }   
 int animateDes(unsigned char dices[2], SDL_Surface* screen){
-    srand(time(NULL));
     unsigned char rollingDices[2];
-    for (float i=50; i>1; i=i/1.5){
+    for (float i=50; i>10; i=i/1.5){
         rollingDices[0] = rand() %6 +1;;
         rollingDices[1] = rand() %6 +1;
         drawDes(rollingDices, screen);
