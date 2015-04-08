@@ -62,6 +62,6 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	// la flemme d'utiliser memcpy pour 4 lignes
 
     *nbMove = tmp_moves.nombre_mouvements ;
-    assert(0<=tmp_moves.nombre_mouvements && tmp_moves.nombre_mouvements<=4);
-    assert(0<=*nbMove && *nbMove<=4);
+    assert(tmp_moves.nombre_mouvements<=4);
+    assert(*nbMove<=4);
 }
