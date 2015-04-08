@@ -7,6 +7,7 @@
 
 //TODO : tester et vérifier si c'est bon
 //TODO : faire le cas où il y a des pions dans la zone out et zone de fin
+//TODO : vérifier qu'on utilise les plus grands dés
 int check_number_dices(
         const SGameState * const state,
         Dice dices[],
