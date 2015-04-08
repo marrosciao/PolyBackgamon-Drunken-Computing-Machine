@@ -55,13 +55,6 @@ int check_move(const SMove move,
         const Player player,
         SGameState const * const state)
 {
-    // Si player==BLACK 1-player == WHITE, de même si player==WHITE.
-    // Si player==BLACK==0, 1-player==1, -1*(1-player)==-1, inversement pour player==WHITE.
-    // Le joueur noir se déplace de la case
-    // 24 vers la case 0, donc dans le sens négatif.
-    // Pour vérifier si le déplacement est valide, on prend la valeur absolue
-    // de la différence dest - src en multipliant par -1 si le joueur est
-    // le joueur noir et par 1 si il est blanc.
     //TODO : 0 -> zone out
     //TODO : 25 -> zone de fin
     //TODO : faire en sorte que ça marche pour la sortie de la zone out pour tout
@@ -120,7 +113,7 @@ int check_move(const SMove move,
         uint i=0;
         while(i<nb_dices && err!=0)
         {
-            if( dices[i]!=delta_move)
+            if( dices[i]!=delta_move || (move.dest_point==25 && dices[i]<delta_move) )
             {
                 err = 1;
             }
