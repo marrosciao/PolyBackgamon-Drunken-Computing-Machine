@@ -123,7 +123,6 @@ int check_move(const SMove move,
             else
             {
                 err = 0;
-                //mettre dice à un valeur invalide
             }
             ++i;
         }
