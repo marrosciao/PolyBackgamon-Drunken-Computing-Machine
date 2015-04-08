@@ -120,9 +120,11 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 
 			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
-                unsigned char set_de_actuel[2] ;
-                memcpy(set_de_actuel,toutes_combinaisons_des[combinaison_de],2*sizeof(set_de_actuel[0]));
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
+                unsigned char set_de_actuel[2] = {
+                    toutes_combinaisons_des[combinaison_de][0],
+                    toutes_combinaisons_des[combinaison_de][1],
+                };
 
 				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
 											,profondeur - 1 
@@ -157,9 +159,11 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			long alpha_valeurs[21] ;
 			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
-                unsigned char set_de_actuel[2] ;
-                memcpy(set_de_actuel,toutes_combinaisons_des[combinaison_de],2*sizeof(set_de_actuel[0]));
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
+                unsigned char set_de_actuel[2] = {
+                    toutes_combinaisons_des[combinaison_de][0],
+                    toutes_combinaisons_des[combinaison_de][1],
+                };
 
 				alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
 											,profondeur - 1 
