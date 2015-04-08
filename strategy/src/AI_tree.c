@@ -110,7 +110,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     if (joueur_calcule == AI_player)
     {
         v = LONG_MIN ; // equivaut à moins l'infini
-        for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
+        for (size_t i = 0 ; beta > alpha && i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
             list_get(liste_possibilites, i, &temp_moves);
@@ -118,7 +118,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
             // les valeurs de alpha-beta pour chaque combinaison de dé
             // par la suite on fera la moyenne de ces valeurs
 
-			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
+			for (size_t combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
                 unsigned char set_de_actuel[2] = {
@@ -138,26 +138,23 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			long alpha_calcul = moyenne(alpha_valeurs);
 
             if (v < alpha_calcul)
-			{
-				*moves = temp_moves ;
-                v = alpha_calcul ;
-			}
-            if (v > alpha)
-                alpha = v ;  
-            if (beta >= alpha)
-                break;
-            
+            {
+                *moves = temp_moves ;
+            }
+
+            v = max(v, alpha_calcul);
+            alpha = max(alpha, v);
         }
     }
     else
     {
         v = LONG_MAX ; // equivaut à plus l'infini
-        for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
+        for (size_t i = 0 ; beta > alpha && i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
             list_get(liste_possibilites, i, &temp_moves);
 			long alpha_valeurs[21] ;
-			for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
+			for (size_t combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
 			{
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
                 unsigned char set_de_actuel[2] = {
@@ -176,15 +173,12 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 			}
 			long alpha_calcul = moyenne(alpha_valeurs);
             if (v > alpha_calcul)
-			{ 
-				*moves = temp_moves ;
-                v = alpha_calcul ;
-			}
-            if (v < beta)
-                beta = v ;  
-            if (beta <= alpha)
-                break;
-            
+            {
+                *moves = temp_moves ;
+            }
+
+            v = min(v, alpha_calcul);
+            beta = min(beta, v);
         }
     }
 
