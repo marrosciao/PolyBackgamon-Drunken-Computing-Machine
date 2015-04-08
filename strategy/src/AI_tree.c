@@ -15,7 +15,6 @@ Player opposing_player(Player player)
 
 AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char dices[2])
 {
-    assert(!isGameFinished(etat_jeu));
 	AIListMoves moves ;
 	ArrayList *liste_possibilites = retrieveEveryPossibility(etat_jeu,player,dices);
 	size_t nombre_possibilites = list_size(liste_possibilites);
