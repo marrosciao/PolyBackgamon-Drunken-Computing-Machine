@@ -13,6 +13,14 @@ Player opposing_player(Player player)
         return WHITE ;
 }
 
+static long max(long a, long b) {
+    return a >= b ? a : b;
+}
+
+static long min(long a, long b) {
+    return a <= b ? a : b;
+}
+
 unsigned int somme_plateau(SGameState etat_jeu,Player player)
 {
     unsigned int somme = 0 ;
