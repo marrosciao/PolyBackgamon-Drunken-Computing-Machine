@@ -2,9 +2,12 @@
 
 #include<stdbool.h>
 #include<stdlib.h>
+#include<stdio.h>
 
 #include"error.h"
+#include"logger.h"
 
+static const char* enumToStr[] = { "NOBODY", "BLACK", "WHITE" };
 //TODO : tester et vérifier si c'est bon
 //TODO : faire le cas où il y a des pions dans la zone out et zone de fin
 //TODO : vérifier qu'on utilise les plus grands dés
@@ -125,6 +128,12 @@ int check_move(const SMove move,
             ++i;
         }
     }
+    if(err>0)
+    {
+        char mess[50];
+        sprintf(mess, "%s à fait une erreur\n", enumToStr[player+1]);
+        logging("referee_logger", mess, WARNING);
+    }
     return err;
 }
 
@@ -181,6 +190,9 @@ int move_all(
 
 void move(SGameState * const state, SMove const movement, const Player player)
 {
+    char mess[50];
+    sprintf(mess, "%s bouge de %d à %d\n", enumToStr[player+1], movement.src_point, movement.dest_point);
+    logging("referee_logger", mess, INFO);
     if(movement.dest_point == 25)
         move_to_end(state, movement, player);
     else if(movement.src_point == 0)
@@ -211,7 +223,16 @@ void put_on(Square board[24], uint bar[2], cuint dest, const Player p)
 {
     if( board[dest-1].owner != p && board[dest-1].nbDames<2 )
     {
-        if(board[dest-1].owner!=NOBODY && board[dest-1].nbDames>0) bar[1-p]++;
+        if(board[dest-1].owner!=NOBODY && board[dest-1].nbDames>0)
+        {
+            bar[1-p]++;
+            char mess[50];
+            sprintf(mess, "%s mange un pion de %s\n", enumToStr[p+1], enumToStr[(1-p)+1]);
+            logging("referee_logger", mess, INFO);
+        }
+        char mess[50];
+        sprintf(mess, "la case %i passe de %s à %s\n", dest, enumToStr[p+1], enumToStr[board[dest-1].owner+1]);
+        logging("referee_logger", mess, INFO);
         board[dest-1].owner = p;
         board[dest-1].nbDames = 0;
     }

@@ -15,17 +15,13 @@
 #include"init.h"
 #include"game.h"
 #include"graph.h"
-//#include"logger.h"
-
-#define STRINGIFY_HELPER( str ) #str
-#define STRINGIFY( str ) STRINGIFY_HELPER( str )
+#include"logger.h"
 
 //TODO : faire les test et merge la branche
 //TODO : appliquer clang-format
 //TODO : refactoring pour que ça soit plus propre
 //TODO : gestion erreur
-//TODO : faire la gestion des paramêtres en ligne de commande
-//TODO : faire le test si on utilise le max des dés
+//TODO : finir affichage logger
 
 void err(String str){
     fprintf(stderr, "%s -> %s\n",str, dlerror());
@@ -48,7 +44,11 @@ Player choose_start_player(unsigned int i)
 
 int main(int ARGC, const char* ARGV[])
 {
+    init_logger();
     unsigned int target_score = 15 ;
+    set_level("main_logger", INFO);
+    set_file("main_logger", NULL);
+    set_level("refere_logger", INFO);
 
     if (ARGC >= 2)
     {
@@ -68,7 +68,9 @@ int main(int ARGC, const char* ARGV[])
             perror("ERREUR : target_score negatif ou nul");
             exit(EXIT_FAILURE);
         }
-        fprintf(stderr, "Lecture de target_score : %i\n",target_score);
+        char mess[50];
+        sprintf(mess, "Lecture de target score %d\n", target_score);
+        logging("referee_logger", mess, ERROR);
     }
     else
     {
@@ -169,6 +171,7 @@ int main(int ARGC, const char* ARGV[])
 
     // --- Fermeture des bibliothèques
     fprintf(stderr,"%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
+    free_logger();
     for(int i=0; i<2; ++i)
     {
         dlclose(players[i].lib_handle);

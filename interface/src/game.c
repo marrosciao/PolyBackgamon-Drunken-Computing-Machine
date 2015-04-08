@@ -11,6 +11,7 @@
 
 #include"referee.h"
 #include"graph.h"
+#include"logger.h"
 
 static Dice rand_dice(){
     return (Dice)(rand()%6)+1;
@@ -65,13 +66,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                 &(player[current].nb_moves),
                 player[current].tries
             );
-            for(unsigned int i=0; i<player[current].nb_moves; ++i)
-            {
-               fprintf(stderr, "\t%s : %d -> %d\n",
-                        enumToStr[current+1],
-                        player[current].moves[i].src_point,
-                        player[current].moves[i].dest_point);
-            }
             errors = move_all(
                     state,
                     player[current].moves,
@@ -85,7 +79,9 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     }
     if(player[current].tries<=0)
     {
-        fprintf(stderr, "\t%s a fait trop d'erreurs\n", enumToStr[current+1]);
+        char mess[50];
+        sprintf(mess, "%s a fait trop d'erreur et à perdu\n", enumToStr[current+1]);
+        logging("referee_logger", mess, ERROR);
         *winner = (Player)(1-current);
         end_of_round = true;
     }
