@@ -59,8 +59,8 @@ int check_move(const SMove move,
     // Si player==BLACK==0, 1-player==1, -1*(1-player)==-1, inversement pour player==WHITE.
     // Le joueur noir se déplace de la case
     // 24 vers la case 0, donc dans le sens négatif.
-    // Pour vérifier si le déplacement est valide, on prend la valeur absolue 
-    // de la différence dest - src en multipliant par -1 si le joueur est 
+    // Pour vérifier si le déplacement est valide, on prend la valeur absolue
+    // de la différence dest - src en multipliant par -1 si le joueur est
     // le joueur noir et par 1 si il est blanc.
     //TODO : 0 -> zone out
     //TODO : 25 -> zone de fin
@@ -109,7 +109,7 @@ int check_move(const SMove move,
     const bool has_out = state->bar[player]>0;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if ( !can_take_from ||
-         !can_put_to || 
+         !can_put_to ||
          (has_out && move.src_point!=0)
          )
     {
@@ -163,7 +163,7 @@ int check_side(SGameState const * const state, const Player player)
         ++index;
     }
     return err;
-    
+
 }
 
 static SGameState* copy_state(SGameState state){

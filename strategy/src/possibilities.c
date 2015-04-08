@@ -199,10 +199,10 @@ SGameState apply_move(SGameState game, Player player, SMove move) {
         game.board[move.src_point-1].nbDames -= 1 ;
         int nbDames = game.board[move.src_point-1].nbDames ;
         assert(nbDames >= 0);
-        
+
         if(nbDames == 0)
             game.board[move.src_point-1].owner = NOBODY;
-        
+
     }
 
     if (move.dest_point == 25)
@@ -212,7 +212,7 @@ SGameState apply_move(SGameState game, Player player, SMove move) {
     else if (game.board[move.dest_point-1].owner!=player && game.board[move.dest_point-1].nbDames == 1)
     {// cas où on mange un pion ennemi
         game.bar[opposing_player(player)] += 1 ;
-        game.board[move.dest_point-1].owner = player ; 
+        game.board[move.dest_point-1].owner = player ;
     }
     else
     {

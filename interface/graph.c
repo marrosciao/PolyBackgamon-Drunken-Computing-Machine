@@ -15,8 +15,8 @@ SDL_Surface* initGraph(){   //Lance une nouvelle fenetre SDL
     SDL_Surface *screen = NULL;
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Init(SDL_INIT_VIDEO);
-	TTF_Init();
-	screen = SDL_SetVideoMode(largeur, hauteur, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+    TTF_Init();
+    screen = SDL_SetVideoMode(largeur, hauteur, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
     SDL_WM_SetCaption("Backgammon des Potits Pedestres", NULL);
     return screen;
 }
@@ -48,7 +48,7 @@ int drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ //Changer le 
 }
 
 int drawBackground(SDL_Surface* screen){
-    SDL_Surface *background = NULL; 
+    SDL_Surface *background = NULL;
     background = SDL_LoadBMP("./Textures/background.bmp");
     SDL_BlitSurface(background, NULL, screen, NULL);
     return EXIT_SUCCESS;
@@ -67,8 +67,8 @@ int drawDes(unsigned char dices[2], SDL_Surface* screen){
         SDL_Rect pos2;
         pos2.x = 908;
         pos2.y = 283;
-        img1 = SDL_LoadBMP(nom1); 
-        img2 = SDL_LoadBMP(nom2); 
+        img1 = SDL_LoadBMP(nom1);
+        img2 = SDL_LoadBMP(nom2);
         imgOk1 = (SDL_Surface*) SDL_DisplayFormat( img1 );
         imgOk2 = (SDL_Surface*) SDL_DisplayFormat( img2 );
         SDL_FreeSurface(img1);
@@ -80,7 +80,7 @@ int drawDes(unsigned char dices[2], SDL_Surface* screen){
         SDL_FreeSurface(imgOk1);
         SDL_FreeSurface(imgOk2);
         return EXIT_SUCCESS;
-}   
+}
 int animateDes(unsigned char dices[2], SDL_Surface* screen){
     srand(time(NULL));
     unsigned char rollingDices[2];
@@ -93,12 +93,12 @@ int animateDes(unsigned char dices[2], SDL_Surface* screen){
         SDL_Delay(1000/i);
     }
     drawDes(dices,screen);
-    SDL_Flip( screen ); 
-	return EXIT_SUCCESS;
+    SDL_Flip( screen );
+    return EXIT_SUCCESS;
 }
 
 int printtext(int posx, int posy, char fontName[],int size, char message[],SDL_Color color, SDL_Surface* screen) {
-    
+
     TTF_Font *font = TTF_OpenFont(fontName,size);
     SDL_Surface *text = TTF_RenderText_Blended(font, message, color);
     SDL_Rect pos;
@@ -114,58 +114,58 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
     char affichenb[20];
     SDL_Color couleurTexte = {255, 255, 255};
     for (i=5; i>=0; i--){
-        for (j = 0; j < state->board[i+18].nbDames && j<5; j++) drawPiece(state->board[i+18].owner,480+53*i,43+j*38,screen);     
+        for (j = 0; j < state->board[i+18].nbDames && j<5; j++) drawPiece(state->board[i+18].owner,480+53*i,43+j*38,screen);
         if (state->board[i+18].nbDames > 5){
             sprintf(affichenb,"%d Pions",state->board[i+18].nbDames);
             printtext(500+53*i, 15, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
         }
-        for (j = 0; j < state->board[i+12].nbDames && j<5; j++) drawPiece(state->board[i+12].owner,75+53*i,43+j*38,screen);     
-	    if (state->board[i+12].nbDames > 5){
+        for (j = 0; j < state->board[i+12].nbDames && j<5; j++) drawPiece(state->board[i+12].owner,75+53*i,43+j*38,screen);
+        if (state->board[i+12].nbDames > 5){
             sprintf(affichenb,"%d Pions",state->board[i+12].nbDames);
             printtext(95+53*i, 15, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
         }
     }
     for (i=0; i<6; i++){
-        for (j = 0; j < state->board[i+6].nbDames && j<5; j++) drawPiece(state->board[i+6].owner,340-53*i,542-j*38,screen);     
+        for (j = 0; j < state->board[i+6].nbDames && j<5; j++) drawPiece(state->board[i+6].owner,340-53*i,542-j*38,screen);
         if (state->board[i+6].nbDames > 5){
             sprintf(affichenb,"%d Pions",state->board[i+6].nbDames);
             printtext(360-53*i, 587, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
         }
         for (j = 0; j < state->board[i].nbDames && j<5; j++){
-            if (i!=5){ 
-            	drawPiece(state->board[i].owner,747-53*i,542-j*38,screen);
+            if (i!=5){
+                drawPiece(state->board[i].owner,747-53*i,542-j*38,screen);
             }
-	        if (i == 5){
-            	drawPiece(state->board[i].owner,480,542-j*38,screen);
+            if (i == 5){
+                drawPiece(state->board[i].owner,480,542-j*38,screen);
             }
-        }         
-    	if (state->board[i].nbDames > 5){
+        }
+        if (state->board[i].nbDames > 5){
             sprintf(affichenb,"%d Pions",state->board[i].nbDames);
             if (i!=5) printtext(767-53*i, 587, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
             if (i==5) printtext(500, 587, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
         }
     }
-        for (j = 0; j < state->bar[0]; j++) drawPiece(BLACK,411,100+j*30,screen);     
-        for (j = 0; j < state->bar[1]; j++) drawPiece(WHITE,411,527-j*30,screen);     
+        for (j = 0; j < state->bar[0]; j++) drawPiece(BLACK,411,100+j*30,screen);
+        for (j = 0; j < state->bar[1]; j++) drawPiece(WHITE,411,527-j*30,screen);
         for (j = 0; j < state->out[0]; j++) {
             if (j%2==1) drawPiece(WHITE,860,75+j*10,screen);
             else drawPiece(WHITE,908,85+j*10,screen);
-        }        
+        }
         for (j = 0; j < state->out[1]; j++) {
             if (j%2==1) drawPiece(BLACK,860,520-j*10,screen);
             else drawPiece(BLACK,908,510-j*10,screen);
         }
 
-    
-    
-    
+
+
+
     return EXIT_SUCCESS;
 }
 bool hitbox(int x,int y,int i){
     if (i<6) return (x< 793-53*i && x>793-53*(i+1) && y <582 && y>357);
-    if (i>=6 && i<12) return (x< 386-53*(i-6) && x>386-53*(i-5) && y <582 && y>357); 
-    if (i>=12 && i<18) return (x< 69+53*(i-11) && x>69+53*(i-12) && y < 270 && y>45); 
-    if (i>=18 && i<24) return (x< 474+53*(i-17) && x>474+53*(i-18) && y <270 && y>45); 
+    if (i>=6 && i<12) return (x< 386-53*(i-6) && x>386-53*(i-5) && y <582 && y>357);
+    if (i>=12 && i<18) return (x< 69+53*(i-11) && x>69+53*(i-12) && y < 270 && y>45);
+    if (i>=18 && i<24) return (x< 474+53*(i-17) && x>474+53*(i-18) && y <270 && y>45);
 }
 int selectPion(SGameState* state, SDL_Surface* screen, bool src, Player color){
     int continuer = 1;
@@ -217,13 +217,13 @@ int PlayTurn( SGameState *  gameState, const unsigned char dices[2], SMove moves
     SDL_Color noir = {0, 0, 0};
     if (dices[0] == dices[1]) nbMoves = 4;
     for (i=0; i<nbMoves; i++){
-        coup[0] = nbMoves-i +48; 
+        coup[0] = nbMoves-i +48;
         printtext(630, 290, "./Textures/CowboyMovie.ttf",50,coup,noir, screen);
         if (color == WHITE) printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES BLANCS",noir, screen);
         if (color == BLACK) printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES NOIRS",noir, screen);
         SDL_Flip(screen);
         moves[i].src_point= selectPion(gameState,screen,true,color);
         moves[i].dest_point = selectPion(gameState,screen,false,color);
-    return 0;    
+    return 0;
     }
 }
