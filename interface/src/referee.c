@@ -2,6 +2,7 @@
 
 #include<stdbool.h>
 #include<stdio.h>
+#include<stdlib.h>
 
 #include"error.h"
 
@@ -71,6 +72,17 @@ int check_move(const SMove move,
     {
         delta_move = 25-move.dest_point;
     }
+    else if(move.dest_point==25)
+    {
+        if(player==BLACK)
+        {
+            delta_move = move.src_point;
+        }
+        else
+        {
+            delta_move = move.dest_point - move.src_point;
+        }
+    }
     if(delta_move<0)
     {
        delta_move=-delta_move;
@@ -84,7 +96,7 @@ int check_move(const SMove move,
     {
         can_take_from =state->board[move.src_point-1].nbDames>0 && state->board[move.src_point-1].owner==player;
     }
-    //TODO : verif pour les noirs (25-6 >> 6)
+    //TODO : faire la vérif de sortie des dames (cf wikipedia)
     bool can_put_to = false;
     if(move.dest_point==25)
     {
@@ -94,7 +106,7 @@ int check_move(const SMove move,
     {
         can_put_to = state->board[move.dest_point-1].owner==player || state->board[move.dest_point-1].nbDames<2;
     }
-    const bool has_out         = state->bar[player]>0;
+    const bool has_out = state->bar[player]>0;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if ( !can_take_from ||
          !can_put_to || 
@@ -154,6 +166,11 @@ int check_side(SGameState const * const state, const Player player)
     
 }
 
+static SGameState* copy_state(SGameState state){
+    SGameState *copy = (SGameState*)malloc(sizeof *copy);
+    *copy = state;
+    return copy;
+}
 //TODO : changer les paramêtres pour enlever les trucs inutiles
 //TODO : si erreur -> arrêt
 int move_all(
@@ -166,22 +183,19 @@ int move_all(
 {
     uint errors = 0;
     uint i = 0;
+    SGameState copy = *state;
     while(i<nb_moves && errors==0)
     {
         if(check_move(moves[i], dices, nb_dices, player, state))
         {
             ++errors;
+            *state = copy;
+        }
+        else
+        {
+            move(state, moves[i], player);
         }
         ++i;
-    }
-    if(errors == 0)
-    {
-        for(unsigned int j=0; j<nb_moves; ++j)
-        {
-            //TODO : 0 -> zone out
-            //TODO : 25 -> zone de fin
-            move(state, moves[j], player);
-        }
     }
     return errors;
 }
