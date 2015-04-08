@@ -14,26 +14,26 @@
  * @struct Functions
  * @brief Structure rassemblant les fonctions de l'API.
  *
- * Cette structure sert à faciliter l'initialisation des fonctions : 
+ * Cette structure sert à faciliter l'initialisation des fonctions :
  * on passe la structure à une fonction initialisant les pointeurs de fonctions.
  */
 typedef struct{
-	//! fonction d'initialisation de la stratégie
-	pfInitLibrary	initLibrary;
-	//! fonction démarant un match
-	pfStartMatch	startMatch;
-	//! fonction démarant une manche
-	pfStartGame		startGame;
-	//! fonction terminant une manche
-	pfEndGame		endGame;
-	//! fonction terminant un match
-	pfEndMatch		endMatch;
-	//! fonction renvoyant si l'IA double la mise
-	pfDoubleStack	doubleStack;
-	//! fonction retournant si l'IA accepte de doubler la mise ou abandonne
-	pfTakeDouble	takeDouble;
-	//! fonction retournant les mouvements à effectuer
-	pfPlayTurn		playTurn;
+    //! fonction d'initialisation de la stratégie
+    pfInitLibrary    initLibrary;
+    //! fonction démarant un match
+    pfStartMatch    startMatch;
+    //! fonction démarant une manche
+    pfStartGame        startGame;
+    //! fonction terminant une manche
+    pfEndGame        endGame;
+    //! fonction terminant un match
+    pfEndMatch        endMatch;
+    //! fonction renvoyant si l'IA double la mise
+    pfDoubleStack    doubleStack;
+    //! fonction retournant si l'IA accepte de doubler la mise ou abandonne
+    pfTakeDouble    takeDouble;
+    //! fonction retournant les mouvements à effectuer
+    pfPlayTurn        playTurn;
 } Functions;
 
 /**
