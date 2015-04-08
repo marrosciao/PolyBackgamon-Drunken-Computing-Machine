@@ -45,7 +45,7 @@ static long moyenne(long alpha_valeurs[21])
 		alpha += alpha_valeurs[i] ;
 	}
 
-	alpha = alpha / 21 ;
+	alpha /= 21 ;
 
 	// DISTANCE D'EUCLIDE
 
@@ -128,7 +128,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 											,profondeur - 1 
 											,alpha
 											,beta
-											,(joueur_calcule == BLACK)?WHITE:BLACK
+											,opposing_player(joueur_calcule)
 											,AI_player
 											,moves
 											,set_de_actuel);
@@ -165,7 +165,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
 											,profondeur - 1 
 											,alpha
 											,beta
-											,(joueur_calcule == BLACK)?WHITE:BLACK
+											,opposing_player(joueur_calcule)
 											,AI_player
 											,moves
 											,set_de_actuel);
