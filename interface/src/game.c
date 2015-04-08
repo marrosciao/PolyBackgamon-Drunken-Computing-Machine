@@ -80,6 +80,13 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
                     current
             );
             player[current].tries -= errors;
+            if(errors>0)
+            {
+                roll_dice(dices);
+                char mess[50];
+                sprintf(mess ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+                logging("referee_logger", mess, INFO);
+            }
         }
     }
     if(player[current].tries<=0)

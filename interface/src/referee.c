@@ -206,9 +206,15 @@ void move(SGameState * const state, SMove const movement, const Player player)
     {
         move_in_board(state, movement, player);
     }
-    sprintf(mess, "la case %2d à %2d pions\n", movement.src_point, state->board[movement.src_point-1].nbDames);
+    unsigned int nbDame = 0;
+    if(movement.src_point>0) nbDame = state->board[movement.src_point-1].nbDames;
+    else nbDame = state->bar[player];
+    sprintf(mess, "la case %2d à %2d pions\n", movement.src_point, nbDame);
     logging("referee_logger", mess, INFO);
-    sprintf(mess, "la case %2d à %2d pions\n", movement.dest_point, state->board[movement.dest_point-1].nbDames);
+    nbDame = 0;
+    if(movement.dest_point<24) nbDame = state->out[player];
+    else nbDame = state->board[movement.dest_point-1].nbDames;
+    sprintf(mess, "la case %2d à %2d pions\n", movement.dest_point, nbDame);
     logging("referee_logger", mess, INFO);
 }
 

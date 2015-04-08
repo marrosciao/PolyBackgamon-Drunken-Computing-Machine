@@ -70,13 +70,13 @@ int main(int ARGC, const char* ARGV[])
         }
         char mess[50];
         sprintf(mess, "Lecture de target score %d\n", target_score);
-        logging("referee_logger", mess, WARNING);
+        logging("main_logger", mess, WARNING);
     }
     else
     {
         char mess[50];
         sprintf(mess, "Pas de target_score fourni, pas defaut %i\n",target_score);
-        logging("referee_logger", mess, WARNING);
+        logging("main_logger", mess, WARNING);
     }
 
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
@@ -98,7 +98,7 @@ int main(int ARGC, const char* ARGV[])
         players[i].func->initLibrary( (players[i].name) );
         char mess[50];
         sprintf(mess, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
-        logging("referee_logger", mess, WARNING);
+        logging("main_logger", mess, WARNING);
         players[i].match_won = 0;
     }
 
@@ -113,7 +113,7 @@ int main(int ARGC, const char* ARGV[])
     {
         char mess[50];
         sprintf(mess, "case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
-        logging("referee_logger", mess, WARNING);
+        logging("main_logger", mess, WARNING);
     }
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);
@@ -127,10 +127,12 @@ int main(int ARGC, const char* ARGV[])
     {
         //TODO : faire des affichages pour voir si les fonctions sont bien lancé
         //TODO : faire un logger basic
-        //TODO : RAZ du board
-        fprintf(stderr, "Début de la manche %d\n", turn_num);
+        char mess[50];
+        sprintf(mess, "Début de la manche %d\n", turn_num);
+        logging("main_logger", mess, WARNING);
         Player current = choose_start_player(0);
-        fprintf(stderr, "%s commence\n", enumToStr[current+1]);
+        sprintf(mess, "%s commence\n", enumToStr[current+1]);
+        logging("main_logger", mess, WARNING);
         for(unsigned int i=0; i<2; ++i)
         {
             players[i].func->startGame( (Player)i );
@@ -144,12 +146,14 @@ int main(int ARGC, const char* ARGV[])
         init_board(&state);
         while(!end_of_round)
         {
-            fprintf(stderr,"Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
+            sprintf(mess,"Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
+            logging("main_logger", mess, INFO);
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
     	    drawBackground(screen);
             drawBoard(&state,screen);//graph
             SDL_Delay(1000);   
-	    	fprintf(stderr,"fin du tour %d\n", state.turn);
+	    	sprintf(mess,"fin du tour %d\n", state.turn);
+            logging("main_logger", mess, WARNING);
             current = (Player)(1-current);
             ++state.turn;
         }
@@ -168,14 +172,20 @@ int main(int ARGC, const char* ARGV[])
         }
         int score = state.blackScore;
         if(winner==WHITE) score = state.whiteScore;
-        fprintf(stderr, "gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
-        fprintf(stderr, "fin de la manche %d\n", turn_num);
+        sprintf(mess, "gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
+        logging("main_logger", mess, INFO);
+        sprintf(mess, "fin de la manche %d\n", turn_num);
+        logging("main_logger", mess, INFO);
+        printf("gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
         ++turn_num;
     }
     for(unsigned int i=0; i<2; ++i) players[i].func->endMatch();
 
     // --- Fermeture des bibliothèques
-    fprintf(stderr,"%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
+    char mess[100];
+    sprintf(mess,"%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
+    logging("main_logger", mess, INFO);
+    printf("%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
     free_logger();
     for(int i=0; i<2; ++i)
     {
