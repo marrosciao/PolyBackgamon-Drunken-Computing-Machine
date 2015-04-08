@@ -39,13 +39,13 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
-    const int value_to_double_stake = 60 ;
+    const int value_to_double_stake = 600 ;
     return getValueFromGameState(*gameState,ai_player) >= value_to_double_stake;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
-    const int value_to_surrender_stake = -100 ;
+    const int value_to_surrender_stake = -1000 ;
     return getValueFromGameState(*gameState,ai_player) < value_to_surrender_stake;
 }
 
