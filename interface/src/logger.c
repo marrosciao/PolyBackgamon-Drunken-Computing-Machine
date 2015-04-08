@@ -45,7 +45,7 @@ int set_file(const char* name, const char* file){
 int p_logging(const char* name, const char* file, const char* fctn, const int ligne, const char* message, Level lvl){
     Logger* tmp = get_logger(name);
     if(!tmp) return 0;
-    if(lvl<=tmp->lvl) fprintf(tmp->file, "[%s]:%7s(%4d) %7s : %s",file, fctn, ligne, _enumToStr[lvl], message);
+    if(lvl<=tmp->lvl) fprintf(tmp->file, "[%15s]:%15s(%4d ) %7s : %s",file, fctn, ligne, _enumToStr[lvl], message);
     return 1;
 }
 

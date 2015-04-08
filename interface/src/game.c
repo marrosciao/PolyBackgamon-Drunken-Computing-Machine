@@ -32,7 +32,7 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     unsigned char dices[2];
     roll_dice(dices);
     char mess[50];
-    sprintf(mess ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    sprintf(mess ,"résultat des dés : %d, %d\n", dices[0], dices[1]);
     logging("referee_logger", mess, INFO);
     animateDes(dices,screen);
     SGameState* state_copy = copy_state(*state);

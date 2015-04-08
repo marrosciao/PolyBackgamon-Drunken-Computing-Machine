@@ -243,7 +243,7 @@ void move(SGameState * const state, SMove const movement, const Player player)
     sprintf(mess, "la case %2d à %2d pions\n", movement.src_point, nbDame);
     logging("referee_logger", mess, INFO);
     nbDame = 0;
-    if(movement.dest_point<24) nbDame = state->out[player];
+    if(movement.dest_point>24) nbDame = state->out[player];
     else nbDame = state->board[movement.dest_point-1].nbDames;
     sprintf(mess, "la case %2d à %2d pions\n", movement.dest_point, nbDame);
     logging("referee_logger", mess, INFO);

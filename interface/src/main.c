@@ -145,7 +145,7 @@ int main(int ARGC, const char* ARGV[])
         init_board(&state);
         while(!end_of_round)
         {
-            sprintf(mess,"Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
+            sprintf(mess,"Début du tour %d, Joueur : %s\n", state.turn, enumToStr[current+1]);
             logging("main_logger", mess, INFO);
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
     	    drawBackground(screen);
