@@ -139,6 +139,7 @@ int main(int ARGC, const char* ARGV[])
         {
             fprintf(stderr,"Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
+    	    drawBackground(screen);
             drawBoard(&state,screen);//graph
             fprintf(stderr,"fin du tour %d\n", state.turn);
             current = (Player)(1-current);
