@@ -75,7 +75,7 @@ void genererDes(unsigned char des[21][2])
 
 }
 
-long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
+long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
 {
     assert(joueur_calcule >= 0);
     // on verifie que le joueur duquel on se place est correct ...
@@ -110,7 +110,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
     if (joueur_calcule == AI_player)
     {
         v = LONG_MIN ; // equivaut à moins l'infini
-        for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
+        for (size_t i = 0 ; beta > alpha && i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
             list_get(liste_possibilites, i, &temp_moves);
@@ -118,7 +118,7 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
             // les valeurs de alpha-beta pour chaque combinaison de dé
             // par la suite on fera la moyenne de ces valeurs
 
-            for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
+            for (size_t combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
             {
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
                 unsigned char set_de_actuel[2] = {
@@ -126,8 +126,9 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                     toutes_combinaisons_des[combinaison_de][1],
                 };
 
-                alpha_valeurs[combinaison_de] = alphabeta(    gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                                            ,profondeur - 1
+                alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
+                        ,profondeur - 1 
+                        ,profondeur_initial
                                             ,alpha
                                             ,beta
                                             ,opposing_player(joueur_calcule)
@@ -137,27 +138,24 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
             }
             long alpha_calcul = moyenne(alpha_valeurs);
 
-            if (v < alpha_calcul)
+            if (v < alpha_calcul && profondeur_initial == profondeur)
             {
                 *moves = temp_moves ;
-                v = alpha_calcul ;
             }
-            if (v > alpha)
-                alpha = v ;
-            if (beta >= alpha)
-                break;
 
+            v = max(v, alpha_calcul);
+            alpha = max(alpha, v);
         }
     }
     else
     {
         v = LONG_MAX ; // equivaut à plus l'infini
-        for (size_t i = 0 ; i < list_size(liste_possibilites) ; i++)
+        for (size_t i = 0 ; beta > alpha && i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
             list_get(liste_possibilites, i, &temp_moves);
             long alpha_valeurs[21] ;
-            for ( int combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
+            for (size_t combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
             {
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
                 unsigned char set_de_actuel[2] = {
@@ -165,26 +163,20 @@ long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Playe
                     toutes_combinaisons_des[combinaison_de][1],
                 };
 
-                alpha_valeurs[combinaison_de] = alphabeta(    gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                                            ,profondeur - 1
-                                            ,alpha
-                                            ,beta
-                                            ,opposing_player(joueur_calcule)
-                                            ,AI_player
-                                            ,moves
-                                            ,set_de_actuel);
+                alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
+                        ,profondeur - 1
+                        ,profondeur_initial
+                        ,alpha
+                        ,beta
+                        ,opposing_player(joueur_calcule)
+                        ,AI_player
+                        ,moves
+                        ,set_de_actuel);
             }
             long alpha_calcul = moyenne(alpha_valeurs);
-            if (v > alpha_calcul)
-            {
-                *moves = temp_moves ;
-                v = alpha_calcul ;
-            }
-            if (v < beta)
-                beta = v ;
-            if (beta <= alpha)
-                break;
 
+            v = min(v, alpha_calcul);
+            beta = min(beta, v);
         }
     }
 
@@ -218,7 +210,8 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
     AIListMoves moves ;
     // appel theorique de alphabeta : alphabeta(Noeud,profondeur_de_base,-infini,+infini)
     alphabeta(    etat_jeu, // etat du jeu courant, necessaire pour calculer les possibilites
-                2, // profondeur de calcul souhaité, attention, augmenter de 1 peut prendre beaucou plus de temps!
+                2,
+                2,// profondeur de calcul souhaité, attention, augmenter de 1 peut prendre beaucou plus de temps!
                 LONG_MIN, // moins l'infini version machine
                 LONG_MAX, // plus l'infini version machine
                 player, // quel joueur nous sommes
