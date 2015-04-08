@@ -12,8 +12,8 @@ void InitLibrary(char name[50])
 
     // Code d'initialisation ici.
 
-	// Sauf qu'on a pas d'intialisation à faire vu notre algorithme
-	// Tout va bien
+    // Sauf qu'on a pas d'intialisation à faire vu notre algorithme
+    // Tout va bien
 }
 
 void StartMatch(const unsigned int target_score)
@@ -23,18 +23,18 @@ void StartMatch(const unsigned int target_score)
 
 void StartGame(Player p)
 {
-	// ai_player est une var globale !
-	ai_player = p ;
+    // ai_player est une var globale !
+    ai_player = p ;
 }
 
 void EndGame()
 {
-	// Pas de var globale, non utilisé	
+    // Pas de var globale, non utilisé
 }
 
 void EndMatch()
 {
-	// Pas de var globale, non utilisé
+    // Pas de var globale, non utilisé
 }
 
 int DoubleStack(const SGameState * const gameState)
@@ -59,6 +59,6 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	// la flemme d'utiliser memcpy pour 4 lignes
 
     *nbMove = tmp_moves.nombre_mouvements ;
-    assert(0<=tmp_moves.nombre_mouvements && tmp_moves.nombre_mouvements<=4);
-    assert(0<=*nbMove && *nbMove<=4);
+    assert(tmp_moves.nombre_mouvements<=4);
+    assert(*nbMove<=4);
 }

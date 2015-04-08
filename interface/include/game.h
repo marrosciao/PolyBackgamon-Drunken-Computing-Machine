@@ -6,6 +6,8 @@
 
 //! struct rassemblant les infos d'une IA
 typedef struct{
+    //! nombre de match gagné
+    unsigned int match_won;
     //! chemin de la bibliothèque dynamique
     char* lib_path;
     //! handler de la bibliothèque dynamique
