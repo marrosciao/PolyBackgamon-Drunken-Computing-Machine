@@ -84,7 +84,7 @@ int drawDes(unsigned char dices[2], SDL_Surface* screen){
 int animateDes(unsigned char dices[2], SDL_Surface* screen){
     srand(time(NULL));
     unsigned char rollingDices[2];
-    for (float i=2; i>1; i-=0.2){
+    for (float i=50; i>1; i=i/1.5){
         rollingDices[0] = rand() %6 +1;;
         rollingDices[1] = rand() %6 +1;
         drawDes(rollingDices, screen);
@@ -93,6 +93,7 @@ int animateDes(unsigned char dices[2], SDL_Surface* screen){
     }
     drawDes(dices,screen);
     SDL_Flip( screen ); 
+    SDL_Delay(1000);
 	return EXIT_SUCCESS;
 }
 
@@ -157,13 +158,13 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
             drawPiece(BLACK,411,100+j*30,screen);     
         for (uint j = 0; j < state->bar[1]; j++)
             drawPiece(WHITE,411,527-j*30,screen);     
-        for (uint j = 0; j < state->out[0]; j++) {
+        for (uint j = 0; j < state->out[1]; j++) {
             if (j%2==1)
                 drawPiece(WHITE,860,75+j*10,screen);
             else
                 drawPiece(WHITE,908,85+j*10,screen);
         }        
-        for (uint j = 0; j < state->out[1]; j++) {
+        for (uint j = 0; j < state->out[0]; j++) {
             if (j%2==1)
                 drawPiece(BLACK,860,520-j*10,screen);
             else

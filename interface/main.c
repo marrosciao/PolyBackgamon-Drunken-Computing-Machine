@@ -141,7 +141,8 @@ int main(int ARGC, const char* ARGV[])
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
     	    drawBackground(screen);
             drawBoard(&state,screen);//graph
-            fprintf(stderr,"fin du tour %d\n", state.turn);
+            SDL_Delay(1000);   
+	    	fprintf(stderr,"fin du tour %d\n", state.turn);
             current = (Player)(1-current);
             ++state.turn;
         }
