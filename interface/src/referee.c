@@ -71,12 +71,41 @@ static bool compute_can_take_from(cuint src, cuint bar[2], const Square board[24
     }
     return can_take_from;
 }
+static bool has_farer_piece(const Square board[24], const Player player)
+{
+    bool has_farer = false;
+    if(player==BLACK)
+    {
+        unsigned int index = 6;
+        unsigned int end   = 0;
+        for(;index>end; --index)
+        {
+            if(board[index-1].owner==player)
+            {
+                has_farer = true;
+            }
+        }
+    }
+    if(player == WHITE)
+    {
+        unsigned int index = 19;
+        unsigned int end   = 25;
+        for(;index>end; ++index)
+        {
+            if(board[index-1].owner==player)
+            {
+                has_farer = true;
+            }
+        }
+    }
+    return has_farer;
+}
  static bool compute_can_put_to(cuint dest, const SGameState* const state, const Player player)
 {
     bool can_put_to = false;
     if(dest==25)
     {
-        can_put_to = !check_side(state, player);
+        can_put_to = !check_side(state, player) && !has_farer_piece(state->board, player);
     }
     else
     {
