@@ -70,14 +70,15 @@ int main(int ARGC, const char* ARGV[])
         }
         char mess[50];
         sprintf(mess, "Lecture de target score %d\n", target_score);
-        logging("referee_logger", mess, ERROR);
+        logging("referee_logger", mess, WARNING);
     }
     else
     {
-        fprintf(stderr, "Pas de target_score fourni, pas defaut %i\n",target_score);
+        char mess[50];
+        sprintf(mess, "Pas de target_score fourni, pas defaut %i\n",target_score);
+        logging("referee_logger", mess, WARNING);
     }
 
-    //init_logger();
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
 
     IA players[2];
@@ -95,7 +96,9 @@ int main(int ARGC, const char* ARGV[])
         players[i].lib_handle = NULL;
         init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
         players[i].func->initLibrary( (players[i].name) );
-        fprintf(stderr, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
+        char mess[50];
+        sprintf(mess, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
+        logging("referee_logger", mess, WARNING);
         players[i].match_won = 0;
     }
 
@@ -108,7 +111,9 @@ int main(int ARGC, const char* ARGV[])
     sleep(2);
     for(unsigned int i=0; i<24; ++i)
     {
-        fprintf(stderr, "case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
+        char mess[50];
+        sprintf(mess, "case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
+        logging("referee_logger", mess, WARNING);
     }
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);

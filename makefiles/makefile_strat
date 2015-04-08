@@ -1,0 +1,44 @@
+#The Target Binary Program
+TARGET        := PolyBackgammon
+ 
+IASRCDIR := strategy/$(SRCDIR)
+
+#Flags, Libraries and Includes
+LDFLAGS       += -shared -fPIC
+LDLIBS        +=
+ 
+#---------------------------------------------------------------------------------
+#DO NOT EDIT BELOW THIS LINE
+#---------------------------------------------------------------------------------
+SOURCES       := $(wildcard $(IASRCDIR)/*.c)
+OBJECTS       := $(patsubst $(IASRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.c=.o))
+DEBUG         ?= 1
+ 
+ifeq ($(DEBUG), 1)
+	CFLAGS += $(CFLAGS_DEBUG)
+else
+	CFLAGS += $(CFLAGS_PROD)
+endif
+ 
+all: $(targetdir)/$(target)
+	@echo "${green}${bold}compilation de la stratégie${reset}"
+ 
+$(builddir)/%.o: $(iasrcdir)/%.c
+	@mkdir -p $(@d)
+	@echo "${blue}compilation de $< ${reset}"
+	@$(cc) -c $< $(cflags) $(cppflags) -o $@
+ 
+$(targetdir)/$(target): $(objects)
+	@echo "${blue}création de l'executable${reset}"
+	@$(cc) $(ldflags) -o $(targetdir)/$(target) $^ $(ldlibs)
+
+
+
+clean:
+	$(RM) -r $(BUILDDIR) *.o
+	$(RM) $(TARGETDIR)/$(TARGET)
+ 
+-include $(OBJECTS:.o=.d)
+ 
+.PHONY: all clean check
+

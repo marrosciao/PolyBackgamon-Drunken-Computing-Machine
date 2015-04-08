@@ -148,7 +148,7 @@ static size_t insert_all_dices(SGameState game,
             .dest_point = i + dices[0],
         };
         if (is_valide_move(&game, player, move)) {
-            move.dest_point = min(move.dest_point, 25);
+            move.dest_point = min_uint(move.dest_point, 25);
             AIListMoves moves_tmp = moves;
             moves_tmp.mouvement[moves_tmp.nombre_mouvements] = move;
             moves_tmp.nombre_mouvements += 1;

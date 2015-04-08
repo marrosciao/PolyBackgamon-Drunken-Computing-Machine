@@ -141,8 +141,8 @@ long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long 
                 *moves = temp_moves ;
             }
 
-            v = max(v, alpha_calcul);
-            alpha = max(alpha, v);
+            v = max_long(v, alpha_calcul);
+            alpha = max_long(alpha, v);
         }
     }
     else
@@ -173,8 +173,8 @@ long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long 
             }
             long alpha_calcul = moyenne(alpha_valeurs);
 
-            v = min(v, alpha_calcul);
-            beta = min(beta, v);
+            v = min_long(v, alpha_calcul);
+            beta = min_long(beta, v);
         }
     }
 

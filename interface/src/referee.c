@@ -52,16 +52,14 @@ int check_number_dices(
 //TODO : refactoring ?
 //TODO : verifier qu'on utilise pas deux fois le même dé
 //TODO : verif de l'utilisation max des dés
+//TODO : 0 -> zone out
+//TODO : 25 -> zone de fin
 int check_move(const SMove move,
         Dice dices[],
         cuint nb_dices,
         const Player player,
         SGameState const * const state)
 {
-    //TODO : 0 -> zone out
-    //TODO : 25 -> zone de fin
-    //TODO : faire en sorte que ça marche pour la sortie de la zone out pour tout
-    //les joueurs (black sort au niveau des ~20)
     uint err = 0;
     int delta_move = (move.dest_point - move.src_point);
     if(move.src_point==0 && player==BLACK)
@@ -152,6 +150,9 @@ int check_side(SGameState const * const state, const Player player)
         if( state->board[index-1].owner == player)
         {
             err = true;
+            char mess[50];
+            sprintf(mess, "%s essaie de sortir un pion alors qu'il lui reste des pions hors de la zone de fin\n", enumToStr[player+1]);
+            logging("referee_logger", mess, WARNING);
         }
         ++index;
     }
@@ -194,11 +195,21 @@ void move(SGameState * const state, SMove const movement, const Player player)
     sprintf(mess, "%s bouge de %d à %d\n", enumToStr[player+1], movement.src_point, movement.dest_point);
     logging("referee_logger", mess, INFO);
     if(movement.dest_point == 25)
+    {
         move_to_end(state, movement, player);
+    }
     else if(movement.src_point == 0)
+    {
         move_from_out(state, movement, player);
+    }
     else
+    {
         move_in_board(state, movement, player);
+    }
+    sprintf(mess, "la case %2d à %2d pions\n", movement.src_point, state->board[movement.src_point-1].nbDames);
+    logging("referee_logger", mess, INFO);
+    sprintf(mess, "la case %2d à %2d pions\n", movement.dest_point, state->board[movement.dest_point-1].nbDames);
+    logging("referee_logger", mess, INFO);
 }
 
 void move_from_out(SGameState * const state, SMove const movement, const Player player)

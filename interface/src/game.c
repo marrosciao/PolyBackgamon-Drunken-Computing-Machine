@@ -31,23 +31,28 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
 {
     unsigned char dices[2];
     roll_dice(dices);
-    fprintf(stderr ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    char mess[50];
+    sprintf(mess ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    logging("referee_logger", mess, INFO);
     animateDes(dices,screen);
     SGameState* state_copy = copy_state(*state);
     bool end_of_round = false;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( *lastStaker!=current && player[current].func->doubleStack(state_copy) )
     {
-        fprintf(stderr, "\t%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
+        sprintf(mess, "\t%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
+        logging("referee_logger", mess, INFO);
         if( !player[1-current].func->takeDouble(state_copy) )
         {
-            fprintf(stderr, "\t%s ne suit pas\n", enumToStr[(1-current)+1]);
+            sprintf(mess, "\t%s ne suit pas\n", enumToStr[(1-current)+1]);
+            logging("referee_logger", mess, INFO);
             end_of_round = true;
             *winner      = current;
         }
         else
         {
-            fprintf(stderr, "\t%s suit\n", enumToStr[(1-current)+1]);
+            sprintf(mess, "\t%s suit\n", enumToStr[(1-current)+1]);
+            logging("referee_logger", mess, INFO);
             state->stake *= 2;
             *lastStaker   = current;
         }
