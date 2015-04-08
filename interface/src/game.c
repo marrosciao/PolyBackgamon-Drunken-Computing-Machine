@@ -7,8 +7,10 @@
 #include<string.h>
 #include<stdio.h>
 #include<assert.h>
+#include<SDL/SDL.h>
 
 #include"referee.h"
+#include"graph.h"
 
 static Dice rand_dice(){
     return (Dice)(rand()%6)+1;
@@ -24,11 +26,12 @@ SGameState* copy_state(SGameState state){
     return copy;
 }
 
-int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastStaker, Player* winner)
+int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastStaker, Player* winner, SDL_Surface* screen)
 {
     unsigned char dices[2];
     roll_dice(dices);
     fprintf(stderr ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    animateDes(dices,screen);
     SGameState* state_copy = copy_state(*state);
     bool end_of_round = false;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};

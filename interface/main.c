@@ -5,14 +5,16 @@
 #include<stdlib.h>
 #include<math.h>
 #include<time.h>
+#include<unistd.h>
 
-#include<SDL2/SDL.h>
-#include<SDL2/SDL_image.h>
+#include<SDL/SDL.h>
+#include<SDL/SDL_ttf.h>
 
 #include"backgammon.h"
 #include"config.h"
 #include"init.h"
 #include"game.h"
+#include"graph.h"
 //#include"logger.h"
 
 #define STRINGIFY_HELPER( str ) #str
@@ -98,7 +100,10 @@ int main(int ARGC, const char* ARGV[])
     // --- Initialisation du jeux
     SGameState state;
     init_state(&state);
-
+    SDL_Surface* screen = initGraph();//graph
+    drawBackground(screen);
+    SDL_Flip(screen);
+    sleep(2);
     for(unsigned int i=0; i<24; ++i)
     {
         fprintf(stderr, "case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
@@ -132,9 +137,10 @@ int main(int ARGC, const char* ARGV[])
         init_board(&state);
         while(!end_of_round)
         {
-            fprintf(stderr, "Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
-            end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner);
-            fprintf(stderr, "fin du tour %d\n", state.turn);
+            fprintf(stderr,"Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
+            end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
+            drawBoard(&state,screen);//graph
+            fprintf(stderr,"fin du tour %d\n", state.turn);
             current = (Player)(1-current);
             ++state.turn;
         }
@@ -167,5 +173,6 @@ int main(int ARGC, const char* ARGV[])
         if (ARGC >= 3+i)
             free(players[i].lib_path);
     }
+    endGraph();//graph
     return EXIT_SUCCESS;
 }
