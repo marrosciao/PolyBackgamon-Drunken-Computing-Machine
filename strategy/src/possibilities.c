@@ -7,9 +7,9 @@
 
 typedef unsigned char uc;
 
-static void        insert_all_dices(SGameState game,
+static size_t      insert_all_dices(SGameState game,
                                     Player player,
-                                    size_t *max_nb_dice_used,
+                                    size_t max_nb_dice_used,
                                     size_t nb_dices_used,
                                     size_t nb_dices,
                                     const uc dices[nb_dices],
@@ -76,34 +76,34 @@ ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsign
 
     if (dices[0] == dices[1]) {
         uc dices_tmp[4] = {dices[0], dices[0], dices[0], dices[0]};
-        insert_all_dices(game,
-                         player,
-                         &max_nb_dices_used,
-                         0,
-                         4,
-                         dices_tmp,
-                         list,
-                         (AIListMoves) { .nombre_mouvements = 0 });
+        max_nb_dices_used = insert_all_dices(game,
+                                             player,
+                                             max_nb_dices_used,
+                                             0,
+                                             4,
+                                             dices_tmp,
+                                             list,
+                                             (AIListMoves) { .nombre_mouvements = 0 });
     } else {
         uc dices_tmp[2] = {dices[0], dices[1]};
-        insert_all_dices(game,
-                         player,
-                         &max_nb_dices_used,
-                         0,
-                         2,
-                         dices_tmp,
-                         list,
-                         (AIListMoves) { .nombre_mouvements = 0 });
+        max_nb_dices_used = insert_all_dices(game,
+                                             player,
+                                             max_nb_dices_used,
+                                             0,
+                                             2,
+                                             dices_tmp,
+                                             list,
+                                             (AIListMoves) { .nombre_mouvements = 0 });
         dices_tmp[0] = dices[1];
         dices_tmp[1] = dices[0];
-        insert_all_dices(game,
-                         player,
-                         &max_nb_dices_used,
-                         0,
-                         2,
-                         dices_tmp,
-                         list,
-                         (AIListMoves) { .nombre_mouvements = 0 });
+        max_nb_dices_used = insert_all_dices(game,
+                                             player,
+                                             max_nb_dices_used,
+                                             0,
+                                             2,
+                                             dices_tmp,
+                                             list,
+                                             (AIListMoves) { .nombre_mouvements = 0 });
 
     }
 
@@ -123,14 +123,14 @@ ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsign
     return list;
 }
 
-static void insert_all_dices(SGameState game,
-                             Player player,
-                             size_t *max_nb_dice_used,
-                             size_t nb_dices_used,
-                             size_t nb_dices,
-                             const uc dices[nb_dices],
-                             ArrayList *list,
-                             AIListMoves moves) {
+static size_t insert_all_dices(SGameState game,
+                               Player player,
+                               size_t max_nb_dice_used,
+                               size_t nb_dices_used,
+                               size_t nb_dices,
+                               const uc dices[nb_dices],
+                               ArrayList *list,
+                               AIListMoves moves) {
     for (uint i = 0; nb_dices && i <= 24; i++) {
         SMove move = {
             .src_point = i,
@@ -140,22 +140,23 @@ static void insert_all_dices(SGameState game,
             AIListMoves moves_tmp = moves;
             moves_tmp.mouvement[moves_tmp.nombre_mouvements] = move;
             moves_tmp.nombre_mouvements += 1;
-            insert_all_dices(apply_move(game, player, move),
-                             player,
-                             max_nb_dice_used,
-                             nb_dices_used + 1,
-                             nb_dices - 1,
-                             dices + 1,
-                             list,
-                             moves_tmp);
+            max_nb_dice_used = insert_all_dices(apply_move(game, player, move),
+                                                player,
+                                                max_nb_dice_used,
+                                                nb_dices_used + 1,
+                                                nb_dices - 1,
+                                                dices + 1,
+                                                list,
+                                                moves_tmp);
         }
     }
 
-    if (nb_dices_used >= *max_nb_dice_used) {
-        *max_nb_dice_used = nb_dices_used;
+    if (nb_dices_used >= max_nb_dice_used) {
+        max_nb_dice_used = nb_dices_used;
         list_push(list, moves);
     }
 
+    return max_nb_dice_used;
 }
 
 static SGameState reverse_game(SGameState game) {
