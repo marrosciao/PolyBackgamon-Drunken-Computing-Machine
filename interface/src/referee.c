@@ -100,12 +100,16 @@ static bool has_farer_piece(const Square board[24], const Player player)
     }
     return has_farer;
 }
- static bool compute_can_put_to(cuint dest, const SGameState* const state, const Player player)
+ static bool compute_can_put_to(int delta ,cuint dest, const SGameState* const state, const Player player, Dice dices[2])
 {
     bool can_put_to = false;
     if(dest==25)
     {
-        can_put_to = !check_side(state, player) && !has_farer_piece(state->board, player);
+        can_put_to = !check_side(state, player) &&
+                     ( !has_farer_piece(state->board, player) ||
+                       dices[0] == delta ||
+                       dices[1] == delta
+                     );
     }
     else
     {
@@ -127,7 +131,7 @@ int check_move(const SMove move,
     uint err = 0;
     int delta_move = compute_delta_move(move.src_point, move.dest_point, player);
     bool can_take_from = compute_can_take_from(move.src_point, state->bar, state->board, player);
-    bool can_put_to = compute_can_put_to(move.dest_point, state, player);
+    bool can_put_to = compute_can_put_to(delta_move, move.dest_point, state, player, dices);
     const bool has_out = state->bar[player]>0;
     if ( !can_take_from ||
          !can_put_to ||
