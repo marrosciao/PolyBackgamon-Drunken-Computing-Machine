@@ -66,11 +66,11 @@ int main(int ARGC, const char* ARGV[])
             perror("ERREUR : target_score negatif ou nul");
             exit(EXIT_FAILURE);
         }
-        printf("Lecture de target_score : %i\n",target_score);
+        fprintf(stderr, "Lecture de target_score : %i\n",target_score);
     }
     else
     {
-        printf("Pas de target_score fourni, pas defaut %i\n",target_score);
+        fprintf(stderr, "Pas de target_score fourni, pas defaut %i\n",target_score);
     }
 
     //init_logger();
@@ -91,7 +91,7 @@ int main(int ARGC, const char* ARGV[])
         players[i].lib_handle = NULL;
         init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
         players[i].func->initLibrary( (players[i].name) );
-        printf("%s I.A. : %s\n", enumToStr[i+1],players[i].name );
+        fprintf(stderr, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
     }
 
     // --- Initialisation du jeux
@@ -100,24 +100,24 @@ int main(int ARGC, const char* ARGV[])
 
     for(unsigned int i=0; i<24; ++i)
     {
-        printf("case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
+        fprintf(stderr, "case %2d : owner %6s, nbDames %d\n", i, enumToStr[state.board[i].owner+1], state.board[i].nbDames);
     }
     players[WHITE].func->startMatch(target_score);
     players[BLACK].func->startMatch(target_score);
     bool finished               = false;
-    const unsigned int maxScore = 3;
+    const unsigned int maxScore = target_score;
     unsigned int turn_num       = 1;
     srand(time(NULL));
-
+    Player winner          = NOBODY;
     // --- Boucle principale
     while(!finished)
     {
         //TODO : faire des affichages pour voir si les fonctions sont bien lancé
         //TODO : faire un logger basic
         //TODO : RAZ du board
-        printf("Début de la manche %d\n", turn_num);
+        fprintf(stderr, "Début de la manche %d\n", turn_num);
         Player current = choose_start_player(0);
-        printf("\t%s commence\n", enumToStr[current+1]);
+        fprintf(stderr, "%s commence\n", enumToStr[current+1]);
         for(unsigned int i=0; i<2; ++i)
         {
             players[i].func->startGame( (Player)i );
@@ -125,15 +125,15 @@ int main(int ARGC, const char* ARGV[])
         }
         bool end_of_round      = false;
         state.stake            = 1;
-        Player winner          = NOBODY;
+        winner                 = NOBODY;
         Player lastStaker      = NOBODY;
         state.turn             = 1;
         init_board(&state);
         while(!end_of_round)
         {
-            printf("\tDébut du tour %d\n\t\tJoueur : %s\n", state.turn, enumToStr[current+1]);
+            fprintf(stderr, "Début du tour %d\nJoueur : %s\n", state.turn, enumToStr[current+1]);
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner);
-            printf("\tfin du tour %d\n", state.turn);
+            fprintf(stderr, "fin du tour %d\n", state.turn);
             current = (Player)(1-current);
             ++state.turn;
         }
@@ -150,13 +150,14 @@ int main(int ARGC, const char* ARGV[])
         }
         int score = state.blackScore;
         if(winner==WHITE) score = state.whiteScore;
-        printf("gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
-        printf("fin de la manche %d\n", turn_num);
+        fprintf(stderr, "gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
+        fprintf(stderr, "fin de la manche %d\n", turn_num);
         ++turn_num;
     }
     for(unsigned int i=0; i<2; ++i) players[i].func->endMatch();
 
     // --- Fermeture des bibliothèques
+    fprintf(stderr,"%s:%s gagne\n", enumToStr[winner+1], players[winner].name);
     for(int i=0; i<2; ++i)
     {
         dlclose(players[i].lib_handle);

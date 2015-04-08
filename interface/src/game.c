@@ -28,22 +28,22 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
 {
     unsigned char dices[2];
     roll_dice(dices);
-    printf("\t\trésultat des dés : %d, %d\n", dices[0], dices[1]);
+    fprintf(stderr ,"\trésultat des dés : %d, %d\n", dices[0], dices[1]);
     SGameState* state_copy = copy_state(*state);
     bool end_of_round = false;
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( *lastStaker!=current && player[current].func->doubleStack(state_copy) )
     {
-        printf("\t\t %s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
+        fprintf(stderr, "\t%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
         if( !player[1-current].func->takeDouble(state_copy) )
         {
-            printf("\t\t %s ne suit pas\n", enumToStr[(1-current)+1]);
+            fprintf(stderr, "\t%s ne suit pas\n", enumToStr[(1-current)+1]);
             end_of_round = true;
             *winner      = current;
         }
         else
         {
-            printf("\t\t %s suit\n", enumToStr[(1-current)+1]);
+            fprintf(stderr, "\t%s suit\n", enumToStr[(1-current)+1]);
             state->stake *= 2;
             *lastStaker   = current;
         }
@@ -64,13 +64,7 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
             );
             for(unsigned int i=0; i<player[current].nb_moves; ++i)
             {
-                printf("dice : %d,%d\n",dices[0], dices[1]);
-                printf("player : %s\n", enumToStr[current+1]);
-                printf("mouv num : %d/%d\n",i, player[current].nb_moves);
-                fflush(stdout);
-        assert(player[current].moves[i].src_point<=25);
-        assert(player[current].moves[i].dest_point<=25);
-                printf("%s : %d -> %d\n",
+               fprintf(stderr, "\t%s : %d -> %d\n",
                         enumToStr[current+1],
                         player[current].moves[i].src_point,
                         player[current].moves[i].dest_point);
@@ -88,7 +82,7 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     }
     if(player[current].tries<=0)
     {
-        printf("\t\t%s a fait trop d'erreurs\n", enumToStr[current+1]);
+        fprintf(stderr, "\t%s a fait trop d'erreurs\n", enumToStr[current+1]);
         *winner = (Player)(1-current);
         end_of_round = true;
     }
