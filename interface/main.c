@@ -92,6 +92,7 @@ int main(int ARGC, const char* ARGV[])
         init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
         players[i].func->initLibrary( (players[i].name) );
         fprintf(stderr, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
+        players[i].match_won = 0;
     }
 
     // --- Initialisation du jeux
@@ -142,11 +143,13 @@ int main(int ARGC, const char* ARGV[])
         {
             state.whiteScore+=state.stake;
             finished = state.whiteScore>=maxScore;
+            players[WHITE].match_won++;
         }
         else
         {
             state.blackScore+=state.stake;
             finished = state.blackScore>=maxScore;
+            players[BLACK].match_won++;
         }
         int score = state.blackScore;
         if(winner==WHITE) score = state.whiteScore;
@@ -157,7 +160,7 @@ int main(int ARGC, const char* ARGV[])
     for(unsigned int i=0; i<2; ++i) players[i].func->endMatch();
 
     // --- Fermeture des bibliothèques
-    fprintf(stderr,"%s:%s gagne\n", enumToStr[winner+1], players[winner].name);
+    fprintf(stderr,"%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
     for(int i=0; i<2; ++i)
     {
         dlclose(players[i].lib_handle);
