@@ -19,16 +19,16 @@ Player opposing_player(Player player)
         return WHITE ;
 }
 
-unsigned int somme_plateau(SGameState etat_jeu,Player player)
+unsigned int somme_plateau(SGameState* etat_jeu,Player player)
 {
     unsigned int somme = 0 ;
-    somme += etat_jeu.bar[player];
+    somme += etat_jeu->bar[player];
     for (int i = 0 ; i < 24 ; i++ )
     {
-        if (etat_jeu.board[i].owner == player)
-            somme += etat_jeu.board[i].nbDames ;
+        if (etat_jeu->board[i].owner == player)
+            somme += etat_jeu->board[i].nbDames ;
     }
-    somme += etat_jeu.out[player];
+    somme += etat_jeu->out[player];
     return somme;
 }
 
@@ -87,12 +87,12 @@ long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long 
     assert(des[0] >= 1 && des[0] <= 6 && des[1] >= 1 && des[1] <= 6 );
     // on verifie que les dés envoyés sont valides
 
-    assert(somme_plateau(etat_jeu,WHITE) == 15 );
-    assert(somme_plateau(etat_jeu,BLACK) == 15 );
+    assert(somme_plateau(&etat_jeu,WHITE) == 15 );
+    assert(somme_plateau(&etat_jeu,BLACK) == 15 );
 
-    if (profondeur == 0 || isGameFinished(etat_jeu))
+    if (profondeur == 0 || isGameFinished(&etat_jeu))
     {
-        int heuristic_value = getValueFromGameState(etat_jeu,AI_player);
+        int heuristic_value = getValueFromGameState(&etat_jeu,AI_player);
         //printf("NOEUD FINAL : VALUE %i\n",heuristic_value);
         return heuristic_value ;
     }
@@ -203,7 +203,7 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
     on arrete le calcul pour ce set de branche
     (plus de détail sur l'algorithme : chercher AlphaBeta Pruning sur un moteur de recherche)
     */
-    assert(!isGameFinished(etat_jeu));
+    assert(!isGameFinished(&etat_jeu));
 
     AIListMoves moves ;
     // appel theorique de alphabeta : alphabeta(Noeud,profondeur_de_base,-infini,+infini)
@@ -225,7 +225,7 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
 // les états sont normalement symétriques
-int getValueFromGameState(SGameState etat_jeu, Player player)
+int getValueFromGameState(SGameState* etat_jeu, Player player)
 {
 
     const int BAR_VALUE = -5 ;
@@ -238,17 +238,17 @@ int getValueFromGameState(SGameState etat_jeu, Player player)
     // calcul de la valeur heuristique en partant du principe qu'on est le joueur WHITE
     // (on multipliera par -1 si on est en réalité le joueur BLACK)
 
-    heuristic_value += etat_jeu.bar[WHITE]* BAR_VALUE;
-    heuristic_value -= etat_jeu.bar[BLACK]* BAR_VALUE;
+    heuristic_value += etat_jeu->bar[WHITE]* BAR_VALUE;
+    heuristic_value -= etat_jeu->bar[BLACK]* BAR_VALUE;
     // prise en compte des pions sur la barre verticale
 
-    heuristic_value += etat_jeu.out[WHITE]* OUT_VALUE;
-    heuristic_value -= etat_jeu.out[BLACK]* OUT_VALUE;
+    heuristic_value += etat_jeu->out[WHITE]* OUT_VALUE;
+    heuristic_value -= etat_jeu->out[BLACK]* OUT_VALUE;
     // prise en compte des pions sortis du jeu
 
     for (int i = 0 ; i < 24 ; i++)
     {
-        Square current_square = etat_jeu.board[i] ;
+        Square current_square = etat_jeu->board[i] ;
         if (current_square.owner == WHITE)
         {
             if (current_square.nbDames == 1)
@@ -286,7 +286,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
     return etat_jeu;
 }
 
-bool isGameFinished(SGameState etat_jeu)
+bool isGameFinished(SGameState* etat_jeu)
 {
-    return (etat_jeu.out[WHITE] >= 15 || etat_jeu.out[BLACK] >= 15 ) ;
+    return (etat_jeu->out[WHITE] >= 15 || etat_jeu->out[BLACK] >= 15 ) ;
 }
