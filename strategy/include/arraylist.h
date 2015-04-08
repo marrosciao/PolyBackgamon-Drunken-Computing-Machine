@@ -1,6 +1,7 @@
 #pragma once
 
 /**
+ * @file arraylist.h
  * @brief Implémentation d'une ArrayList.
  *
  * Le code est inspiré de l'implémentation de [Open Data Structures]

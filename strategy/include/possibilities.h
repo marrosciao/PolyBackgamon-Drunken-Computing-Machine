@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @file possibilities.h
+ * @brief Permet de calculer les états possibles à la fin du tour.
+ */
+
 #include <stddef.h>
 
 #include "backgammon.h"
