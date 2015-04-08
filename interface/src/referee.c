@@ -208,6 +208,7 @@ int move_all(
         if(check_move(moves[i], dices, nb_dices, player, state))
         {
             ++errors;
+            logging("referee_logger", "Annulation des mouvements\n", WARNING);
             *state = copy;
         }
         else
