@@ -75,7 +75,7 @@ void genererDes(unsigned char des[21][2])
 
 }
 
-long alphabeta(SGameState etat_jeu, int profondeur, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
+long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
 {
     assert(joueur_calcule >= 0);
     // on verifie que le joueur duquel on se place est correct ...
