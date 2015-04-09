@@ -84,8 +84,8 @@ int main(int ARGC, const char* ARGV[])
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
 
     IA players[2];
-    players[0].lib_path=(char*)"./strategy/libstrategy.so";
-    players[1].lib_path=(char*)"./strategy/libstrategy.so";
+    players[0].lib_path=(char*)"./strategy/bin/libpote.so-dev";
+    players[1].lib_path=(char*)"./strategy/bin/libpote.so-dev";
     // --- Initialisation des bibliothèques
     for(int i=0; i<2; ++i)
     {
