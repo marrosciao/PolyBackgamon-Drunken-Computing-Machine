@@ -213,17 +213,18 @@ int selectPion(SGameState* state, bool src, Player color){
                 for (i=-1; i<25; i++){
                     if (hitbox(pos.x,pos.y,i)==true){
                         if (event.button.button == SDL_BUTTON_RIGHT && src==false){ 
-                            if( ((state->board[i].nbDames == 1) || (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
+                            if(i==24){
+                                continuer = 0;
+                                fprintf(stderr,"col:%d",color);
+                                state->out[color] += 1;
+                                val = i;
+                            }
+                            else if( ((state->board[i].nbDames == 1) || (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
                                 continuer = 0;
                                 if ((state->board[i].owner == color)||(state->board[i].owner)==NOBODY){
                                     state->board[i].nbDames ++;
                                 }
                                 state->board[i].owner = color;
-                                val = i;
-                            }
-                            else if(i==24){
-                                continuer = 0;
-                                state->out[color] += 1;
                                 val = i;
                             }
                         }
