@@ -75,13 +75,13 @@ static bool compute_can_take_from(cuint src, cuint bar[2], const Square board[24
     }
     return can_take_from;
 }
-static bool has_farer_piece(const Square board[24], const Player player)
+static bool has_farer_piece(const Square board[24], cuint dest, const Player player)
 {
     bool has_farer = false;
     if(player==BLACK)
     {
         unsigned int index = 6;
-        unsigned int end   = 0;
+        unsigned int end   = dest+1;
         for(;index>end; --index)
         {
             if(board[index-1].owner==player)
@@ -93,7 +93,7 @@ static bool has_farer_piece(const Square board[24], const Player player)
     if(player == WHITE)
     {
         unsigned int index = 19;
-        unsigned int end   = 25;
+        unsigned int end   = dest-1;
         for(;index>end; ++index)
         {
             if(board[index-1].owner==player)
@@ -110,7 +110,7 @@ static bool has_farer_piece(const Square board[24], const Player player)
     if(dest==25)
     {
         can_put_to = !check_side(state, player) &&
-                     ( !has_farer_piece(state->board, player) ||
+                     ( !has_farer_piece(state->board, dest, player) ||
                        dices[0] == delta ||
                        dices[1] == delta
                      );
