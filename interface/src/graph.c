@@ -201,6 +201,7 @@ int selectPion(SGameState* state, SDL_Surface* screen, bool src, Player color){
             case SDL_QUIT:
                 continuer = 0;
                 endGraph();
+                exit(EXIT_SUCCESS);
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 pos.x = event.button.x;
