@@ -78,10 +78,11 @@ static bool compute_can_take_from(cuint src, cuint bar[2], const Square board[24
 static bool has_farer_piece(const Square board[24], cuint dest, const Player player)
 {
     bool has_farer = false;
+    if(dest == 0) return true;
     if(player==BLACK)
     {
         unsigned int index = 6;
-        unsigned int end   = dest+1;
+        unsigned int end   = dest;//+1;
         for(;index>end; --index)
         {
             if(board[index-1].owner==player)
@@ -93,7 +94,7 @@ static bool has_farer_piece(const Square board[24], cuint dest, const Player pla
     if(player == WHITE)
     {
         unsigned int index = 19;
-        unsigned int end   = dest-1;
+        unsigned int end   = dest;//-1;
         for(;index<end; ++index)
         {
             if(board[index-1].owner==player)
@@ -156,10 +157,19 @@ int check_move(const SMove move,
         uint i=0;
         while(i<nb_dices && err!=0)
         {
-            if( dices[i]!=delta_move || (move.dest_point==25 && dices[i]<delta_move) )
+            /*if( dices[i]!=delta_move || (move.dest_point==25 && dices[i]<delta_move) )*/
+            if( dices[i]!=delta_move )
             {
-                err = 1;
-                strcpy(messTmp,stringify(!can_move));
+                if(move.dest_point==25 && !has_farer_piece(state->board, move.src_point, player) )
+                {
+                    err = 0;
+                }
+                else
+                {
+                    err = 1;
+                    strcpy(messTmp,stringify(!can_move));
+                    if(move.dest_point==25) strcpy(messTmp,stringify(!25&&has_farer));
+                }
             }
             else
             {
@@ -217,6 +227,9 @@ int move_all(
     SGameState copy = *state;
     while(i<nb_moves && errors==0)
     {
+        char mess[50];
+        sprintf(mess, "%s bouge de %d à %d\n", enumToStr[player+1], moves[i].src_point, moves[i].dest_point);
+    logging("referee_logger", mess, INFO);
         if(check_move(moves[i], dices, nb_dices, player, state))
         {
             ++errors;
@@ -235,8 +248,6 @@ int move_all(
 void move(SGameState * const state, SMove const movement, const Player player)
 {
     char mess[50];
-    sprintf(mess, "%s bouge de %d à %d\n", enumToStr[player+1], movement.src_point, movement.dest_point);
-    logging("referee_logger", mess, INFO);
     if(movement.dest_point == 25)
     {
         move_to_end(state, movement, player);
