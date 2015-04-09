@@ -15,7 +15,6 @@ SDL_Surface* initGraph(){   //Lance une nouvelle fenetre SDL
     int hauteur = 627;
     SDL_Surface *screen = NULL;
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Init(SDL_INIT_VIDEO);
 	TTF_Init();
 	screen = SDL_SetVideoMode(largeur, hauteur, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
     SDL_WM_SetCaption("Backgammon des Potits Pedestres", NULL);
@@ -52,6 +51,7 @@ int drawBackground(SDL_Surface* screen){
     SDL_Surface *background = NULL; 
     background = SDL_LoadBMP("./Textures/background.bmp");
     SDL_BlitSurface(background, NULL, screen, NULL);
+    SDL_FreeSurface(background);
     return EXIT_SUCCESS;
 }
 
@@ -105,6 +105,7 @@ void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_
     pos.y = posy;
     SDL_BlitSurface(text, NULL, screen, &pos);
     TTF_CloseFont(font);
+    SDL_FreeSurface(text);
 }
 
 int drawBoard(SGameState* state, SDL_Surface* screen){
@@ -206,54 +207,25 @@ int selectPion(SGameState* state, SDL_Surface* screen, bool src, Player color){
                 pos.y = event.button.y;
                 for (i=0; i<24; i++){
                     if (hitbox(pos.x,pos.y,i)==true){
-                        if (event.button.button == SDL_BUTTON_RIGHT && src==false && color == state->board[i].owner ){
+                        if (event.button.button == SDL_BUTTON_RIGHT && src==false && ((state->board[i].nbDames == 1) 
+|| (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
                             continuer = 0;
-                            state->board[i].nbDames ++;
+                            if (state->board[i].owner == color){
+                                state->board[i].nbDames ++;
+                            }
+                            state->board[i].owner = color;
                             val = i;
-                            drawBackground(screen);
-                            drawBoard(state, screen);
-                            SDL_Flip(screen);
                         }
                         if (event.button.button == SDL_BUTTON_LEFT && state->board[i].nbDames != 0 && src==true && color == state->board[i].owner){
                             state->board[i].nbDames --;
                             continuer = 0;
                             val = i;
-                            drawBackground(screen);
-                            drawBoard(state, screen);
-                            SDL_Flip(screen);
                         }
                     }
                 }
                 break;
     }
 }
-    return val;
+    return val+1;
 }
-int PlayTurn( SGameState *  gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries, SDL_Surface* screen, Player color){
-    int nbMoves = dices[0] == dices[1] ? 4 : 2;
-    char coup[] = "0 COUPS RESTANTS";
-    //SDL_Color blanc = {
-    //    .r = 100,
-    //    .g = 100,
-    //    .b = 100,
-    //};
-    SDL_Color noir = {
-        .r = 0,
-        .g = 0,
-        .b = 0,
-    };
 
-    for (int i=0; i<nbMoves; i++){
-        coup[0] = nbMoves-i +48;
-        printtext(630, 290, "./Textures/CowboyMovie.ttf",50,coup,noir, screen);
-        if (color == WHITE)
-            printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES BLANCS",noir, screen);
-        if (color == BLACK)
-            printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES NOIRS",noir, screen);
-        SDL_Flip(screen);
-        moves[i].src_point= selectPion(gameState,screen,true,color);
-        moves[i].dest_point = selectPion(gameState,screen,false,color);
-    }
-
-    return 0;
-}
