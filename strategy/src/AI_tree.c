@@ -19,7 +19,7 @@ Player opposing_player(Player player)
         return WHITE ;
 }
 
-unsigned int somme_plateau(SGameState* etat_jeu,Player player)
+unsigned int somme_plateau(const SGameState* etat_jeu,Player player)
 {
     unsigned int somme = 0 ;
     somme += etat_jeu->bar[player];
@@ -225,7 +225,7 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
 // les états sont normalement symétriques
-int getValueFromGameState(SGameState* etat_jeu, Player player)
+int getValueFromGameState(const SGameState* etat_jeu, Player player)
 {
 
     const int BAR_VALUE = -55 ;
@@ -287,7 +287,7 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
     return etat_jeu;
 }
 
-bool isGameFinished(SGameState* etat_jeu)
+bool isGameFinished(const SGameState* etat_jeu)
 {
     return (etat_jeu->out[WHITE] >= 15 || etat_jeu->out[BLACK] >= 15 ) ;
 }
