@@ -21,8 +21,8 @@ static bool        all_dames_in_inner_board(CompactGameState *game, Player playe
 #define CHECK_FROM_BAR {if (!game->bar[player]) return false;}
 
 static bool is_valide_move(CompactGameState *game, Player player, CompactMove move) {
-    uint from = move.src_point,
-         to = move.dest_point;
+    uint8_t from = move.src_point,
+            to = move.dest_point;
 
     if (to < 25) {
         if (from && !game->bar[player]) {

@@ -117,7 +117,9 @@ static bool has_farer_piece(const Square board[24], cuint dest, const Player pla
     }
     else
     {
-        can_put_to = state->board[dest-1].owner==player || state->board[dest-1].nbDames<2;
+        can_put_to = state->board[dest-1].owner==player ||
+                     state->board[dest-1].owner==NOBODY ||
+                     state->board[dest-1].nbDames<2;
     }
     return can_put_to;
 }
