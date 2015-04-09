@@ -41,18 +41,18 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
     if( *lastStaker!=current && player[current].func->doubleStack(state_copy) )
     {
-        sprintf(mess, "\t%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
+        sprintf(mess, "%s double la mise : mise ainsi doublée : %d\n", enumToStr[current+1], (state->stake)*2 );
         logging("referee_logger", mess, INFO);
         if( !player[1-current].func->takeDouble(state_copy) )
         {
-            sprintf(mess, "\t%s ne suit pas\n", enumToStr[(1-current)+1]);
+            sprintf(mess, "%s ne suit pas\n", enumToStr[(1-current)+1]);
             logging("referee_logger", mess, INFO);
             end_of_round = true;
             *winner      = current;
         }
         else
         {
-            sprintf(mess, "\t%s suit\n", enumToStr[(1-current)+1]);
+            sprintf(mess, "%s suit\n", enumToStr[(1-current)+1]);
             logging("referee_logger", mess, INFO);
             state->stake *= 2;
             *lastStaker   = current;

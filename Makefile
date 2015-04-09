@@ -20,4 +20,4 @@ clean:
 	@rm -rf doc
 
 doc:
-	@doxygen
+	@doxygen Doxyfile
