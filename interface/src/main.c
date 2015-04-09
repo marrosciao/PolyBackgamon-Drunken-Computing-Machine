@@ -160,6 +160,9 @@ int main(int ARGC, const char* ARGV[])
         {
             sprintf(mess,"Début du tour %d, Joueur : %s\n", state.turn, enumToStr[current+1]);
             logging("main_logger", mess, WARNING);
+            if (ARGC < 3+current){
+                players[current].func->startGame(current);
+            }
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
     	    drawBackground(screen);
             drawBoard(&state,screen);//graph

@@ -177,7 +177,9 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
     return EXIT_SUCCESS;
 }
 bool hitbox(int x,int y,int i){
-    if (i<6)
+    if (i== -1)
+        return (x<460 && x>400);
+    else if (i>=0 && i<6)
         return (x< 793-53*i && x>793-53*(i+1) && y <582 && y>357);
     else if (i>=6 && i<12)
         return (x< 386-53*(i-6) && x>386-53*(i-5) && y <582 && y>357); 
@@ -185,10 +187,12 @@ bool hitbox(int x,int y,int i){
         return (x< 69+53*(i-11) && x>69+53*(i-12) && y < 270 && y>45); 
     else if (i>=18 && i<24)
         return (x< 474+53*(i-17) && x>474+53*(i-18) && y <270 && y>45); 
+    else if (i == 24)
+        return (x<956 && x>853);
     else
         return false;
 }
-int selectPion(SGameState* state, SDL_Surface* screen, bool src, Player color){
+int selectPion(SGameState* state, bool src, Player color){
     int continuer = 1;
     SDL_Event event;
     int i;
@@ -206,12 +210,12 @@ int selectPion(SGameState* state, SDL_Surface* screen, bool src, Player color){
             case SDL_MOUSEBUTTONDOWN:
                 pos.x = event.button.x;
                 pos.y = event.button.y;
-                for (i=0; i<24; i++){
+                for (i=-1; i<25; i++){
                     if (hitbox(pos.x,pos.y,i)==true){
                         if (event.button.button == SDL_BUTTON_RIGHT && src==false && ((state->board[i].nbDames == 1) 
 || (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
                             continuer = 0;
-                            if (state->board[i].owner == color){
+                            if ((state->board[i].owner == color)||(state->board[i].owner)==NOBODY){
                                 state->board[i].nbDames ++;
                             }
                             state->board[i].owner = color;

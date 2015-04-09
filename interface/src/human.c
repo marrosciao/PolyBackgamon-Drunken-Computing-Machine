@@ -31,6 +31,7 @@ void StartGame(Player p)
 {
     // ai_player est une var globale !
     color = p ;
+    fprintf(stderr,"couleur = %d",color);
 }
 
 Functions* StartScreen(SDL_Surface* s)
@@ -92,12 +93,12 @@ void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4]
         if (color == BLACK)
             printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES NOIRS",noir, screen);
         SDL_Flip(screen);
-        moves[i].src_point= selectPion(gameState,screen,true,color);
+        moves[i].src_point= selectPion(gameState,true,color);
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);
         SDL_Flip(screen);
-        moves[i].dest_point = selectPion(gameState,screen,false,color);
+        moves[i].dest_point = selectPion(gameState,false,color);
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);

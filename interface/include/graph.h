@@ -13,6 +13,6 @@ int animateDes(unsigned char dices[2], SDL_Surface* screen);
 int printtext(int posx, int posy, char fontName[],int size, char message[],SDL_Color color, SDL_Surface* screen);
 int drawBoard(SGameState* state, SDL_Surface* screen);
 bool hitbox(int x,int y,int i);
-int selectPion(SGameState* state, SDL_Surface* screen, bool src, Player color);
+int selectPion(SGameState* state, bool src, Player color);
 
 #endif
