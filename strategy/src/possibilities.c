@@ -17,15 +17,29 @@ static bool        is_move_possible(SGameState *game, Player player, uint locati
 static bool        is_valide_move(SGameState *, Player, SMove);
 static bool        all_dames_in_inner_board(SGameState *game, Player player);
 
+#define CHECK_FROM_BOARD {if (game->board[from - 1].owner != player) return false;}
+#define CHECK_FROM_BAR {if (!game->bar[player]) return false;}
+
 static bool is_valide_move(SGameState *game, Player player, SMove move) {
-    uint from = move.src_point, len = move.dest_point - move.src_point;
-    if (from + len == 25 && from &&
-        game->board[from - 1].owner == player) {
+    uint from = move.src_point,
+         to = move.dest_point;
+
+    if (to < 25) {
+        if (from && !game->bar[player]) {
+            CHECK_FROM_BOARD;
+        } else if (!from){
+            CHECK_FROM_BAR;
+        } else {
+            return false;
+        }
+        return is_move_possible(game, player, to);
+
+    } else if (to == 25 && from) {
+        CHECK_FROM_BOARD;
         return all_dames_in_inner_board(game, player);
-    } else if (from + len > 25 && from &&
-               game->board[from - 1].owner == player) {
-        // On sort un pion. C'est un peu compliqué, pour gérer les sorties, cf
-        // wikipédia.
+
+    } else if (to > 25 && from){
+        CHECK_FROM_BOARD;
         if (!all_dames_in_inner_board(game, player)) {
             return false;
         }
@@ -38,19 +52,7 @@ static bool is_valide_move(SGameState *game, Player player, SMove move) {
         }
 
         return true;
-    } else if (from >= 25 ||
-        (from + len) > 25) {
-        // On est hors du cadre.
-        return false;
-    } else if (from &&
-               game->bar[player]) {
-        // il y a des dames sur la barre.
-        return false;
-    } else if (from == 0) {
-        // On part de la barre.
-        return game->bar[player] && is_move_possible(game, player, from + len);
-    } else if (game->board[from - 1].owner == player){
-        return is_move_possible(game, player, from + len);
+
     } else {
         return false;
     }
