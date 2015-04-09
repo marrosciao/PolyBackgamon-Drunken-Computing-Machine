@@ -8,18 +8,11 @@
 #include "utils.h"
 #include "possibilities.h"
 
-Player ai_player;
+CompactPlayer ai_player;
 
-Player opposing_player(Player player)
-{
-    assert(player != NOBODY);
-    if (player == WHITE)
-        return BLACK ;
-    else
-        return WHITE ;
-}
 
-uint8_t somme_plateau(const CompactGameState* etat_jeu,Player player)
+
+uint8_t somme_plateau(const CompactGameState* etat_jeu,CompactPlayer player)
 {
     uint8_t somme = 0 ;
     somme += etat_jeu->bar[player];
@@ -73,7 +66,7 @@ void genererDes(unsigned char des[21][2])
 
 }
 
-long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
+long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, CompactPlayer joueur_calcule, CompactPlayer AI_player,AIListMoves *moves , const unsigned char des[2])
 {
     assert(joueur_calcule >= 0);
     // on verifie que le joueur duquel on se place est correct ...
@@ -87,8 +80,8 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
     assert(des[0] >= 1 && des[0] <= 6 && des[1] >= 1 && des[1] <= 6 );
     // on verifie que les dés envoyés sont valides
 
-    assert(somme_plateau(&etat_jeu,WHITE) == 15 );
-    assert(somme_plateau(&etat_jeu,BLACK) == 15 );
+    assert(somme_plateau(&etat_jeu,CWHITE) == 15 );
+    assert(somme_plateau(&etat_jeu,CBLACK) == 15 );
 
     if (profondeur == 0 || isGameFinished(&etat_jeu))
     {
@@ -183,7 +176,7 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
 }
 
 // objectif : a partir d'un GameState, trouver le meilleur set de mouvement
-AIListMoves getBestMoves(CompactGameState etat_jeu, Player player,const unsigned char dices[2])
+AIListMoves getBestMoves(CompactGameState etat_jeu, CompactPlayer player,const unsigned char dices[2])
 {
     /*
     solution : algorithme alpha beta
@@ -225,7 +218,7 @@ AIListMoves getBestMoves(CompactGameState etat_jeu, Player player,const unsigned
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
 // les états sont normalement symétriques
-int getValueFromGameState(const CompactGameState* etat_jeu, Player player)
+int getValueFromGameState(const CompactGameState* etat_jeu, CompactPlayer player)
 {
 
     const int BAR_VALUE = -55 ;
@@ -236,21 +229,21 @@ int getValueFromGameState(const CompactGameState* etat_jeu, Player player)
 	const int INPLAY_MALUS_DELTA = 2 ;
 
     int heuristic_value = 0 ;
-    // calcul de la valeur heuristique en partant du principe qu'on est le joueur WHITE
-    // (on multipliera par -1 si on est en réalité le joueur BLACK)
+    // calcul de la valeur heuristique en partant du principe qu'on est le joueur CWHITE
+    // (on multipliera par -1 si on est en réalité le joueur CBLACK)
 
-    heuristic_value += etat_jeu->bar[WHITE]* BAR_VALUE;
-    heuristic_value -= etat_jeu->bar[BLACK]* BAR_VALUE;
+    heuristic_value += etat_jeu->bar[CWHITE]* BAR_VALUE;
+    heuristic_value -= etat_jeu->bar[CBLACK]* BAR_VALUE;
     // prise en compte des pions sur la barre verticale
 
-    heuristic_value += etat_jeu->out[WHITE]* OUT_VALUE;
-    heuristic_value -= etat_jeu->out[BLACK]* OUT_VALUE;
+    heuristic_value += etat_jeu->out[CWHITE]* OUT_VALUE;
+    heuristic_value -= etat_jeu->out[CBLACK]* OUT_VALUE;
     // prise en compte des pions sortis du jeu
 
     for (int i = 0 ; i < 24 ; i++)
     {
         CompactSquare current_square = etat_jeu->board[i] ;
-        if (current_square.owner == WHITE)
+        if (current_square.owner == CWHITE)
         {
             if (current_square.nbDames == 1)
                 heuristic_value -= INPLAY_MALUS_ALONE + (INPLAY_MALUS_DELTA *(i+1));
@@ -258,7 +251,7 @@ int getValueFromGameState(const CompactGameState* etat_jeu, Player player)
 
             heuristic_value += current_square.nbDames * (INPLAY_VALUE_BASE + ((i+1) * INPLAY_VALUE_DELTA));
         }
-        else if (current_square.owner == BLACK)
+        else if (current_square.owner == CBLACK)
         {
             if (current_square.nbDames == 1)
                 heuristic_value += INPLAY_MALUS_ALONE + (INPLAY_MALUS_DELTA *(24-i)) ;
@@ -266,13 +259,13 @@ int getValueFromGameState(const CompactGameState* etat_jeu, Player player)
         }
     }
 
-    if (player == BLACK)
+    if (player == CBLACK)
         heuristic_value *= -1;
 
     return heuristic_value ;
 }
 
-CompactGameState gameStateFromMovement(CompactGameState etat_jeu, AIListMoves mouvements,Player player)
+CompactGameState gameStateFromMovement(CompactGameState etat_jeu, AIListMoves mouvements,CompactPlayer player)
 {
     // a partir d'un etat de jeu et de mouvements définis, renvoie un autre etat de jeux.
     // WARNING : CELA NE VERIFIE PAS QUE LE MOUVEMENT EST VALIDE !
@@ -289,5 +282,5 @@ CompactGameState gameStateFromMovement(CompactGameState etat_jeu, AIListMoves mo
 
 bool isGameFinished(const CompactGameState* etat_jeu)
 {
-    return (etat_jeu->out[WHITE] >= 15 || etat_jeu->out[BLACK] >= 15 ) ;
+    return (etat_jeu->out[CWHITE] >= 15 || etat_jeu->out[CBLACK] >= 15 ) ;
 }

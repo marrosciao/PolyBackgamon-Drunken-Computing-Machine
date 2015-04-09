@@ -27,7 +27,7 @@ uint   min_uint(uint, uint);
 
 CompactGameState  reverse_game(CompactGameState);
 AIListMoves reverse_moves(AIListMoves);
-Player opposing_player(Player player);
+CompactPlayer opposing_player(CompactPlayer player);
 
 /**
  * @brief Applique un mouvement sur le plateau.
@@ -38,4 +38,4 @@ Player opposing_player(Player player);
  *
  * @return L'état du jeu modifié.
  */
-CompactGameState apply_move(CompactGameState, Player, CompactMove);
+CompactGameState apply_move(CompactGameState, CompactPlayer, CompactMove);

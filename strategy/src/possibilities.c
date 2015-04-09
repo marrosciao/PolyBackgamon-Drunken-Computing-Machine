@@ -6,21 +6,21 @@
 /** Pour toutes les fonctions ici, CompactGameState est normalisé. */
 
 static size_t      insert_all_dices(CompactGameState game,
-                                    Player player,
+                                    CompactPlayer player,
                                     size_t max_nb_dice_used,
                                     size_t nb_dices_used,
                                     size_t nb_dices,
                                     const uc dices[nb_dices],
                                     ArrayList *list,
                                     AIListMoves moves);
-static bool        is_move_possible(CompactGameState *game, Player player, uint location);
-static bool        is_valide_move(CompactGameState *, Player, CompactMove);
-static bool        all_dames_in_inner_board(CompactGameState *game, Player player);
+static bool        is_move_possible(CompactGameState *game, CompactPlayer player, uint location);
+static bool        is_valide_move(CompactGameState *, CompactPlayer, CompactMove);
+static bool        all_dames_in_inner_board(CompactGameState *game, CompactPlayer player);
 
 #define CHECK_FROM_BOARD {if (game->board[from - 1].owner != player) return false;}
 #define CHECK_FROM_BAR {if (!game->bar[player]) return false;}
 
-static bool is_valide_move(CompactGameState *game, Player player, CompactMove move) {
+static bool is_valide_move(CompactGameState *game, CompactPlayer player, CompactMove move) {
     uint8_t from = move.src_point,
             to = move.dest_point;
 
@@ -58,16 +58,16 @@ static bool is_valide_move(CompactGameState *game, Player player, CompactMove mo
     }
 }
 
-static bool is_move_possible(CompactGameState *game, Player player, uint location) {
+static bool is_move_possible(CompactGameState *game, CompactPlayer player, uint location) {
     if (game->board[location - 1].owner == player ||
-        game->board[location - 1].owner == NOBODY) {
+        game->board[location - 1].owner == CNOBODY) {
         return true;
     } else {
         return game->board[location - 1].nbDames < 2;
     }
 }
 
-static bool all_dames_in_inner_board(CompactGameState *game, Player player) {
+static bool all_dames_in_inner_board(CompactGameState *game, CompactPlayer player) {
     size_t count = game->bar[player];
 
     for (size_t i = 0; i < 18; i++) {
@@ -79,8 +79,8 @@ static bool all_dames_in_inner_board(CompactGameState *game, Player player) {
     return count == 0;
 }
 
-ArrayList *retrieveEveryPossibility(CompactGameState game, Player player, const unsigned char dices[2]) {
-    if (player == BLACK) {
+ArrayList *retrieveEveryPossibility(CompactGameState game, CompactPlayer player, const unsigned char dices[2]) {
+    if (player == CBLACK) {
         game = reverse_game(game);
     }
 
@@ -130,14 +130,14 @@ ArrayList *retrieveEveryPossibility(CompactGameState game, Player player, const 
         list_splice(list, 0, i);
     }
 
-    if (player == BLACK) {
+    if (player == CBLACK) {
         list_foreach(list, reverse_moves);
     }
     return list;
 }
 
 static size_t insert_all_dices(CompactGameState game,
-                               Player player,
+                               CompactPlayer player,
                                size_t max_nb_dice_used,
                                size_t nb_dices_used,
                                size_t nb_dices,

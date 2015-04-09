@@ -2,6 +2,15 @@
 
 #include "utils.h"
 
+CompactPlayer opposing_player(CompactPlayer player)
+{
+    assert(player != CNOBODY);
+    if (player == CWHITE)
+        return CBLACK ;
+    else
+        return CWHITE ;
+}
+
 CompactGameState reverse_game(CompactGameState game) {
     CompactSquare board[24];
 
@@ -29,7 +38,7 @@ AIListMoves reverse_moves(AIListMoves moves) {
     return moves;
 }
 
-CompactGameState apply_move(CompactGameState game, Player player, CompactMove move) {
+CompactGameState apply_move(CompactGameState game, CompactPlayer player, CompactMove move) {
     assert(move.src_point < 25);
     assert(move.dest_point > 0);
     if (move.src_point == 0)
@@ -44,7 +53,7 @@ CompactGameState apply_move(CompactGameState game, Player player, CompactMove mo
         assert(nbDames >= 0);
 
         if(nbDames == 0)
-            game.board[move.src_point-1].owner = NOBODY;
+            game.board[move.src_point-1].owner = CNOBODY;
 
     }
 
