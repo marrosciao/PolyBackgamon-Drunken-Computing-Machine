@@ -107,7 +107,7 @@ int main(int ARGC, const char* ARGV[])
         }
         else
         {
-            /*players[i].func = StartScreen(screen);*/
+            players[i].func = StartScreen(screen);
             players[i].lib_path = NULL;
         }
         players[i].func->initLibrary( (players[i].name) );
