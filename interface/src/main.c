@@ -120,6 +120,7 @@ int main(int ARGC, const char* ARGV[])
     // --- Initialisation du jeux
     SGameState state;
     init_state(&state);
+    drawBoard(&state,screen);
     for(unsigned int i=0; i<24; ++i)
     {
         char mess[50];
