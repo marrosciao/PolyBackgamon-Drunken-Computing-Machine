@@ -40,14 +40,14 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
-    const int value_to_double_stake = 100 ;
+    const int value_to_double_stake = 800 ;
     CompactGameState compact_gamestate = gameStateToCompact(*gameState);
     return getValueFromGameState(&compact_gamestate,ai_player) >= value_to_double_stake;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
-    const int value_to_surrender_stake = -150 ;
+    const int value_to_surrender_stake = -1000 ;
     CompactGameState compact_gamestate = gameStateToCompact(*gameState);
     return getValueFromGameState(&compact_gamestate,ai_player) < value_to_surrender_stake;
 }
