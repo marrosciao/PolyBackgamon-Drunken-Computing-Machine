@@ -94,7 +94,7 @@ static bool has_farer_piece(const Square board[24], cuint dest, const Player pla
     {
         unsigned int index = 19;
         unsigned int end   = dest-1;
-        for(;index>end; ++index)
+        for(;index<end; ++index)
         {
             if(board[index-1].owner==player)
             {

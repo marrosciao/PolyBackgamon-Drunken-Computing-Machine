@@ -60,7 +60,6 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     }
     if( !end_of_round )
     {
-
         unsigned int errors = 1;
         player[current].nb_moves = 0;
         player[current].func->playTurn(
