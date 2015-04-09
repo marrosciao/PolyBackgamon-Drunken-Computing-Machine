@@ -7,8 +7,10 @@ CompactGameState gameStateToCompact(SGameState gamestate)
     {
         .bar[0]=(uint8_t)gamestate.bar[0],
         .bar[1]=(uint8_t)gamestate.bar[1],
-        .whiteScore = gamestate.out[0],
-        .blackScore = gamestate.out[1],
+        .out[0]=(uint8_t)gamestate.out[0],
+        .out[1]=(uint8_t)gamestate.out[1],
+        .whiteScore = gamestate.whiteScore,
+        .blackScore = gamestate.blackScore,
         .turn = gamestate.turn,
         .stake = gamestate.stake,
     };
