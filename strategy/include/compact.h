@@ -2,11 +2,32 @@
 #pragma once
 #include <stdint.h>
 #include "backgammon.h"
+#include <stdint.h>
+
+
+// C'est sale, mais ça fait l'équivalent d'un enum
+typedef uint8_t CompactPlayer ;
+static const CompactPlayer CNOBODY = -1 ;
+static const CompactPlayer CBLACK = 0 ;
+static const CompactPlayer CWHITE = 1 ;
+
+/*
+// On essaye de faire un enum ne prenant qu'un seule byte au lieu de 4 (pour l'alignement)
+// problème : ne marche pas
+typedef enum
+{
+	CNOBODY = -1 ,
+	CBLACK = 0 ,
+	CWHITE = 1
+} CompactPlayer __attribute__ ((packed));
+*/
+
+
 /**
  * @brief Définit le contenu d'une case de jeu.
  */
 typedef struct {
-    Player owner;           /*!<  Joueur contrôlant la case */
+    CompactPlayer owner;           /*!<  Joueur contrôlant la case */
     uint8_t nbDames;   /*!<  Nombre de dames sur la case (non utilisé si
                                   `owner == NOBODY.`) */
 } CompactSquare;
