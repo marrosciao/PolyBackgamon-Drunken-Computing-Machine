@@ -2,7 +2,7 @@
 export CFLAGS        += -std=c11 -Wall -Wextra -Wshadow -pedantic -pipe -fdiagnostics-color=auto
 # -fsanitize=address
 export CFLAGS_DEBUG  += -Og -g
-export CFLAGS_PROD   += -O2 -s -DNDEBUG
+export CFLAGS_PROD   += -O2 -s -DNDEBUG -DLOG_LVL=NONE
 export CPPFLAGS      += -MMD -MP -I include
 export LDFLAGS       +=
 export LDLIBS        +=
