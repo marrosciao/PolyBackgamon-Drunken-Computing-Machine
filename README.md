@@ -23,20 +23,24 @@ $ make strategy
 ```
 Compilation des 2 à la fois
 ```
-$ make interface strategy
+$ make
 ```
 
-La librairie de strategie se trouve à strategy/libstrategy.so après la compilation
+La librairie de strategie se trouve à strategy/bin/libpote.so après la compilation
 ## Utilisation
 ```
-$ ./PolyBackgammon nombre-de-points chemin-vers-ai1 [chemin-vers-ai2]
+$ ./interface/bin/PolyBackgammon-dev [nombre-de-points] [chemin-vers-ai1] [chemin-vers-ai2]
 ```
-Si vous executez 2 fois la même IA avec le même fichier, leurs variables globales seront partagées
+Lorsqu'aucune IA n'est précisée, cela lancera un match humain contre humain. Si il n'y a pas de parametre nombre-de-points utilisé, le programme utilisera une valeur par défaut. Si une seule IA est precisée, un humain devrait jouer contre l'IA. Si deux IA sont en paramètre, elles se battront en duel jusqu'à ce que victoire s'en suive.
+
+nombre-de-points doit etre une valeur positive non nulle. Cela indique le nombre de points nécessaires pour gagner le set de match, cela d'indique PAS le nombre de matchs joués au total par les deux IA.
+
+Note : Si vous executez 2 fois la même IA avec le même fichier, leurs variables globales seront partagées
 Si vous souhaitez qu'une IA affronte son double, il faut donc copier l'IA dans un dossier temporairement
 Exemple :
 ```
-$ cp strategy/libstrategy.so /tmp/lib.so
-$ ./PolyBackgammon 15 /tmp/lib.so
+$ cp ./strategy/bin/libpote.so-dev /tmp/lib.so
+$ ./interface/bin/PolyBackgammon-dev 15 /tmp/lib.so
 ```
 Dans cet exemple l'IA se battra contre elle même sur autant de matchs qu'il faudra, jusqu'à ce qu'une des deux IA ait 15 points.
 
@@ -54,8 +58,8 @@ L'algorithme alpha beta est exactement le meme que minimax, excepté une amélio
 Il faut etre en revanche prudent en choisissant la profondeur de cet algorithme, car sans les optimisations nécessaires, une profondeur de 2 peut tout de meme durer jusqu'à quelques secondes (par ex dans le cas d'un double dé pour le backgammon).
 Les optimisations peuvent etre les suivantes :
 * Ajout d'options de compilation permettant l'accélération de l'éxecution
-* Filtrage des résultats doubles ( par exemple, si on a comme dés 4 et 3, bouger un pion de 1 à 8 est la meme chose s'il n'y a pas de pion adverse sur 4 ou 5)
-* Envoyer les structures par pointeur à la place de par valeur : sur un petit programme il n'y a aucune différence, mais sur ~2000 * ~2000 appels récursifs, la différence se sent
+* Filtrage des résultats doubles ( par exemple, si on a comme dés 4 et 3, bouger un pion de 1 à 8 est la meme chose si on utilise les dés 4 puis 3 ou 3 puis 4 s'il n'y a pas de pion adverse sur 4 ou 5)
+* Envoyer les structures par pointeur à la place de par valeur lorsque possible : sur un petit programme il n'y a aucune différence, mais sur ~2000 * ~2000 appels récursifs, la différence peut se sentir
 
 ### Interface
 
