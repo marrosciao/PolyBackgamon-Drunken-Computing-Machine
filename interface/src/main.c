@@ -188,6 +188,7 @@ int main(int ARGC, const char* ARGV[])
     free_logger();
     for(int i=0; i<2; ++i)
     {
+        free(players[i].func);
         dlclose(players[i].lib_handle);
         if (ARGC >= 3+i)
             free(players[i].lib_path);
