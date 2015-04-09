@@ -19,7 +19,7 @@ Player opposing_player(Player player)
         return WHITE ;
 }
 
-uint8_t somme_plateau(CompactGameState* etat_jeu,Player player)
+uint8_t somme_plateau(const CompactGameState* etat_jeu,Player player)
 {
     uint8_t somme = 0 ;
     somme += etat_jeu->bar[player];
@@ -225,7 +225,7 @@ AIListMoves getBestMoves(CompactGameState etat_jeu, Player player,const unsigned
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
 // les états sont normalement symétriques
-int getValueFromGameState(CompactGameState* etat_jeu, Player player)
+int getValueFromGameState(const CompactGameState* etat_jeu, Player player)
 {
 
     const int BAR_VALUE = -55 ;
@@ -287,7 +287,7 @@ CompactGameState gameStateFromMovement(CompactGameState etat_jeu, AIListMoves mo
     return etat_jeu;
 }
 
-bool isGameFinished(CompactGameState* etat_jeu)
+bool isGameFinished(const CompactGameState* etat_jeu)
 {
     return (etat_jeu->out[WHITE] >= 15 || etat_jeu->out[BLACK] >= 15 ) ;
 }

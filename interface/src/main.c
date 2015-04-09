@@ -15,6 +15,11 @@
 #include"game.h"
 #include"graph.h"
 #include"logger.h"
+#include"human.h"
+
+#define LOG_LVL INFO
+
+#define LOG_LVL INFO
 
 //TODO : faire les test et merge la branche
 //TODO : appliquer clang-format
@@ -45,9 +50,9 @@ int main(int ARGC, const char* ARGV[])
 {
     init_logger();
     unsigned int target_score = 15 ;
-    set_level("main_logger", INFO);
+    set_level("main_logger", LOG_LVL);
     set_file("main_logger", NULL);
-    set_level("refere_logger", INFO);
+    set_level("refere_logger", LOG_LVL);
     set_level("score_logger", INFO);
     set_file("score_logger", "score.log");
     set_simple_print("score_logger", true);
@@ -86,6 +91,10 @@ int main(int ARGC, const char* ARGV[])
     IA players[2];
     players[0].lib_path=(char*)"./strategy/bin/libpote.so-dev";
     players[1].lib_path=(char*)"./strategy/bin/libpote.so-dev";
+    SDL_Surface* screen = initGraph();//graph
+    drawBackground(screen);
+    SDL_Flip(screen);
+    sleep(2);
     // --- Initialisation des bibliothèques
     for(int i=0; i<2; ++i)
     {
@@ -93,10 +102,15 @@ int main(int ARGC, const char* ARGV[])
         {
             players[i].lib_path=(char*)calloc(strlen(ARGV[2+i])+1,sizeof(char));
             strcpy(players[i].lib_path,ARGV[2+i]);
+            players[i].func = (Functions*)malloc( sizeof(Functions) );
+            players[i].lib_handle = NULL;
+            init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
         }
-        players[i].func = (Functions*)malloc( sizeof(Functions) );
-        players[i].lib_handle = NULL;
-        init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
+        else
+        {
+            players[i].func = StartScreen(screen);
+            players[i].lib_path = NULL;
+        }
         players[i].func->initLibrary( (players[i].name) );
         char mess[50];
         sprintf(mess, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
@@ -107,10 +121,6 @@ int main(int ARGC, const char* ARGV[])
     // --- Initialisation du jeux
     SGameState state;
     init_state(&state);
-    SDL_Surface* screen = initGraph();//graph
-    drawBackground(screen);
-    SDL_Flip(screen);
-    sleep(2);
     for(unsigned int i=0; i<24; ++i)
     {
         char mess[50];
@@ -192,13 +202,14 @@ int main(int ARGC, const char* ARGV[])
     sprintf(mess, "%s , %d\n", enumToStr[winner+1], score);
     logging("score_logger", mess, INFO);
     free_logger();
+    endGraph(screen);//graph
     for(int i=0; i<2; ++i)
     {
         free(players[i].func);
-        dlclose(players[i].lib_handle);
-        if (ARGC >= 3+i)
+        if (ARGC >= 3+i){
+            dlclose(players[i].lib_handle);
             free(players[i].lib_path);
+        }
     }
-    endGraph();//graph
     return EXIT_SUCCESS;
 }
