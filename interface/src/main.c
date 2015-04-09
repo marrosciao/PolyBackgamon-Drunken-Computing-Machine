@@ -15,6 +15,7 @@
 #include"game.h"
 #include"graph.h"
 #include"logger.h"
+#include"human.h"
 
 #define LOG_LVL INFO
 
