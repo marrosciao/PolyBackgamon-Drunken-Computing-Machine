@@ -9,14 +9,16 @@
  */
 
 #include <stddef.h>
+#include <stdint.h>
 #include <stdbool.h>
 
+#include "compact.h"
 #include "backgammon.h"
 
 typedef struct {
-    SMove mouvement[4] ;
+    CompactMove mouvement[4] ;
     // tableau des mouvements, jusqu'à 4 possibles
-    size_t nombre_mouvements ;
+    uint8_t nombre_mouvements ;
     // nombre de mouvements viables dans cette structure ( entre 0 et 4)
 } AIListMoves;
 /** Type du contenu de la liste. */

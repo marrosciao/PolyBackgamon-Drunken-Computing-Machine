@@ -23,4 +23,4 @@
  *
  * @return Une ArrayList des mouvements possibles.
  */
-ArrayList *retrieveEveryPossibility(SGameState game, Player player, const unsigned char dices[2]);
+ArrayList *retrieveEveryPossibility(CompactGameState game, Player player, const unsigned char dices[2]);

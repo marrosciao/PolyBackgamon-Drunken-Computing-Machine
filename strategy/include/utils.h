@@ -3,7 +3,7 @@
 #include "backgammon.h"
 #include "arraylist.h"
 
-typedef unsigned int uint;
+typedef uint8_t uint;
 typedef unsigned char uc;
 
 
@@ -25,7 +25,7 @@ size_t min_size_t(size_t, size_t);
 long   min_long(long, long);
 uint   min_uint(uint, uint);
 
-SGameState  reverse_game(SGameState);
+CompactGameState  reverse_game(CompactGameState);
 AIListMoves reverse_moves(AIListMoves);
 Player opposing_player(Player player);
 
@@ -38,4 +38,4 @@ Player opposing_player(Player player);
  *
  * @return L'état du jeu modifié.
  */
-SGameState apply_move(SGameState, Player, SMove);
+CompactGameState apply_move(CompactGameState, Player, CompactMove);

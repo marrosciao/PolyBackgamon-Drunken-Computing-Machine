@@ -3,6 +3,7 @@
 
 #include "backgammon.h"
 #include "AI_tree.h"
+#include "compact.h"
 
 
 void InitLibrary(char name[50])
@@ -40,28 +41,31 @@ void EndMatch()
 int DoubleStack(const SGameState * const gameState)
 {
     const int value_to_double_stake = 100 ;
-    return getValueFromGameState(gameState,ai_player) >= value_to_double_stake;
+    CompactGameState compact_gamestate = gameStateToCompact(*gameState);
+    return getValueFromGameState(&compact_gamestate,ai_player) >= value_to_double_stake;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
     const int value_to_surrender_stake = -150 ;
-    return getValueFromGameState(gameState,ai_player) < value_to_surrender_stake;
+    CompactGameState compact_gamestate = gameStateToCompact(*gameState);
+    return getValueFromGameState(&compact_gamestate,ai_player) < value_to_surrender_stake;
 }
 
-void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
+void PlayTurn(const SGameState * const gameStateFat, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
 {
-    assert(somme_plateau(gameState,WHITE)==15);
-    assert(somme_plateau(gameState,BLACK)==15);
-    AIListMoves tmp_moves = getBestMoves(*gameState,ai_player,dices);
+    CompactGameState gameState = gameStateToCompact(*gameStateFat);
+    assert(somme_plateau(&gameState,WHITE)==15);
+    assert(somme_plateau(&gameState,BLACK)==15);
+    AIListMoves tmp_moves = getBestMoves(gameState,ai_player,dices);
 
-    moves[0] = tmp_moves.mouvement[0] ;
-    moves[1] = tmp_moves.mouvement[1] ;
-    moves[2] = tmp_moves.mouvement[2] ;
-    moves[3] = tmp_moves.mouvement[3] ;
+    moves[0] = compactToSMove(tmp_moves.mouvement[0]);
+    moves[1] = compactToSMove(tmp_moves.mouvement[1]);
+    moves[2] = compactToSMove(tmp_moves.mouvement[2]);
+    moves[3] = compactToSMove(tmp_moves.mouvement[3]);
     // la flemme d'utiliser memcpy pour 4 lignes
 
-    *nbMove = tmp_moves.nombre_mouvements ;
+    *nbMove = (unsigned int)tmp_moves.nombre_mouvements ;
     assert(tmp_moves.nombre_mouvements<=4);
     assert(*nbMove<=4);
 }

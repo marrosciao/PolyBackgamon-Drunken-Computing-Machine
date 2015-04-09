@@ -19,9 +19,9 @@ Player opposing_player(Player player)
         return WHITE ;
 }
 
-unsigned int somme_plateau(SGameState* etat_jeu,Player player)
+uint8_t somme_plateau(CompactGameState* etat_jeu,Player player)
 {
-    unsigned int somme = 0 ;
+    uint8_t somme = 0 ;
     somme += etat_jeu->bar[player];
     for (int i = 0 ; i < 24 ; i++ )
     {
@@ -73,7 +73,7 @@ void genererDes(unsigned char des[21][2])
 
 }
 
-long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
+long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, Player joueur_calcule, Player AI_player,AIListMoves *moves , const unsigned char des[2])
 {
     assert(joueur_calcule >= 0);
     // on verifie que le joueur duquel on se place est correct ...
@@ -183,7 +183,7 @@ long alphabeta(SGameState etat_jeu, int profondeur,int profondeur_initial, long 
 }
 
 // objectif : a partir d'un GameState, trouver le meilleur set de mouvement
-AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char dices[2])
+AIListMoves getBestMoves(CompactGameState etat_jeu, Player player,const unsigned char dices[2])
 {
     /*
     solution : algorithme alpha beta
@@ -225,7 +225,7 @@ AIListMoves getBestMoves(SGameState etat_jeu, Player player,const unsigned char 
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
 // les états sont normalement symétriques
-int getValueFromGameState(SGameState* etat_jeu, Player player)
+int getValueFromGameState(CompactGameState* etat_jeu, Player player)
 {
 
     const int BAR_VALUE = -55 ;
@@ -249,7 +249,7 @@ int getValueFromGameState(SGameState* etat_jeu, Player player)
 
     for (int i = 0 ; i < 24 ; i++)
     {
-        Square current_square = etat_jeu->board[i] ;
+        CompactSquare current_square = etat_jeu->board[i] ;
         if (current_square.owner == WHITE)
         {
             if (current_square.nbDames == 1)
@@ -272,7 +272,7 @@ int getValueFromGameState(SGameState* etat_jeu, Player player)
     return heuristic_value ;
 }
 
-SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Player player)
+CompactGameState gameStateFromMovement(CompactGameState etat_jeu, AIListMoves mouvements,Player player)
 {
     // a partir d'un etat de jeu et de mouvements définis, renvoie un autre etat de jeux.
     // WARNING : CELA NE VERIFIE PAS QUE LE MOUVEMENT EST VALIDE !
@@ -280,14 +280,14 @@ SGameState gameStateFromMovement(SGameState etat_jeu, AIListMoves mouvements,Pla
 
     for (size_t i = 0 ; i < mouvements.nombre_mouvements ; i++)
     {
-        SMove current_move = mouvements.mouvement[i] ;
+        CompactMove current_move = mouvements.mouvement[i] ;
         etat_jeu = apply_move(etat_jeu,player,current_move);
     }
 
     return etat_jeu;
 }
 
-bool isGameFinished(SGameState* etat_jeu)
+bool isGameFinished(CompactGameState* etat_jeu)
 {
     return (etat_jeu->out[WHITE] >= 15 || etat_jeu->out[BLACK] >= 15 ) ;
 }

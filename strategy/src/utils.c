@@ -2,8 +2,8 @@
 
 #include "utils.h"
 
-SGameState reverse_game(SGameState game) {
-    Square board[24];
+CompactGameState reverse_game(CompactGameState game) {
+    CompactSquare board[24];
 
     for (size_t i = 0; i < 24; i++) {
         board[i] = game.board[23 - i];
@@ -29,7 +29,7 @@ AIListMoves reverse_moves(AIListMoves moves) {
     return moves;
 }
 
-SGameState apply_move(SGameState game, Player player, SMove move) {
+CompactGameState apply_move(CompactGameState game, Player player, CompactMove move) {
     assert(move.src_point < 25);
     assert(move.dest_point > 0);
     if (move.src_point == 0)
