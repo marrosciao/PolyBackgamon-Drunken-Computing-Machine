@@ -16,6 +16,8 @@
 #include"graph.h"
 #include"logger.h"
 
+#define LOG_LVL INFO
+
 //TODO : faire les test et merge la branche
 //TODO : appliquer clang-format
 //TODO : refactoring pour que ça soit plus propre
@@ -45,9 +47,9 @@ int main(int ARGC, const char* ARGV[])
 {
     init_logger();
     unsigned int target_score = 15 ;
-    set_level("main_logger", INFO);
+    set_level("main_logger", LOG_LVL);
     set_file("main_logger", NULL);
-    set_level("refere_logger", INFO);
+    set_level("refere_logger", LOG_LVL);
     set_level("score_logger", INFO);
     set_file("score_logger", "score.log");
     set_simple_print("score_logger", true);
