@@ -19,21 +19,21 @@
  */
 typedef struct{
     //! fonction d'initialisation de la stratégie
-    pfInitLibrary    initLibrary;
+    pfInitLibrary initLibrary;
     //! fonction démarant un match
-    pfStartMatch    startMatch;
+    pfStartMatch  startMatch;
     //! fonction démarant une manche
-    pfStartGame        startGame;
+    pfStartGame   startGame;
     //! fonction terminant une manche
-    pfEndGame        endGame;
+    pfEndGame     endGame;
     //! fonction terminant un match
-    pfEndMatch        endMatch;
+    pfEndMatch    endMatch;
     //! fonction renvoyant si l'IA double la mise
-    pfDoubleStack    doubleStack;
+    pfDoubleStack doubleStack;
     //! fonction retournant si l'IA accepte de doubler la mise ou abandonne
-    pfTakeDouble    takeDouble;
+    pfTakeDouble  takeDouble;
     //! fonction retournant les mouvements à effectuer
-    pfPlayTurn        playTurn;
+    pfPlayTurn    playTurn;
 } Functions;
 
 /**

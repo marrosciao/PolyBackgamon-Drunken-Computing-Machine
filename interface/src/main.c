@@ -88,6 +88,10 @@ int main(int ARGC, const char* ARGV[])
     IA players[2];
     players[0].lib_path=(char*)"./strategy/bin/libpote.so-dev";
     players[1].lib_path=(char*)"./strategy/bin/libpote.so-dev";
+    SDL_Surface* screen = initGraph();//graph
+    drawBackground(screen);
+    SDL_Flip(screen);
+    sleep(2);
     // --- Initialisation des bibliothèques
     for(int i=0; i<2; ++i)
     {
@@ -95,10 +99,15 @@ int main(int ARGC, const char* ARGV[])
         {
             players[i].lib_path=(char*)calloc(strlen(ARGV[2+i])+1,sizeof(char));
             strcpy(players[i].lib_path,ARGV[2+i]);
+            players[i].func = (Functions*)malloc( sizeof(Functions) );
+            players[i].lib_handle = NULL;
+            init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
         }
-        players[i].func = (Functions*)malloc( sizeof(Functions) );
-        players[i].lib_handle = NULL;
-        init_lib( players[i].lib_path , &(players[i].lib_handle), players[i].func, err);
+        else
+        {
+            players[i].func = StartScreen(screen);
+            players[i].lib_path = NULL;
+        }
         players[i].func->initLibrary( (players[i].name) );
         char mess[50];
         sprintf(mess, "%s I.A. : %s\n", enumToStr[i+1],players[i].name );
@@ -109,10 +118,6 @@ int main(int ARGC, const char* ARGV[])
     // --- Initialisation du jeux
     SGameState state;
     init_state(&state);
-    SDL_Surface* screen = initGraph();//graph
-    drawBackground(screen);
-    SDL_Flip(screen);
-    sleep(2);
     for(unsigned int i=0; i<24; ++i)
     {
         char mess[50];
