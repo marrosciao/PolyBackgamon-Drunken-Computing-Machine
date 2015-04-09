@@ -2,27 +2,29 @@
 
 #include<string.h>
 
-static const char* _enumToStr[] = { "ERROR", "WARNING", "INFO"};
+static const char* _enumToStr[] = { "NONE", "ERROR", "WARNING", "INFO"};
+static Logger loggers[LOGGER_SIZE];
+static unsigned int nb_loggers;
 
 void init_logger(){
     for(unsigned int i=0; i<LOGGER_SIZE; ++i){
-        _loggers[i].file = NULL;
-        _loggers[i].name = NULL;
-        _loggers[i].simple_print = false;
+        loggers[i].file = NULL;
+        loggers[i].name = NULL;
+        loggers[i].simple_print = false;
     }
 }
 
 Logger* get_logger(const char* name){
     unsigned int i=0;
-    while(i<_nb_loggers && strcmp(name, _loggers[i].name)) ++i;
-    if(i>=_nb_loggers){
-        if( _nb_loggers>= LOGGER_SIZE ) return NULL;
-        _nb_loggers++;
-        _loggers[i].file = stderr;
-        _loggers[i].lvl  = INFO;
-        _loggers[i].name = name;
+    while(i<nb_loggers && strcmp(name, loggers[i].name)) ++i;
+    if(i>=nb_loggers){
+        if( nb_loggers>= LOGGER_SIZE ) return NULL;
+        nb_loggers++;
+        loggers[i].file = stderr;
+        loggers[i].lvl  = INFO;
+        loggers[i].name = name;
     }
-    return &(_loggers[i]);
+    return &(loggers[i]);
 }
 
 int set_level(const char* name, Level lvl){
@@ -67,7 +69,7 @@ int p_logging(const char* name, const char* file, const char* fctn, const int li
 }
 
 void free_logger(){
-    for(unsigned int i=0; i< _nb_loggers; ++i){
-        if(_loggers[i].file!=stderr) fclose(_loggers[i].file);
+    for(unsigned int i=0; i< nb_loggers; ++i){
+        if(loggers[i].file!=stderr) fclose(loggers[i].file);
     }
 }

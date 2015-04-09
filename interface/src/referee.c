@@ -209,6 +209,7 @@ int move_all(
         cuint nb_dices,
         const Player player )
 {
+    set_level("referee_logger", LOG_LVL);
     uint errors = 0;
     uint i = 0;
     SGameState copy = *state;
