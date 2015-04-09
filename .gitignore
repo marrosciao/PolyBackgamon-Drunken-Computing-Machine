@@ -6,6 +6,7 @@
 
 *.swp
 *~
+*.log
 
 #Cmake generated file
 CMakeFiles/
