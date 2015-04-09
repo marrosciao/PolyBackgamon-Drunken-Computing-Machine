@@ -94,11 +94,13 @@ void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4]
             printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES NOIRS",noir, screen);
         SDL_Flip(screen);
         moves[i].src_point= selectPion(gameState,true,color);
+        fprintf(stderr,"src: %d",moves[i].src_point);
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);
         SDL_Flip(screen);
         moves[i].dest_point = selectPion(gameState,false,color);
+        fprintf(stderr,"dest: %d",moves[i].dest_point);
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);

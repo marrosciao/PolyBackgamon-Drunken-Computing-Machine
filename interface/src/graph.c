@@ -196,7 +196,7 @@ int selectPion(SGameState* state, bool src, Player color){
     int continuer = 1;
     SDL_Event event;
     int i;
-    int val = -1;
+    int val;
     while (continuer){
         SDL_Rect pos;
         SDL_WaitEvent(&event);
@@ -212,19 +212,32 @@ int selectPion(SGameState* state, bool src, Player color){
                 pos.y = event.button.y;
                 for (i=-1; i<25; i++){
                     if (hitbox(pos.x,pos.y,i)==true){
-                        if (event.button.button == SDL_BUTTON_RIGHT && src==false && ((state->board[i].nbDames == 1) 
-|| (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
-                            continuer = 0;
-                            if ((state->board[i].owner == color)||(state->board[i].owner)==NOBODY){
-                                state->board[i].nbDames ++;
+                        if (event.button.button == SDL_BUTTON_RIGHT && src==false){ 
+                            if( ((state->board[i].nbDames == 1) || (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
+                                continuer = 0;
+                                if ((state->board[i].owner == color)||(state->board[i].owner)==NOBODY){
+                                    state->board[i].nbDames ++;
+                                }
+                                state->board[i].owner = color;
+                                val = i;
                             }
-                            state->board[i].owner = color;
-                            val = i;
+                            else if(i==24){
+                                continuer = 0;
+                                state->out[color] += 1;
+                                val = i;
+                            }
                         }
-                        if (event.button.button == SDL_BUTTON_LEFT && state->board[i].nbDames != 0 && src==true && color == state->board[i].owner){
-                            state->board[i].nbDames --;
-                            continuer = 0;
-                            val = i;
+                        if (event.button.button == SDL_BUTTON_LEFT && src==true ){
+                            if (state->board[i].nbDames != 0 && color == state->board[i].owner){
+                                state->board[i].nbDames --;
+                                continuer = 0;
+                                val = i;
+                            }
+                            else if (i==-1){
+                                state->bar[color] -= 1;
+                                val = i;
+                                continuer = 0;
+                            }
                         }
                     }
                 }
