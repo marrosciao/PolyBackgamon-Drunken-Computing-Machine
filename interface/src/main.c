@@ -19,7 +19,6 @@
 
 #define LOG_LVL INFO
 
-#define LOG_LVL INFO
 
 //TODO : faire les test et merge la branche
 //TODO : appliquer clang-format
@@ -51,10 +50,10 @@ int main(int ARGC, const char* ARGV[])
     init_logger();
     unsigned int target_score = 15 ;
     set_level("main_logger", LOG_LVL);
-    set_file("main_logger", NULL);
     set_level("refere_logger", LOG_LVL);
     set_level("score_logger", INFO);
     set_file("score_logger", "score.log");
+    set_file("main_logger", NULL);
     set_simple_print("score_logger", true);
 
     if (ARGC >= 2)
@@ -108,7 +107,7 @@ int main(int ARGC, const char* ARGV[])
         }
         else
         {
-            players[i].func = StartScreen(screen);
+            /*players[i].func = StartScreen(screen);*/
             players[i].lib_path = NULL;
         }
         players[i].func->initLibrary( (players[i].name) );
@@ -121,6 +120,7 @@ int main(int ARGC, const char* ARGV[])
     // --- Initialisation du jeux
     SGameState state;
     init_state(&state);
+    drawBoard(&state,screen);
     for(unsigned int i=0; i<24; ++i)
     {
         char mess[50];

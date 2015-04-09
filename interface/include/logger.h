@@ -4,15 +4,17 @@
 #include<stdio.h>
 #include<stdbool.h>
 
+#define LOG_LVL INFO
+
 #define LOGGER_SIZE 10
 #define logging(name, message, lvl)\
     p_logging(name, __FILE__, __func__, __LINE__, message, lvl)
 
 typedef enum{
-    NONE    = -1,
-    ERROR   = 0,
-    WARNING = 1,
-    INFO    = 2
+    NONE    = 0,
+    ERROR   = 1,
+    WARNING = 2,
+    INFO    = 3
 } Level;
 
 typedef struct{
@@ -22,8 +24,8 @@ typedef struct{
     bool simple_print;
 } Logger;
 
-Logger _loggers[LOGGER_SIZE];
-unsigned int _nb_loggers;
+//extern Logger _loggers[LOGGER_SIZE];
+//extern unsigned int _nb_loggers;
 
 void    init_logger();
 Logger* get_logger(const char*);

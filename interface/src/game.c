@@ -29,6 +29,7 @@ SGameState* copy_state(SGameState state){
 
 int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastStaker, Player* winner, SDL_Surface* screen)
 {
+    set_level("referee_logger", LOG_LVL);
     unsigned char dices[2];
     roll_dice(dices);
     char mess[50];
