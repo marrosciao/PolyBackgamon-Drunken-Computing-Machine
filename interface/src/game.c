@@ -61,31 +61,27 @@ int gamePlayTurn(SGameState* state, IA player[2], Player current, Player* lastSt
     {
 
         unsigned int errors = 1;
-        while(errors>0 && player[current].tries>0)
-        {
-            player[current].nb_moves = 0;
-            player[current].func->playTurn(
-                state_copy,
-                dices,
+        player[current].nb_moves = 0;
+        player[current].func->playTurn(
+            state_copy,
+            dices,
+            player[current].moves,
+            &(player[current].nb_moves),
+            player[current].tries
+        );
+        errors = move_all(
+                state,
                 player[current].moves,
-                &(player[current].nb_moves),
-                player[current].tries
-            );
-            errors = move_all(
-                    state,
-                    player[current].moves,
-                    player[current].nb_moves,
-                    dices,
-                    2,
-                    current
-            );
-            player[current].tries -= errors;
-            if(errors>0)
-            {
-                roll_dice(dices);
-                sprintf(mess ,"résultat des dés : %d, %d\n", dices[0], dices[1]);
-                logging("referee_logger", mess, INFO);
-            }
+                player[current].nb_moves,
+                dices,
+                2,
+                current
+        );
+        player[current].tries -= errors;
+        if(errors>0)
+        {
+            sprintf(mess ,"résultat des dés : %d, %d\n", dices[0], dices[1]);
+            logging("referee_logger", mess, INFO);
         }
     }
     if(player[current].tries<=0)
