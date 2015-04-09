@@ -3,9 +3,13 @@
 #include<stdbool.h>
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
 
 #include"error.h"
 #include"logger.h"
+
+#define stringify_helper(str) #str
+#define stringify(str) stringify_helper(str)
 
 //TODO : faire la vérif de sortie des dames (cf wikipedia)
 static const char* enumToStr[] = { "NOBODY", "BLACK", "WHITE" };
@@ -133,11 +137,15 @@ int check_move(const SMove move,
     bool can_take_from = compute_can_take_from(move.src_point, state->bar, state->board, player);
     bool can_put_to = compute_can_put_to(delta_move, move.dest_point, state, player, dices);
     const bool has_out = state->bar[player]>0;
+    char messTmp[20];
     if ( !can_take_from ||
          !can_put_to ||
          (has_out && move.src_point!=0)
          )
     {
+        if(!can_put_to) strcpy(messTmp, stringify(!can_put_to));
+        if(!can_take_from) strcpy(messTmp,stringify(!can_take_from));
+        if(has_out && move.src_point!=0) strcpy(messTmp,stringify(has_out));
         err = 1;
     }
     else
@@ -149,6 +157,7 @@ int check_move(const SMove move,
             if( dices[i]!=delta_move || (move.dest_point==25 && dices[i]<delta_move) )
             {
                 err = 1;
+                strcpy(messTmp,stringify(!can_move));
             }
             else
             {
@@ -161,8 +170,8 @@ int check_move(const SMove move,
     if(err>0)
     {
         char mess[50];
-        sprintf(mess, "%s à fait une erreur\n", enumToStr[player+1]);
-        logging("referee_logger", mess, WARNING);
+        sprintf(mess, "%s à fait une erreur : %s\n", enumToStr[player+1], messTmp);
+        logging("referee_logger", mess, ERROR);
     }
     return err;
 }

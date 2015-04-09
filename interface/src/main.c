@@ -48,6 +48,9 @@ int main(int ARGC, const char* ARGV[])
     set_level("main_logger", INFO);
     set_file("main_logger", NULL);
     set_level("refere_logger", INFO);
+    set_level("score_logger", INFO);
+    set_file("score_logger", "score.log");
+    set_simple_print("score_logger", true);
 
     if (ARGC >= 2)
     {
@@ -146,7 +149,7 @@ int main(int ARGC, const char* ARGV[])
         while(!end_of_round)
         {
             sprintf(mess,"Début du tour %d, Joueur : %s\n", state.turn, enumToStr[current+1]);
-            logging("main_logger", mess, INFO);
+            logging("main_logger", mess, WARNING);
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
     	    drawBackground(screen);
             drawBoard(&state,screen);//graph
@@ -172,9 +175,9 @@ int main(int ARGC, const char* ARGV[])
         int score = state.blackScore;
         if(winner==WHITE) score = state.whiteScore;
         sprintf(mess, "gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
-        logging("main_logger", mess, INFO);
+        logging("main_logger", mess, WARNING);
         sprintf(mess, "fin de la manche %d\n", turn_num);
-        logging("main_logger", mess, INFO);
+        logging("main_logger", mess, WARNING);
         printf("gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
         ++turn_num;
     }
@@ -183,8 +186,11 @@ int main(int ARGC, const char* ARGV[])
     // --- Fermeture des bibliothèques
     char mess[100];
     sprintf(mess,"%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
-    logging("main_logger", mess, INFO);
+    logging("main_logger", mess, WARNING);
     printf("%s:%s gagne avec %d match gagné\n", enumToStr[winner+1], players[winner].name, players[winner].match_won);
+    int score = winner==BLACK ? state.blackScore : state.whiteScore;
+    sprintf(mess, "%s , %d\n", enumToStr[winner+1], score);
+    logging("score_logger", mess, INFO);
     free_logger();
     for(int i=0; i<2; ++i)
     {
