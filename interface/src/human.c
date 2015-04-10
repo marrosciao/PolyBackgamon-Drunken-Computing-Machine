@@ -26,7 +26,6 @@ void StartMatch(const unsigned int target_score)
 void StartGame(Player p)
 {
     color = p ;
-    fprintf(stderr,"couleur = %d",color);
 }
 
 Functions* StartScreen(SDL_Surface* s)
@@ -169,7 +168,6 @@ void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4]
     };
 
     while (boucle){
-        fprintf(stderr,"%d",boucle);
         coup[14] = nbMoves+'0';
         drawBackground(screen);  
         drawBoard(gameState, screen);
