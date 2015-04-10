@@ -10,7 +10,9 @@
  * @brief défini les fonctions de manipulation d'un logger
  */
 
+#ifndef LOG_LVL
 #define LOG_LVL INFO
+#endif
 
 #define LOGGER_SIZE 10
 /**
