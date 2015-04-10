@@ -30,6 +30,7 @@ L'interface se trouve à interface/bin/PolyBackgammon après compilation.
 La librairie de strategie se trouve à strategy/bin/libpote.so après la compilation
 ## Utilisation
 
+```
 $ ./interface/bin/PolyBackgammon [nombre-de-points] [chemin-vers-ai1] [chemin-vers-ai2]
 ```
 Lorsqu'aucune IA n'est précisée, un humain joue, donc si on precise le chemin vers ai1, l'humain joue contre ai1, et son on ne precise aucun chemin, on a un match humain contre humain. Si il n'y a pas de parametre nombre-de-points utilisé, le programme utilisera une valeur par défaut. Si une seule IA est precisée, un humain devrait jouer contre l'IA. Si deux IA sont en paramètre, elles se battront en duel jusqu'à ce que victoire s'en suive.
@@ -80,3 +81,22 @@ demandé instantanement si on accepte le videau, c'est évidement au joueur qui 
 		
 	
 
+La partie inteface est séparée en deux sous parties : la partie interface graphique, et la partie arbitre.
+
+La partie arbitre s'occupe de vérifier que les mouvements renvoyé par l'IA ou le joueur humain, sont correcte selon les règles du backgammon.
+
+L'arbitre vérifie tout d'abord que le joueur dont c'est le tour peut et veux augmenter la mise. Il ne peut le faire que si il n'est pas le dernier joueur
+a avoir doublé la mise. Si il double la mise, on demande a l'autre joueur si il veux suivre ou abandonner.
+Ensuite, l'arbitre appelle l'IA (ou le joueur humain) pour lui demander les mouvements à effectuer, test si les mouvements sont valide, puis les effectue.
+Pour qu'un mouvement soit valide, il faut que : 
+    - Si il y a une dame du joueur dans la barre , cette dame soit déplacé
+    - Le mouvement soit d'un distance égale a la valeur du dé (a part si le joueur essaie de sortir une dame)
+    - Le joueur utilise le maximum de dé possible
+    - La case de destination soit des dames du joueur, soit des au maximum une dame adverse (qui sera alors mangé)
+    - Si le joueur veut sortir une dame du plateau, il faut que :
+        - toutes ses dames soit dans le dernier quart du plateau
+        - que la dame à déplacer soit exactement à une distance de la fin égale à la valeur du dé ou qu'elle soit la plus loin de la fin
+
+Une fois que toutes ces vérfications sont faites, l'arbitre effectue les mouvements demandé par le joueur et on passe au joueur suivant.
+Si une condition n'est pas remplie, les mouvements sont annulés et on passe au joueur suivant.
+Le joueur subit une pénalité, au bout de trois pénalité, le joueur est eliminé.
