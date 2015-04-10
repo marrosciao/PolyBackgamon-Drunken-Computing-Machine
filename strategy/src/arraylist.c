@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "arraylist.h"
+#include "utils.h"
 
 /** Taille minimim arbitraire de la liste. */
 const size_t list_min_size = 10;
@@ -19,7 +20,6 @@ struct ArrayList {
 };
 
 static void list_resize(ArrayList *list);
-static size_t max(size_t a, size_t b);
 
 ArrayList *list_new() {
     ArrayList *list = calloc(1, sizeof *list);
@@ -102,10 +102,6 @@ static void list_resize(ArrayList *list) {
     // On redimentionne le tableau à deux fois la dimension de son contenu.
     list->len_array = max(2 * list->len_content, list_min_size);
     list->array = realloc(list->array, list->len_array * sizeof (*list->array));
-}
-
-static size_t max(size_t a, size_t b) {
-    return a >= b ? a : b;
 }
 
 void list_foreach(ArrayList *list, TypeContent fn(TypeContent)) {
