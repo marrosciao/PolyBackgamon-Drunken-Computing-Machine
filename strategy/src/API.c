@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "backgammon.h"
-#include "AI_tree.h"
+#include "AI_main.h"
 #include "compact.h"
 
 

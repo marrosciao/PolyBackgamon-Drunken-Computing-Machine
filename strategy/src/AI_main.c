@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "AI_tree.h"
+#include "AI_main.h"
 #include "utils.h"
 #include "possibilities.h"
 
