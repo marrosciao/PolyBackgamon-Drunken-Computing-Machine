@@ -65,14 +65,15 @@ Les optimisations peuvent etre les suivantes :
 
 ### Interface
 
-Contrôles: 	Pour selectionner un pion:	 Clic gauche
-		Pour poser un pion:		 Clic droit
-		Annuler les coups joués ce tour: [BackSpace]
-		Valider son tour:		 [Enter]
-		Accepter le videau, ou doubler
-		le videau ( quand demandé ):	 [o]
-		Refuser le videau, ou de doubler
-		le videau ( quand demandé ):	 [n]
+Contrôles:
+Action                                                       | Touche
+--------------------------------------------------------------------------------
+Pour selectionner un pion                                    | [Clic gauche]
+Pour poser un pion                                           | [Clic droit]
+Annuler les coups joués ce tour                              | [BackSpace]
+Valider son tour                                             | [Enter]
+Accepter le videau, ou doubler le videau ( quand demandé )   | [o]
+Refuser le videau, ou de doubler le videau ( quand demandé ) | [n]
 
 Particularité: en humain contre humain, il sera demandé si on veut doubler le videau, puis, si le joueur veut doubler, il sera 
 demandé instantanement si on accepte le videau, c'est évidement au joueur qui n'a pas doublé le videau de repondre.
