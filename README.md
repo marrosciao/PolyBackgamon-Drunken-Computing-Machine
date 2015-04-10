@@ -29,12 +29,10 @@ $ DEBUG=0 make
 L'interface se trouve à interface/bin/PolyBackgammon après compilation.
 La librairie de strategie se trouve à strategy/bin/libpote.so après la compilation
 ## Utilisation
-/!\ Actuellement, les matchs humain contre humain ne sont pas gérés. Il y a donc
-au moins une IA parmis les participants.
-```
+
 $ ./interface/bin/PolyBackgammon [nombre-de-points] [chemin-vers-ai1] [chemin-vers-ai2]
 ```
-Lorsqu'aucune IA n'est précisée, cela lancera un match humain contre humain. Si il n'y a pas de parametre nombre-de-points utilisé, le programme utilisera une valeur par défaut. Si une seule IA est precisée, un humain devrait jouer contre l'IA. Si deux IA sont en paramètre, elles se battront en duel jusqu'à ce que victoire s'en suive.
+Lorsqu'aucune IA n'est précisée, un humain joue, donc si on precise le chemin vers ai1, l'humain joue contre ai1, et son on ne precise aucun chemin, on a un match humain contre humain. Si il n'y a pas de parametre nombre-de-points utilisé, le programme utilisera une valeur par défaut. Si une seule IA est precisée, un humain devrait jouer contre l'IA. Si deux IA sont en paramètre, elles se battront en duel jusqu'à ce que victoire s'en suive.
 
 nombre-de-points doit etre une valeur positive non nulle. Cela indique le nombre de points nécessaires pour gagner le set de match, cela d'indique PAS le nombre de matchs joués au total par les deux IA.
 
@@ -66,5 +64,19 @@ Les optimisations peuvent etre les suivantes :
 
 ### Interface
 
-Les textures des pions sont basés sur de l'acajou (en fait j'en sais rien)
+Contrôles: 	Pour selectionner un pion:	 Clic gauche
+		Pour poser un pion:		 Clic droit
+		Annuler les coups joués ce tour: [BackSpace]
+		Valider son tour:		 [Enter]
+		Accepter le videau, ou doubler
+		le videau ( quand demandé ):	 [o]
+		Refuser le videau, ou de doubler
+		le videau ( quand demandé ):	 [n]
+
+Particularité: en humain contre humain, il sera demandé si on veut doubler le videau, puis, si le joueur veut doubler, il sera 
+demandé instantanement si on accepte le videau, c'est évidement au joueur qui n'a pas doublé le videau de repondre.
+
+
+		
+	
 
