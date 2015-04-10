@@ -255,6 +255,10 @@ int move_all(
     uint i = 0;
     // On copie l'état du jeu au cas ou il faille annuler les mouvements
     SGameState copy = *state;
+    if( (nb_moves<=2 && dices[0]!=dices[1]) || (nb_moves<=4 && dices[0]==dices[1]) )
+    {
+        errors = 1;
+    }
     while(i<nb_moves && errors==0)
     {
 
