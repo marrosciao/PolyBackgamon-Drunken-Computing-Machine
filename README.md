@@ -40,7 +40,7 @@ Si vous souhaitez qu'une IA affronte son double, il faut donc copier l'IA dans u
 Exemple :
 ```
 $ cp ./strategy/bin/libpote.so-dev /tmp/lib.so
-$ ./interface/bin/PolyBackgammon-dev 15 /tmp/lib.so
+$ ./interface/bin/PolyBackgammon-dev 15 /tmp/lib.so ./strategy/bin/libpote.so-dev
 ```
 Dans cet exemple l'IA se battra contre elle même sur autant de matchs qu'il faudra, jusqu'à ce qu'une des deux IA ait 15 points.
 
