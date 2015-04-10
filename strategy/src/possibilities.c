@@ -103,7 +103,7 @@ static bool is_valide_move(CompactGameState *game, CompactPlayer player, Compact
         }
 
         // On vérifie qu'il n'y a pas de dame plus éloignée de la sortie.
-        for (size_t i = 18; i < from - 1; i++) {
+        for (uint8_t i = 18; i < from - 1; i++) {
             if (game->board[i].nbDames &&
                 game->board[i].owner == player) {
                 return false;
@@ -216,7 +216,7 @@ static size_t insert_all_dices(CompactGameState game,
      * `max_nb_dice_used` permet de ne pas garder les mouvements qui sont plus
      * courts que le plus long mouvement calculé.
      */
-    for (uint i = 0; nb_dices && i <= 24; i++) {
+    for (uint8_t i = 0; nb_dices && i <= 24; i++) {
         CompactMove move = {
             .src_point = i,
             .dest_point = i + dices[0],
