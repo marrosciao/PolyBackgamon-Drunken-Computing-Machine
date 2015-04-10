@@ -17,7 +17,7 @@ SDL_Surface* initGraph(){   //Demarre notre fenetre SDL
     SDL_Init(SDL_INIT_VIDEO);
 	TTF_Init();
 	screen = SDL_SetVideoMode(largeur, hauteur, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-    SDL_WM_SetCaption("Backgammon des Potits Pedestres", NULL);
+    SDL_WM_SetCaption("Polybackgammon", NULL);
     return screen;
 }
 
