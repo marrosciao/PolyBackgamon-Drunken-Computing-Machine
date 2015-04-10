@@ -4,6 +4,11 @@
 #include "backgammon.h"
 #include <stdint.h>
 
+/*	le but de ce fichier est de réduire les tailles des structures, pour réduire la place mémoire qu'elles prennent
+	quand la profondeur est élevée, la place mémoire prise est gigantesque
+	il faut faire toutes les optimisations nécessaires pour réduire la mémoire utilisée
+*/
+
 // On essaye de faire un enum ne prenant qu'un seule byte au lieu de 4
 typedef enum __attribute__ ((packed)) 
 {

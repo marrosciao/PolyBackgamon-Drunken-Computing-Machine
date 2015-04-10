@@ -67,6 +67,8 @@ void genererDes(unsigned char des[21][2])
 
 long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial, long alpha, long beta, CompactPlayer joueur_calcule, CompactPlayer AI_player,AIListMoves *moves , const unsigned char des[2])
 {
+	// pour plus de détails sur l'algorithme, voir sur votre moteur de recherche préféré "alpha-beta pruning"
+
     assert(joueur_calcule >= 0);
     // on verifie que le joueur duquel on se place est correct ...
 
@@ -84,8 +86,8 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
 
     if (profondeur == 0 || isGameFinished(&etat_jeu))
     {
+		// c'est un noeud final, on renvoit une valeur de plateau
         int heuristic_value = getValueFromGameState(&etat_jeu,AI_player);
-        //printf("NOEUD FINAL : VALUE %i\n",heuristic_value);
         return heuristic_value ;
     }
 
@@ -94,22 +96,26 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
     // on genere toutes les combinaisons de des possibles pour la suite
 
     ArrayList *liste_possibilites = retrieveEveryPossibility(etat_jeu,joueur_calcule,des);
+	// on génère tous les mouvements possibles à partir de l'état de jeu donné
+
     assert(liste_possibilites);
 
     long v;
     if (joueur_calcule == AI_player)
     {
+		// on se place comme si nous devions faire un mouvement
         v = LONG_MIN ; // equivaut à moins l'infini
         for (size_t i = 0 ; beta > alpha && i < list_size(liste_possibilites) ; i++)
         {
             AIListMoves temp_moves;
+
             list_get(liste_possibilites, i, &temp_moves);
             long alpha_valeurs[21] ;
             // les valeurs de alpha-beta pour chaque combinaison de dé
             // par la suite on fera la moyenne de ces valeurs
-
             for (size_t combinaison_de = 0 ; combinaison_de < 21 ; combinaison_de++)
             {
+				// calcul de alphabeta pour chaque combinaison de dé possible après un tour de jeu
                 // set de dés utilisés pour le calcul ; i.e. (1,2) ou (5,6) ou (6,6) ...
                 unsigned char set_de_actuel[2] = {
                     toutes_combinaisons_des[combinaison_de][0],
@@ -117,8 +123,8 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
                 };
 
                 alpha_valeurs[combinaison_de] = alphabeta(	gameStateFromMovement(etat_jeu, temp_moves, joueur_calcule)
-                        ,profondeur - 1 
-                        ,profondeur_initial
+											,profondeur - 1 
+											,profondeur_initial
                                             ,alpha
                                             ,beta
                                             ,opposing_player(joueur_calcule)
@@ -130,6 +136,8 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
 
             if (v < alpha_calcul && profondeur_initial == profondeur)
             {
+				// on vient de trouver une meilleure branche, et il s'avère qu'on est à la profondeur d'origine
+				// on retourne donc le set de mouvement utilisé pour faire de calcul alphabeta
                 *moves = temp_moves ;
             }
 
@@ -139,6 +147,7 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
     }
     else
     {
+		// sinon on se place comme si l'ennemi doit faire un mouvement
         v = LONG_MAX ; // equivaut à plus l'infini
         for (size_t i = 0 ; beta > alpha && i < list_size(liste_possibilites) ; i++)
         {
