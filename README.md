@@ -68,7 +68,7 @@ Les optimisations peuvent etre les suivantes :
 Contrôles:
 
 Action                                                       | Touche
---------------------------------------------------------------------------------
+-------------------------------------------------------------|------------------
 Pour selectionner un pion                                    | [Clic gauche]
 Pour poser un pion                                           | [Clic droit]
 Annuler les coups joués ce tour                              | [BackSpace]
