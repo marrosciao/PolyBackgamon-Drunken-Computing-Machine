@@ -77,7 +77,6 @@ int DoubleStack(const SGameState * const gameState)
     printtext(630, 306, "./Textures/CarnevaleeFreakshow.ttf",39,"o:oui    n:non",noir, screen);
     SDL_Flip(screen);
     while (continuer){
-        SDL_Rect pos;
         SDL_WaitEvent(&event);
         switch(event.type)
         {
