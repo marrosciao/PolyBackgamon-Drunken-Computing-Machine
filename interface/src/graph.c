@@ -176,16 +176,16 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
         SDL_FreeSurface(img);
         SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));
         SDL_Rect pos;
-        pos.x = 409;
-        pos.y = 290;
+        pos.x = 401;
+        pos.y = 280;
         SDL_BlitSurface(imgOk, NULL, screen, &pos);
         SDL_FreeSurface(imgOk);
         sprintf(affichenb,"%d",state->stake);
-        printtext(432, 292, "./Textures/CarnevaleeFreakshow.ttf",32,affichenb,couleurTexte, screen);
+        printtext(430, 295, "./Textures/RioGrande.ttf",26,affichenb,couleurTexte, screen);
         sprintf(affichenb,"%d",state->whiteScore);
-        printtext(904, 568, "./Textures/CarnevaleeFreakshow.ttf",32,affichenb,couleurTexte, screen);
+        printtext(904, 568, "./Textures/RioGrande.ttf",32,affichenb,couleurTexte, screen);
         sprintf(affichenb,"%d",state->blackScore);
-        printtext(904, 25, "./Textures/CarnevaleeFreakshow.ttf",32,affichenb,couleurTexte, screen);
+        printtext(904, 25, "./Textures/RioGrande.ttf",32,affichenb,couleurTexte, screen);
 
         
     
