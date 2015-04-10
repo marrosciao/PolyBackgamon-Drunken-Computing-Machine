@@ -83,6 +83,7 @@ Refuser le videau, ou de doubler le videau ( quand demandé ) | [n]
 
 Particularité: en humain contre humain, il sera demandé si on veut doubler le videau, puis, si le joueur veut doubler, il sera 
 demandé instantanement si on accepte le videau, c'est évidement au joueur qui n'a pas doublé le videau de repondre.
+Si votre coup est annulé, c'est que vous avez fait un coup invalide.
 
 
 La partie inteface est séparée en deux sous parties : la partie interface graphique, et la partie arbitre.
@@ -119,3 +120,9 @@ Pour ce qui est du fonctionnenment de la fonction PlayTurn,
 on attend un clic gauche de la part du joueur qui corresponde bien à une case ou il a un pion,
 puis on attend un clic droit qui correspond à une case ou il peut aller.
 On enregistre les point de depart et d'arrivé et on recommence.
+
+Ce qui aurait pu être ajouté à cette interface, c'est le fait que quand un joueur humain fait une coup invalide, il puisse le rejouer au lieu
+de se faire annuler son coup par l'arbitre.
+Pour cela, on aurait pu utiliser les fonctions de l'arbitre pour analyser les coups du joueur avant de les transmettre.
+
+
