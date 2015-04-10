@@ -61,37 +61,122 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
-    return false;
+    int dobble = false;
+    int continuer = 1;
+    SDL_Event event;
+    SDL_Color noir = {
+        .r = 31,
+        .g = 15,
+        .b = 10,
+    };
+    drawBackground(screen);  
+    drawBoard(gameState, screen);
+    if (color == WHITE)
+        printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"AU TOUR DES BLANCS",noir, screen);
+    if (color == BLACK)
+        printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"AU TOUR DES NOIRS",noir, screen);
+    printtext(630, 266, "./Textures/CarnevaleeFreakshow.ttf",39,"Doubler le Videau?",noir, screen);
+    printtext(630, 306, "./Textures/CarnevaleeFreakshow.ttf",39,"o:oui    n:non",noir, screen);
+    SDL_Flip(screen);
+    while (continuer){
+        SDL_Rect pos;
+        SDL_WaitEvent(&event);
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                continuer = 0;
+                endGraph();
+                exit(EXIT_SUCCESS);
+                break;
+            case SDL_KEYDOWN:
+                if(event.key.keysym.sym == SDLK_o){
+                    dobble = true;
+                    continuer = 0;
+                }
+                if(event.key.keysym.sym == SDLK_n){
+                    dobble = false;
+                    continuer = 0;
+                }
+                break;
+        }
+    }
+    drawBackground(screen);  
+    drawBoard(gameState, screen);
+    SDL_Flip(screen);
+    return dobble;
 }
 
 int TakeDouble(const SGameState * const gameState)
 {
-    return true;
+    
+    int dobble = false;
+    int continuer = 1;
+    SDL_Event event;
+    SDL_Color noir = {
+        .r = 31,
+        .g = 15,
+        .b = 10,
+    };
+    drawBackground(screen);  
+    drawBoard(gameState, screen);
+    printtext(630, 266, "./Textures/CarnevaleeFreakshow.ttf",39,"Accepter le Videau?",noir, screen);
+    printtext(630, 306, "./Textures/CarnevaleeFreakshow.ttf",39,"o:oui    n:non",noir, screen);
+    SDL_Flip(screen);
+    while (continuer){
+        SDL_Rect pos;
+        SDL_WaitEvent(&event);
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                continuer = 0;
+                endGraph();
+                exit(EXIT_SUCCESS);
+                break;
+            case SDL_KEYDOWN:
+                if(event.key.keysym.sym == SDLK_o){
+                    dobble = true;
+                    continuer = 0;
+                }
+                if(event.key.keysym.sym == SDLK_n){
+                    dobble = false;
+                    continuer = 0;
+                }
+                break;
+        }
+    }
+    drawBackground(screen);  
+    drawBoard(gameState, screen);
+    SDL_Flip(screen);
+    return dobble;
+
 }
 
 void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries){
     int nbMoves = dices[0] == dices[1] ? 4 : 2;
     *nbMove = nbMoves;
     SGameState* gameState = state;
-    char coup[] = "0 COUPS RESTANTS";
+    char coup[] = "coups restants : 0";
     //SDL_Color blanc = {
-    //    .r = 100,
-    //    .g = 100,
-    //    .b = 100,
+    //    .r = 255,
+    //    .g = 255,
+    //    .b = 255,
     //};
     SDL_Color noir = {
-        .r = 0,
-        .g = 0,
-        .b = 0,
+        .r = 31,
+        .g = 15,
+        .b = 10,
     };
 
     for (int i=0; i<nbMoves; i++){
-        coup[0] = nbMoves-i +48;
-        printtext(630, 290, "./Textures/CowboyMovie.ttf",50,coup,noir, screen);
+        coup[17] = nbMoves-i +48;
+        drawBackground(screen);  
+        drawBoard(gameState, screen);
+        drawDes(dices,screen);
+        printtext(630, 283, "./Textures/CarnevaleeFreakshow.ttf",39,coup,noir, screen);
         if (color == WHITE)
-            printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES BLANCS",noir, screen);
+            printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"AU TOUR DES BLANCS",noir, screen);
         if (color == BLACK)
-            printtext(230, 290, "./Textures/CowboyMovie.ttf",50,"AU TOUR DES NOIRS",noir, screen);
+            printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"AU TOUR DES NOIRS",noir, screen);
         SDL_Flip(screen);
         moves[i].src_point= selectPion(gameState,true,color);
         fprintf(stderr,"src: %d",moves[i].src_point);

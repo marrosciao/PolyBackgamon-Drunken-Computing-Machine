@@ -5,7 +5,7 @@
 #include<stdbool.h>
 
 SDL_Surface* initGraph();
-void endGraph(SDL_Surface* screen);
+void endGraph();
 int drawPiece(Player color,int posx,int posy,SDL_Surface* screen);
 int drawBackground(SDL_Surface* screen);
 int drawDes(unsigned char dices[2], SDL_Surface* screen);

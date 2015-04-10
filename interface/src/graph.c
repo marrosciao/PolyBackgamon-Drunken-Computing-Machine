@@ -108,6 +108,7 @@ void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_
     SDL_FreeSurface(text);
 }
 
+
 int drawBoard(SGameState* state, SDL_Surface* screen){
     char affichenb[20];
     SDL_Color couleurTexte = {
@@ -120,23 +121,23 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
             drawPiece(state->board[i+18].owner,480+53*i,43+j*38,screen);
         }
         if (state->board[i+18].nbDames > 5){
-            sprintf(affichenb,"%d Pions",state->board[i+18].nbDames);
-            printtext(500+53*i, 15, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
+            sprintf(affichenb,"%d",state->board[i+18].nbDames);
+            printtext(500+53*i, 12, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
         }
         for (uint j = 0; j < state->board[i+12].nbDames && j<5; j++) {
             drawPiece(state->board[i+12].owner,75+53*i,43+j*38,screen);
         }
 	    if (state->board[i+12].nbDames > 5){
-            sprintf(affichenb,"%d Pions",state->board[i+12].nbDames);
-            printtext(95+53*i, 15, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
+            sprintf(affichenb,"%d",state->board[i+12].nbDames);
+            printtext(95+53*i, 12, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
         }
     }
     for (int i=0; i<6; i++){
         for (uint j = 0; j < state->board[i+6].nbDames && j<5; j++)
             drawPiece(state->board[i+6].owner,340-53*i,542-j*38,screen);     
         if (state->board[i+6].nbDames > 5){
-            sprintf(affichenb,"%d Pions",state->board[i+6].nbDames);
-            printtext(360-53*i, 587, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
+            sprintf(affichenb,"%d",state->board[i+6].nbDames);
+            printtext(360-53*i, 587, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
         }
         for (uint j = 0; j < state->board[i].nbDames && j<5; j++){
             if (i!=5){ 
@@ -147,11 +148,11 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
             }
         }         
     	if (state->board[i].nbDames > 5){
-            sprintf(affichenb,"%d Pions",state->board[i].nbDames);
+            sprintf(affichenb,"%d",state->board[i].nbDames);
             if (i!=5)
-                printtext(767-53*i, 587, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
+                printtext(767-53*i, 587, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
             if (i==5)
-                printtext(500, 587, "./Textures/AlphaWood.ttf",14,affichenb,couleurTexte, screen);
+                printtext(500, 587, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
         }
     }
         for (uint j = 0; j < state->bar[0]; j++)
@@ -170,6 +171,24 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
             else
                 drawPiece(BLACK,908,510-j*10,screen);
         }
+        SDL_Surface *img = SDL_LoadBMP("./Textures/Videau.bmp"); 
+        SDL_Surface *imgOk = (SDL_Surface*) SDL_DisplayFormat( img );
+        SDL_FreeSurface(img);
+        SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));
+        SDL_Rect pos;
+        pos.x = 409;
+        pos.y = 290;
+        SDL_BlitSurface(imgOk, NULL, screen, &pos);
+        SDL_FreeSurface(imgOk);
+        sprintf(affichenb,"%d",state->stake);
+        printtext(432, 292, "./Textures/CarnevaleeFreakshow.ttf",32,affichenb,couleurTexte, screen);
+        sprintf(affichenb,"%d",state->whiteScore);
+        printtext(904, 568, "./Textures/CarnevaleeFreakshow.ttf",32,affichenb,couleurTexte, screen);
+        sprintf(affichenb,"%d",state->blackScore);
+        printtext(904, 25, "./Textures/CarnevaleeFreakshow.ttf",32,affichenb,couleurTexte, screen);
+
+        
+    
 
     
     

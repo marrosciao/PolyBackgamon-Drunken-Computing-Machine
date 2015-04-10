@@ -205,7 +205,7 @@ int main(int ARGC, const char* ARGV[])
     sprintf(mess, "%s , %d\n", enumToStr[winner+1], score);
     logging("score_logger", mess, INFO);
     free_logger();
-    endGraph(screen);//graph
+    endGraph();//graph
     for(int i=0; i<2; ++i)
     {
         free(players[i].func);
