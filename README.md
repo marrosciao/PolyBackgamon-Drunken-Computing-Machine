@@ -12,7 +12,7 @@ LABAT Jean - Affichage graphique
 ### Partie AI
 FOURRIER Mikaël - Generation de toutes les possibilités & création d'une ArrayList
 
-FRANCO Andrès - Implémentation de l'algorithme d'intelligence
+FRANCO Andrès - Implémentation de l'algorithme alphabeta
 
 ## Installation
 Compilation de l'interface uniquement :
@@ -35,33 +35,36 @@ La librairie de strategie se trouve à strategy/bin/libpote.so après la compila
 ```
 $ ./interface/bin/PolyBackgammon [nombre-de-points] [chemin-vers-ai1] [chemin-vers-ai2]
 ```
-Lorsqu'aucune IA n'est précisée, un humain joue, donc si on precise le chemin vers ai1, l'humain joue contre ai1, et son on ne precise aucun chemin, on a un match humain contre humain. Si il n'y a pas de parametre nombre-de-points utilisé, le programme utilisera une valeur par défaut. Si une seule IA est precisée, un humain devrait jouer contre l'IA. Si deux IA sont en paramètre, elles se battront en duel jusqu'à ce que victoire s'en suive.
+Si les deux chemins sont précisés, le match se déroule entre les deux IA. Si un
+seul chemin est précise, l'IA affronterai un joueur humain. Sinon, il s'agit
+d'un match humain contre humain.
 
-nombre-de-points doit etre une valeur positive non nulle. Cela indique le nombre de points nécessaires pour gagner le set de match, cela d'indique PAS le nombre de matchs joués au total par les deux IA.
+nombre-de-points doit etre une valeur positive non nulle. Il s'agit du nombre de points nécessaires pour gagner le set de match, et non du nombre de matchs joués au total par les deux IA.
 
 Note : Si vous executez 2 fois la même IA avec le même fichier, leurs variables globales seront partagées
-Si vous souhaitez qu'une IA affronte son double, il faut donc copier l'IA dans un dossier temporairement
+Si vous souhaitez qu'une IA affronte son double, il faut donc copier l'IA dans un dossier différent.
 Exemple :
 ```
 $ cp ./strategy/bin/libpote.so /tmp/lib.so
 $ ./interface/bin/PolyBackgammon 15 /tmp/lib.so ./strategy/bin/libpote.so
 ```
-Dans cet exemple l'IA se battra contre elle même sur autant de matchs qu'il faudra, jusqu'à ce qu'une des deux IA ait 15 points.
+Dans cet exemple l'IA se battra contre elle même dans une partie en 15 points.
 
-## Particularité
+## Particularités
 ### IA
 
-L'IA marche sur un algorithme très simple mais très efficace et connu depuis de nombreuses années : l'algorithme alpha-beta, une version améliorée de l'algorithme minimax
+L'IA marche sur un algorithme très simple mais très efficace et connu depuis de nombreuses années : l'algorithme alpha-beta, une version améliorée de l'algorithme minimax.
 
-Le principe est de calculer, à partir d'un état de jeu donné (celui dans lequel l'IA est en ce moment), toutes les possibilités disponibles. à partir de ces possibilités, on obtient encore des états de plateau, d'où on peut calculer encore toutes les possibilités, du point du vue du joueur adverse.
-On peut continuer cette étape p fois; on apelle p la profondeur. Quand on arrive à la p-ieme étape, on s'arrete et on donne une valeur réelle ou entière représentant l'état du joueur vis à vis du plateau de jeu. Une valeur élevée et positive équivaudra à un avantage pour le joueur, tantdis qu'une valeur faible ou négative équivaudra à un désavantage pour le joueur.
-Bien entendu, notre objectif serait que la valeur de la p-ieme étape devrait etre la plus haute possible, sans pour autant qu'il n'y ait de risque que l'on perde en parcourant ce chemin du au fait que l'ennemi aurait choisi les bons mouvements pour nous contrer. L'algorithme minimax s'assure de minimiser les gains de l'adverse et de maximiser lorsque ce n'est pas un compromis de risque.
+Le principe est de calculer, à partir d'un état de jeu donné (celui dans lequel l'IA est en ce moment), toutes les possibilités disponibles. À partir de ces possibilités, on obtient encore des états de plateau, d'où on peut calculer encore toutes les possibilités, du point du vue du joueur adverse.
+On peut continuer cette étape p fois; on appelle p la profondeur. Quand on arrive à la p-ieme étape, on s'arrête et on donne une valeur kentière représentant l'avantage du joueur sur son adversaire. Une valeur élevée et positive équivaut à un avantage pour le joueur, tantdis qu'une valeur faible ou négative équivaut à un désavantage pour le joueur.
+L'objectif de cet objectif est de minimiser nos pertes, en choisisant le
+mouvement qui les minimise.
 
-L'algorithme alpha beta est exactement le meme que minimax, excepté une amélioration : lorsque l'on voit que l'on commence à calculer un branche dont le résultat pour nosu est plus faible qu'une branche voisine, on abandonne le calcul de cette branche. De la meme manière, si on commence à calculer une branche où les gains de l'adversaire sont plus grands que ceux calculés dans une autre branche, on arrete le calcul de cette branche (de toute manière on n'aurait pas choisi cette branche, donc pourquoi la calculer ?)
+L'algorithme alpha beta est une optimisation du minimax. Lorsque l'on voit que l'on commence à calculer un branche dont le résultat pour nous est plus faible qu'une branche voisine, on abandonne le calcul de cette branche. De la même manière, si on commence à calculer une branche où les gains de l'adversaire sont plus grands que ceux calculés dans une autre branche, on arrête le calcul de cette branche. De toute manière on n'aurait pas choisi cette branche, donc pourquoi la calculer ?
 
-Il faut etre en revanche prudent en choisissant la profondeur de cet algorithme, car sans les optimisations nécessaires, une profondeur de 2 peut tout de meme durer jusqu'à quelques secondes (par ex dans le cas d'un double dé pour le backgammon).
+Il faut être prudent en choisissant la profondeur de cet algorithme, car sans les optimisations nécessaires, une profondeur de 2 peut tout de même durer jusqu'à quelques secondes (par ex dans le cas d'un double dé pour le backgammon).
 Les optimisations peuvent etre les suivantes :
-* Ajout d'options de compilation permettant l'accélération de l'éxecution
+* Ajout d'options de compilation permettant l'accélération de l'exécution
 * Filtrage des résultats doubles ( par exemple, si on a comme dés 4 et 3, bouger un pion de 1 à 8 est la meme chose si on utilise les dés 4 puis 3 ou 3 puis 4 s'il n'y a pas de pion adverse sur 4 ou 5)
 * Envoyer les structures par pointeur à la place de par valeur lorsque possible : sur un petit programme il n'y a aucune différence, mais sur ~2000 * ~2000 appels récursifs, la différence peut se sentir
 
@@ -81,9 +84,6 @@ Refuser le videau, ou de doubler le videau ( quand demandé ) | [n]
 Particularité: en humain contre humain, il sera demandé si on veut doubler le videau, puis, si le joueur veut doubler, il sera 
 demandé instantanement si on accepte le videau, c'est évidement au joueur qui n'a pas doublé le videau de repondre.
 
-
-		
-	
 
 La partie inteface est séparée en deux sous parties : la partie interface graphique, et la partie arbitre.
 
@@ -119,4 +119,3 @@ Pour ce qui est du fonctionnenment de la fonction PlayTurn,
 on attend un clic gauche de la part du joueur qui corresponde bien à une case ou il a un pion,
 puis on attend un clic droit qui correspond à une case ou il peut aller.
 On enregistre les point de depart et d'arrivé et on recommence.
-	
