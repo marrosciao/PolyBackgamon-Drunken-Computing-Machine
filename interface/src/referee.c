@@ -232,7 +232,7 @@ int check_side(SGameState const * const state, const Player player)
         {
             err = true;
 
-            char mess[50];
+            char mess[100];
             sprintf(mess, "%s essaie de sortir un pion alors qu'il lui reste des pions hors de la zone de fin\n", enumToStr[player+1]);
             logging("referee_logger", mess, WARNING);
         }
