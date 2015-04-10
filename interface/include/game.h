@@ -25,6 +25,22 @@ typedef struct{
     SMove moves[4];
 }IA;
 
+/**
+ * @fn int gamePlayTurn(SGameState* state,
+ * IA players[2],
+ * Player current,
+ * Player* lastStaker,
+ * Player* winner,
+ * SDL_Surface* screen)
+ * @brief Joue un tour
+ * @param state      état du jeu
+ * @param player     structure rassemblant les informations sur les joueurs
+ * @param current    joueur dont c'est le tour
+ * @param lastStaker Dernier joueur a avoir augmenté la mise, change si le joueur augmente la mise
+ * @param winner     paramètre de retour, permet de savoir qui à gagné si la manche se termine
+ * @param screen     l'écran sur lequel afficher le plateau de jeu
+ * @return true si la manche est fini, faux si il faut continuer la manche
+ */
 int gamePlayTurn(SGameState* state, IA players[2], Player current, Player* lastStaker, Player* winner, SDL_Surface* screen);
 
 /**
