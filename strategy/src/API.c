@@ -8,13 +8,7 @@
 
 void InitLibrary(char name[50])
 {
-
     strcpy(name,"La meilleure IA des meilleurs potes");
-
-    // Code d'initialisation ici.
-
-    // Sauf qu'on a pas d'intialisation à faire vu notre algorithme
-    // Tout va bien
 }
 
 void StartMatch(const unsigned int target_score)
@@ -40,6 +34,8 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
+	// stratégie simple : si l'évaluation du plateau nous est TRES favorable
+	// on double la mise
     const int value_to_double_stake = 800 ;
     CompactGameState compact_gamestate = gameStateToCompact(*gameState);
     return getValueFromGameState(&compact_gamestate,ai_player) >= value_to_double_stake;
@@ -47,6 +43,8 @@ int DoubleStack(const SGameState * const gameState)
 
 int TakeDouble(const SGameState * const gameState)
 {
+	// strategie toujours simple: 
+	// on accepte toujours sauf si on est vraiment en très mauvaise position
     const int value_to_surrender_stake = -1000 ;
     CompactGameState compact_gamestate = gameStateToCompact(*gameState);
     return getValueFromGameState(&compact_gamestate,ai_player) < value_to_surrender_stake;
@@ -54,18 +52,23 @@ int TakeDouble(const SGameState * const gameState)
 
 void PlayTurn(const SGameState * const gameStateFat, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
 {
+	assert(gameStateFat);
     CompactGameState gameState = gameStateToCompact(*gameStateFat);
+	
+	assert(nbMove);
+	// ce serait bete de déréférencer un pointer NULL
+
     assert(somme_plateau(&gameState,WHITE)==15);
     assert(somme_plateau(&gameState,BLACK)==15);
+	// vérification basique pour voir si on reçoit bien un bon plateau ...
+
     AIListMoves tmp_moves = getBestMoves(gameState,ai_player,dices);
 
-    moves[0] = compactToSMove(tmp_moves.mouvement[0]);
-    moves[1] = compactToSMove(tmp_moves.mouvement[1]);
-    moves[2] = compactToSMove(tmp_moves.mouvement[2]);
-    moves[3] = compactToSMove(tmp_moves.mouvement[3]);
-    // la flemme d'utiliser memcpy pour 4 lignes
+	for (int i = 0 ; i < 4 ; i++)
+	{
+		moves[i] = compactToSMove(tmp_moves.mouvement[i]);
+	} 
 
     *nbMove = (unsigned int)tmp_moves.nombre_mouvements ;
-    assert(tmp_moves.nombre_mouvements<=4);
     assert(*nbMove<=4);
 }
