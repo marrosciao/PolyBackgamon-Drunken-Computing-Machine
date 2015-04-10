@@ -41,7 +41,7 @@ int drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ // Dessine un
     }
     imgOk = (SDL_Surface*) SDL_DisplayFormat( img );
     SDL_FreeSurface(img);
-    SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));:wq
+    SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));
     SDL_BlitSurface(imgOk, NULL, screen, &pos);
     SDL_FreeSurface(imgOk);
     return EXIT_SUCCESS;
