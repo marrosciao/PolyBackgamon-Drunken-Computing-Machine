@@ -25,28 +25,27 @@ uint8_t somme_plateau(const CompactGameState* etat_jeu,CompactPlayer player)
     return somme;
 }
 
-static long moyenne(long alpha_valeurs[21])
+static long moyenne_combinaisons(long alpha_valeurs[21])
 {
     long alpha = 0;
-
-    // MOYENNE
-
+	/*	les arrangements possibles sont 1,1 ; 1,2 ; 1,3 ; ... 2,1 ; 2,2 ; ... 6,6
+		donc 36 possibilités
+		or on n'a calculé que pour les combinaisons disponibles ,donc les doublons du type 4,5 et 5,4 sont enlevés
+		pour la moyenne il faut donc doubler la probabilité des sets non doubles
+	*/
+	// 1,1 ; 1,2 ; 1,3 ; 1,4 ; 1,5 ; 1,6 ; 2,2 ; 2,3 ; 2,4 ; 2,5 ; 2,6 ; 3,3 ;
     for (int i = 0 ; i < 21 ; i++)
     {
-        alpha += alpha_valeurs[i] ;
+		if (i == 0 || i == 6 || i == 11 || i == 15 || i == 18 || i == 20) 
+			// par constructio ndes combinaisons de dés, les doubles se situent aux positions 0,6,11,15,18,20 dans le tableau
+			alpha += alpha_valeurs[i] ;
+			// on ne compte qu'une fois pour les dés doubles
+		else
+			alpha += (alpha_valeurs[i]*2);
+			// mais 2 fois pour les dés simples
     }
 
-    alpha /= 21 ;
-
-    // DISTANCE D'EUCLIDE
-
-    /*
-    for (int i = 0 ; i < 21 ; i++)
-    {
-        alpha += alpha_valeurs[i] * alpha_valeurs[i] ;
-    }
-    alpha = (long) sqrt(alpha);
-    */
+    alpha /= 36 ;
 
     return alpha;
 }
@@ -127,7 +126,7 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
                                             ,moves
                                             ,set_de_actuel);
             }
-            long alpha_calcul = moyenne(alpha_valeurs);
+            long alpha_calcul = moyenne_combinaisons(alpha_valeurs);
 
             if (v < alpha_calcul && profondeur_initial == profondeur)
             {
@@ -164,7 +163,7 @@ long alphabeta(CompactGameState etat_jeu, int profondeur,int profondeur_initial,
                         ,moves
                         ,set_de_actuel);
             }
-            long alpha_calcul = moyenne(alpha_valeurs);
+            long alpha_calcul = moyenne_combinaisons(alpha_valeurs);
 
             v = min_long(v, alpha_calcul);
             beta = min_long(beta, v);
@@ -213,11 +212,9 @@ AIListMoves getBestMoves(CompactGameState etat_jeu, CompactPlayer player,const u
     return moves ;
 }
 
-
-
 // pour un etat de jeu donné, renvoie un entier decrivant l'état du joueur player
 // plus il est élevé, plus le joueur est dans une bonne position
-// les états sont normalement symétriques
+// les états sont normalement symétriques ( value(J1) = - value(J2) )
 int getValueFromGameState(const CompactGameState* etat_jeu, CompactPlayer player)
 {
 
@@ -227,10 +224,12 @@ int getValueFromGameState(const CompactGameState* etat_jeu, CompactPlayer player
     const int INPLAY_VALUE_DELTA = 1 ;
     const int INPLAY_MALUS_ALONE = 10 ;
 	const int INPLAY_MALUS_DELTA = 2 ;
+	// Toutes ces valeurs ont été trouvées "au feeling", 
+	//rien ne dit que les valeurs de ces constantes soient optimisées pour la stratégie
 
     int heuristic_value = 0 ;
-    // calcul de la valeur heuristique en partant du principe qu'on est le joueur CWHITE
-    // (on multipliera par -1 si on est en réalité le joueur CBLACK)
+    // calcul de la valeur heuristique en partant du principe qu'on est le joueur WHITE
+    // (on multipliera par -1 si on est en réalité le joueur BLACK)
 
     heuristic_value += etat_jeu->bar[CWHITE]* BAR_VALUE;
     heuristic_value -= etat_jeu->bar[CBLACK]* BAR_VALUE;
@@ -250,6 +249,7 @@ int getValueFromGameState(const CompactGameState* etat_jeu, CompactPlayer player
                 // on enleve des points si le pion est tout seul
 
             heuristic_value += current_square.nbDames * (INPLAY_VALUE_BASE + ((i+1) * INPLAY_VALUE_DELTA));
+			// plus les pions sont avancés sur le terrain, plus ils valent de points
         }
         else if (current_square.owner == CBLACK)
         {
