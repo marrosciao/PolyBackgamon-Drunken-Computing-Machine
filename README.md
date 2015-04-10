@@ -15,21 +15,24 @@ FRANCO Andrès - Implémentation de l'algorithme d'intelligence
 ## Installation
 Compilation de l'interface uniquement :
 ```
-$ make interface
+$ DEBUG=0 make interface
 ```
 Compilation de l'IA uniquement :
 ```
-$ make strategy
+$ DEBUG=0 make strategy
 ```
 Compilation des 2 à la fois
 ```
-$ make
+$ DEBUG=0 make
 ```
 
+L'interface se trouve à interface/bin/PolyBackgammon après compilation.
 La librairie de strategie se trouve à strategy/bin/libpote.so après la compilation
 ## Utilisation
+/!\ Actuellement, les matchs humain contre humain ne sont pas gérés. Il y a donc
+au moins une IA parmis les participants.
 ```
-$ ./interface/bin/PolyBackgammon-dev [nombre-de-points] [chemin-vers-ai1] [chemin-vers-ai2]
+$ ./interface/bin/PolyBackgammon [nombre-de-points] [chemin-vers-ai1] [chemin-vers-ai2]
 ```
 Lorsqu'aucune IA n'est précisée, cela lancera un match humain contre humain. Si il n'y a pas de parametre nombre-de-points utilisé, le programme utilisera une valeur par défaut. Si une seule IA est precisée, un humain devrait jouer contre l'IA. Si deux IA sont en paramètre, elles se battront en duel jusqu'à ce que victoire s'en suive.
 
@@ -39,8 +42,8 @@ Note : Si vous executez 2 fois la même IA avec le même fichier, leurs variable
 Si vous souhaitez qu'une IA affronte son double, il faut donc copier l'IA dans un dossier temporairement
 Exemple :
 ```
-$ cp ./strategy/bin/libpote.so-dev /tmp/lib.so
-$ ./interface/bin/PolyBackgammon-dev 15 /tmp/lib.so ./strategy/bin/libpote.so-dev
+$ cp ./strategy/bin/libpote.so /tmp/lib.so
+$ ./interface/bin/PolyBackgammon 15 /tmp/lib.so ./strategy/bin/libpote.so
 ```
 Dans cet exemple l'IA se battra contre elle même sur autant de matchs qu'il faudra, jusqu'à ce qu'une des deux IA ait 15 points.
 
