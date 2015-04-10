@@ -16,7 +16,7 @@
 
 #define LOGGER_SIZE 10
 /**
- * @fn logging(const char* name, const char* message, Level lvl)
+ * @def logging(const char* name, const char* message, Level lvl)
  * @brief Fonction affichant un message
  * @param name    nom du logger
  * @param message message à afficher
@@ -26,17 +26,27 @@
 #define logging(name, message, lvl)\
     p_logging(name, __FILE__, __func__, __LINE__, message, lvl)
 
+//! Enum représentant les différents niveaux de log
 typedef enum{
+    //! Affiche aucun log (ne pas utiliser avec logging)
     NONE    = 0,
+    //! Niveau de log correspondant à une erreur
     ERROR   = 1,
+    //! Niveau de log correspondant à un avertissement
     WARNING = 2,
+    //! Niveau de log correspondant à une information
     INFO    = 3
 } Level;
 
+//! Struct contenant les informations nécéssaires au logging
 typedef struct{
+    //! fichier associé au logger
     FILE* file;
+    //! niveau pour lequel on doit afficher les messages
     Level lvl;
+    //! nom du logger
     const char* name;
+    //! drapeaux servant à savoir si il faut faire un affichage long
     bool simple_print;
 } Logger;
 

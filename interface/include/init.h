@@ -65,7 +65,7 @@ void init_lib(const char*, void**, Functions*, err_func);
 void init_state(SGameState*);
 
 /**
- * @fn void board_state(SGameState* state)
+ * @fn void init_board(SGameState* state)
  * @brief initialise l'état du plateau du jeu
  * @param state pointeur sur l'état du jeu
  * @warning init_state n'est pas resopnsable de state

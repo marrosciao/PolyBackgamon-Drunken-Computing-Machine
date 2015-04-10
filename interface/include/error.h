@@ -8,14 +8,16 @@
  * @brief définie la fonction test
  */
 
+//! typedef représentant une chaine de caractère
 typedef const char* String;
+//! typedef pour les fonction passé en paramêtre de test
 typedef void (*err_func)(String);
 
 /**
- * @def test(bool condition, void (*fun)(const char*))
+ * @def test(cond, func)
  * @brief Fait appel à la fonction si la condition passé en paramètre est fausse
- * @param condition si ce paramètre est évalueé à faux, le deuxième paramêtre est appelé
- * @param fun       fonction à appeler si la condition est fausse, la chaine de caractère passée en paramètre est la suivante : cf ci-dessous
+ * @param cond -> bool :                      si ce paramètre est évalueé à faux, le deuxième paramêtre est appelé
+ * @param func -> void (fun*)(const char*) :  fonction à appeler si la condition est fausse, la chaine de caractère passée en paramètre est la suivante : cf ci-dessous
  *
  *  "[<fichier>]<fonction> (line <ligne>) : <condition>"
  *

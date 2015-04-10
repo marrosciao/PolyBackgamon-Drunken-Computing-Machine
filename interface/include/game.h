@@ -5,6 +5,12 @@
 #include"init.h"
 #include"backgammon.h"
 
+/**
+ * @file game.h
+ * @author Vincent BONNEVALLE
+ * @brief définie des fonctions de jeu
+ */
+
 //! struct rassemblant les infos d'une IA
 typedef struct{
     //! nombre de match gagné
