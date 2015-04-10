@@ -81,9 +81,10 @@ Valider son tour                                             | [Enter]
 Accepter le videau, ou doubler le videau ( quand demandé )   | [o]
 Refuser le videau, ou de doubler le videau ( quand demandé ) | [n]
 
-Particularité: en humain contre humain, il sera demandé si on veut doubler le videau, puis, si le joueur veut doubler, il sera 
+Particularités: en humain contre humain, il sera demandé si on veut doubler le videau, puis, si le joueur veut doubler, il sera 
 demandé instantanement si on accepte le videau, c'est évidement au joueur qui n'a pas doublé le videau de repondre.
 Si votre coup est annulé, c'est que vous avez fait un coup invalide.
+Lorsqu'il y a plus de 5 pions sur une case, seulment 5 sont affichés, et le nombres de pions presents est ecrit à coté de la case.
 
 
 La partie inteface est séparée en deux sous parties : la partie interface graphique, et la partie arbitre.
