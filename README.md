@@ -6,10 +6,12 @@ It's a project for 3rd year in IT ingeneering school with C programming language
 ## Auteurs
 ### Partie graphique / arbitre
 BONNEVALLE Vincent - Logique arbitre
+
 LABAT Jean - Affichage graphique
 
 ### Partie AI
 FOURRIER Mikaël - Generation de toutes les possibilités & création d'une ArrayList
+
 FRANCO Andrès - Implémentation de l'algorithme d'intelligence
 
 ## Installation
