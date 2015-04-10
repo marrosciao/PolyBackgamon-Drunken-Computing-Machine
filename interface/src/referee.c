@@ -160,10 +160,10 @@ int check_move(const SMove move,
 {
     uint err = 0;
 
-    int delta_move = compute_delta_move(move.src_point, move.dest_point, player);
-    bool can_take_from = compute_can_take_from(move.src_point, state->bar, state->board, player);
-    bool can_put_to = compute_can_put_to(delta_move, move.src_point, move.dest_point, state, player, dices);
-    const bool has_out = state->bar[player]>0;
+    int delta_move      = compute_delta_move(move.src_point, move.dest_point, player);
+    bool can_take_from  = compute_can_take_from(move.src_point, state->bar, state->board, player);
+    bool can_put_to     = compute_can_put_to(delta_move, move.src_point, move.dest_point, state, player, dices);
+    const bool has_out  = state->bar[player]>0;
     
     char messTmp[20];
 
