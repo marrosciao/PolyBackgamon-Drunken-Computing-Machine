@@ -72,7 +72,7 @@ static int compute_delta_move(cuint src, cuint dest, const Player player)
     {
         delta_move = player==BLACK ? src : dest-src;
     }
-    return delta_move<0 ? -delta_move : delta_move;
+    return (delta_move<0 && player==BLACK) ? -delta_move : delta_move;
 }
 
 // Détermine si le joueur peut prendre une dame de la case
