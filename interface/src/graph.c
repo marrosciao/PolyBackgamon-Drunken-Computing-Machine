@@ -54,7 +54,7 @@ void drawBackground(SDL_Surface* screen){ //Dessine le fond
     SDL_FreeSurface(background);
 }
 
-void drawDes(unsigned char dices[2], SDL_Surface* screen){ //Dessine les dés donnés
+void drawDes(const unsigned char dices[2], SDL_Surface* screen){ //Dessine les dés donnés
         char nom1[] = "./Textures/De5.bmp";
         char nom2[] = "./Textures/De5.bmp";
         nom1[13] = dices[0]+'0';
@@ -108,7 +108,7 @@ void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_
 }
 
 
-void drawBoard(SGameState* state, SDL_Surface* screen){
+void drawBoard(SGameState const * const state, SDL_Surface* screen){
 // Dessine l'état donné
 
     char affichenb[20];

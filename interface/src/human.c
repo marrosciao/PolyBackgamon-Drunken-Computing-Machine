@@ -148,7 +148,7 @@ int TakeDouble(const SGameState * const gameState)
 
 }
 
-void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries){
+void PlayTurn( SGameState const * const  state, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries){
     
     //cette fonction à les mêmes parametres que le playturn d'une IA classique, ce qui permet à l'arbitre de ne pas differencier humain et IA
 

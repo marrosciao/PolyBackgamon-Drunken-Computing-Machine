@@ -20,6 +20,6 @@ void EndGame();
 void EndMatch();
 int DoubleStack(const SGameState * const gameState);
 int TakeDouble(const SGameState * const gameState);
-void PlayTurn( SGameState *  gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries);
+void PlayTurn( SGameState const * const  gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries);
 
 #endif

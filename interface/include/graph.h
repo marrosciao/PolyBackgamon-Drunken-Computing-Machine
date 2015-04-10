@@ -36,7 +36,7 @@ void drawBackground(SDL_Surface* screen);
  * @param dices     Des à dessiner
  * @param screen    surface sur laquelle on les dessine
  */
-void drawDes(unsigned char dices[2], SDL_Surface* screen); 
+void drawDes(const unsigned char dices[2], SDL_Surface* screen); 
 /**
  * @fn void animateDes(unsigned char dices[2], SDL_Surface* screen)
  * @brief annime le roulement des des donnés
@@ -61,7 +61,7 @@ void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_
  * @brief Dessine le board (pions, videau, bar, out)
  * @param state     l'état courant à dessiner
  */
-void drawBoard(SGameState* state, SDL_Surface* screen);
+void drawBoard(SGameState const * const state, SDL_Surface* screen);
 /**
  * @fn bool hitbox(int x,int y,int i)
  * @brief verifie si les coordonnées x,y correspondent à une case du jeu i 
