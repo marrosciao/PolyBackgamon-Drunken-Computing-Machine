@@ -66,6 +66,7 @@ Les optimisations peuvent etre les suivantes :
 ### Interface
 
 Contrôles:
+
 Action                                                       | Touche
 --------------------------------------------------------------------------------
 Pour selectionner un pion                                    | [Clic gauche]
