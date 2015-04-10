@@ -47,7 +47,7 @@ int TakeDouble(const SGameState * const gameState)
 	// on accepte toujours sauf si on est vraiment en très mauvaise position
     const int value_to_surrender_stake = -1000 ;
     CompactGameState compact_gamestate = gameStateToCompact(*gameState);
-    return getValueFromGameState(&compact_gamestate,ai_player) < value_to_surrender_stake;
+    return getValueFromGameState(&compact_gamestate,ai_player) > value_to_surrender_stake;
 }
 
 void PlayTurn(const SGameState * const gameStateFat, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
