@@ -108,12 +108,15 @@ Le joueur subit une pénalité, au bout de trois pénalité, le joueur est elimi
 
 
 La partie interface graphique à deux utilités: Afficher le jeu, et permettre à des joueurs humains de jouer.
-	-Pour afficher le jeu, à chaque fois qu'un joueur à fait un deplacement ou qu'un dé est tiré, le main va actualiser l'affichage,
-	en affichant le fond du jeu, puis en dessinant les pions et les dés par dessus.
-	-Pour avoir un joueur humain, nous avons la même fonction PlayTurn que pour une IA. Cependant, pour que le joeur puisse faire ses actions, il faut que la 
-	partie que s'occupe de faire jouer les joueurs humains ait accès à l'interface graphique, il y a donc une fonction d'initialisation de plus: StartScreen.
-	Cette fonction permet de stocker une variable globale que gardera le screen. Cette fonction renvoie egalement des pointeurs de fonctions vers les mêmes fonctions que les librairies d'IA,
-	ce qui permet à l'arbitre de ne plus faire de difference entre humain et IA.
-	Pour ce qui est du fonctionnenment de la fonction PlayTurn, on attend un clic gauche de la part du joueur qui corresponde bien à une case ou il a un pion,
-	puis on attend un clic droit qui correspond à une case ou il peut aller. On enregistre les point de depart et d'arrivé et on recommence.
+- Pour afficher le jeu, à chaque fois qu'un joueur à fait un deplacement ou qu'un dé est tiré, le main va actualiser l'affichage, en affichant le fond du jeu, puis en dessinant les pions et les dés par dessus.
+- Pour avoir un joueur humain, nous avons la même fonction PlayTurn que pour une IA. Cependant, pour que le joeur puisse faire ses actions, il faut que la  partie que s'occupe de faire jouer les joueurs humains ait accès à l'interface graphique, il y a donc une fonction d'initialisation de plus: StartScreen.
+
+Cette fonction permet de stocker une variable globale que gardera le screen.
+Cette fonction renvoie egalement des pointeurs de fonctions vers les mêmes fonctions que les librairies d'IA,
+ce qui permet à l'arbitre de ne plus faire de difference entre humain et IA.
+
+Pour ce qui est du fonctionnenment de la fonction PlayTurn,
+on attend un clic gauche de la part du joueur qui corresponde bien à une case ou il a un pion,
+puis on attend un clic droit qui correspond à une case ou il peut aller.
+On enregistre les point de depart et d'arrivé et on recommence.
 	
