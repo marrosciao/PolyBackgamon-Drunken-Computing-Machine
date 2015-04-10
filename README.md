@@ -89,13 +89,13 @@ L'arbitre vérifie tout d'abord que le joueur dont c'est le tour peut et veux au
 a avoir doublé la mise. Si il double la mise, on demande a l'autre joueur si il veux suivre ou abandonner.
 Ensuite, l'arbitre appelle l'IA (ou le joueur humain) pour lui demander les mouvements à effectuer, test si les mouvements sont valide, puis les effectue.
 Pour qu'un mouvement soit valide, il faut que : 
-    - Si il y a une dame du joueur dans la barre , cette dame soit déplacé
-    - Le mouvement soit d'un distance égale a la valeur du dé (a part si le joueur essaie de sortir une dame)
-    - Le joueur utilise le maximum de dé possible
+    * Si il y a une dame du joueur dans la barre , cette dame soit déplacé
+    * Le mouvement soit d'un distance égale a la valeur du dé (a part si le joueur essaie de sortir une dame)
+    * Le joueur utilise le maximum de dé possible
     - La case de destination soit des dames du joueur, soit des au maximum une dame adverse (qui sera alors mangé)
-    - Si le joueur veut sortir une dame du plateau, il faut que :
-        - toutes ses dames soit dans le dernier quart du plateau
-        - que la dame à déplacer soit exactement à une distance de la fin égale à la valeur du dé ou qu'elle soit la plus loin de la fin
+    * Si le joueur veut sortir une dame du plateau, il faut que :
+        * toutes ses dames soit dans le dernier quart du plateau
+        * que la dame à déplacer soit exactement à une distance de la fin égale à la valeur du dé ou qu'elle soit la plus loin de la fin
 
 Une fois que toutes ces vérfications sont faites, l'arbitre effectue les mouvements demandé par le joueur et on passe au joueur suivant.
 Si une condition n'est pas remplie, les mouvements sont annulés et on passe au joueur suivant.
