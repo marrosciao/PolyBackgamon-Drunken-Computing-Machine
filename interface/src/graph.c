@@ -10,7 +10,7 @@
 
 typedef unsigned int uint;
 
-SDL_Surface* initGraph(){   //Lance une nouvelle fenetre SDL
+SDL_Surface* initGraph(){   //Demarre notre fenetre SDL
     int largeur = 1000;
     int hauteur = 627;
     SDL_Surface *screen = NULL;
@@ -27,27 +27,27 @@ void endGraph(){    //Ferme les fenetres SDL
 }
 
 
-int drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ //Changer le int en Player quand je ferais l'import
+int drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ // Dessine un pion à la position (posx posy)
     SDL_Surface *img = NULL;
     SDL_Surface *imgOk = NULL;
     SDL_Rect pos;
     pos.x = posx;
     pos.y = posy;
     if (color == WHITE)  {
-        img = SDL_LoadBMP("./Textures/Blanc.bmp"); //idem
+        img = SDL_LoadBMP("./Textures/Blanc.bmp");
     }
     else {
         img = SDL_LoadBMP("./Textures/Noir.bmp");
     }
     imgOk = (SDL_Surface*) SDL_DisplayFormat( img );
     SDL_FreeSurface(img);
-    SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));
+    SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));:wq
     SDL_BlitSurface(imgOk, NULL, screen, &pos);
     SDL_FreeSurface(imgOk);
     return EXIT_SUCCESS;
 }
 
-int drawBackground(SDL_Surface* screen){
+int drawBackground(SDL_Surface* screen){ //Dessine le fond 
     SDL_Surface *background = NULL; 
     background = SDL_LoadBMP("./Textures/background.bmp");
     SDL_BlitSurface(background, NULL, screen, NULL);
@@ -55,7 +55,7 @@ int drawBackground(SDL_Surface* screen){
     return EXIT_SUCCESS;
 }
 
-int drawDes(unsigned char dices[2], SDL_Surface* screen){
+int drawDes(unsigned char dices[2], SDL_Surface* screen){ //Dessine les dés donnés
         char nom1[] = "./Textures/De5.bmp";
         char nom2[] = "./Textures/De5.bmp";
         nom1[13] = dices[0]+'0';
@@ -81,7 +81,7 @@ int drawDes(unsigned char dices[2], SDL_Surface* screen){
         SDL_FreeSurface(imgOk2);
         return EXIT_SUCCESS;
 }   
-int animateDes(unsigned char dices[2], SDL_Surface* screen){
+int animateDes(unsigned char dices[2], SDL_Surface* screen){ //Fait une petite animation de dés qui clignotes avant d'arriver sur la valeur donnée
     unsigned char rollingDices[2];
     for (float i=50; i>10; i=i/1.5){
         rollingDices[0] = rand() %6 +1;;
@@ -96,8 +96,10 @@ int animateDes(unsigned char dices[2], SDL_Surface* screen){
 	return EXIT_SUCCESS;
 }
 
-void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_Color color, SDL_Surface* screen) {
-    
+void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_Color color, SDL_Surface* screen) { 
+//Affiche à la position posx,posy le texte donné dans la couleur donnée et dans la police donnée
+//posx donne le centre du texte (permet de centrer le texte quelle que soit sa longeur
+//posy donne le haut du texte    
     TTF_Font *font = TTF_OpenFont(fontName,size);
     SDL_Surface *text = TTF_RenderText_Blended(font, message, color);
     SDL_Rect pos;
@@ -110,17 +112,20 @@ void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_
 
 
 int drawBoard(SGameState* state, SDL_Surface* screen){
+// Dessine l'état donné
+
     char affichenb[20];
     SDL_Color couleurTexte = {
         .r = 255,
         .g = 255,
         .b = 255,
     };
+    //Affichage des pions, s'il y a trop de pions, on n'affiche que 5 pions et on affiche le nombre de pions
     for (int i=5; i>=0; i--){
         for (uint j = 0; j < state->board[i+18].nbDames && j<5; j++) {
             drawPiece(state->board[i+18].owner,480+53*i,43+j*38,screen);
         }
-        if (state->board[i+18].nbDames > 5){
+        if (state->board[i+18].nbDames > 5){  
             sprintf(affichenb,"%d",state->board[i+18].nbDames);
             printtext(500+53*i, 12, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
         }
@@ -155,10 +160,12 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
                 printtext(500, 587, "./Textures/CowboyMovie.ttf",32,affichenb,couleurTexte, screen);
         }
     }
+     //Affichage des pions sur la barre:
         for (uint j = 0; j < state->bar[0]; j++)
             drawPiece(BLACK,411,100+j*30,screen);     
         for (uint j = 0; j < state->bar[1]; j++)
-            drawPiece(WHITE,411,527-j*30,screen);     
+            drawPiece(WHITE,411,527-j*30,screen);
+    //Affichage des pions sortis:     
         for (uint j = 0; j < state->out[1]; j++) {
             if (j%2==1)
                 drawPiece(WHITE,860,75+j*10,screen);
@@ -171,6 +178,7 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
             else
                 drawPiece(BLACK,908,510-j*10,screen);
         }
+    //Affichage du videau
         SDL_Surface *img = SDL_LoadBMP("./Textures/Videau.bmp"); 
         SDL_Surface *imgOk = (SDL_Surface*) SDL_DisplayFormat( img );
         SDL_FreeSurface(img);
@@ -181,6 +189,7 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
         SDL_BlitSurface(imgOk, NULL, screen, &pos);
         SDL_FreeSurface(imgOk);
         sprintf(affichenb,"%d",state->stake);
+    //Affichage des scores des joueurs
         printtext(430, 295, "./Textures/RioGrande.ttf",26,affichenb,couleurTexte, screen);
         sprintf(affichenb,"%d",state->whiteScore);
         printtext(904, 568, "./Textures/RioGrande.ttf",32,affichenb,couleurTexte, screen);
@@ -195,7 +204,7 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
     
     return EXIT_SUCCESS;
 }
-bool hitbox(int x,int y,int i){
+bool hitbox(int x,int y,int i){ // Cette fonction permet de verifier si des coordonées x,y sont dans la case i du board
     if (i== -1)
         return (x<460 && x>400);
     else if (i>=0 && i<6)
@@ -212,6 +221,9 @@ bool hitbox(int x,int y,int i){
         return false;
 }
 int selectPion(SGameState* state, bool src, Player color){
+//Permet au joueur de selectionner un pion, 
+//si src=true, il selectionne un pion qu'il veut deplacer
+//si src=false, il selectionne la case sur laquelle il veut posser un pion
     int continuer = 1;
     SDL_Event event;
     int i;
@@ -231,14 +243,14 @@ int selectPion(SGameState* state, bool src, Player color){
                 pos.y = event.button.y;
                 for (i=-1; i<25; i++){
                     if (hitbox(pos.x,pos.y,i)==true){
-                        if (event.button.button == SDL_BUTTON_RIGHT && src==false){ 
+                        if (event.button.button == SDL_BUTTON_RIGHT && src==false){  //clic droit pour poser un pion
                             if(i==24){
                                 continuer = 0;
                                 fprintf(stderr,"col:%d",color);
                                 state->out[color] += 1;
                                 val = i;
                             }
-                            else if( ((state->board[i].nbDames == 1) || (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){
+                            else if( ((state->board[i].nbDames == 1) || (color == state->board[i].owner) || (state->board[i].owner== NOBODY))){ //clic gauche pour prendre un pion
                                 continuer = 0;
                                 if ((state->board[i].owner == color)||(state->board[i].owner)==NOBODY){
                                     state->board[i].nbDames ++;
