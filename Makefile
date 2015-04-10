@@ -1,5 +1,6 @@
 #Flags, Libraries and Includes
-export CFLAGS        += -std=c11 -Wall -Wextra -Wshadow -pedantic -pipe -fdiagnostics-color=auto
+# -fdiagnostics-color=auto
+export CFLAGS        += -std=c11 -Wall -Wextra -Wshadow -pedantic -pipe
 # -fsanitize=address
 export CFLAGS_DEBUG  += -Og -g
 export CFLAGS_PROD   += -O2 -s -DNDEBUG -DLOG_LVL=NONE
