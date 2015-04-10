@@ -5,7 +5,7 @@
 #include "arraylist.h"
 #include "utils.h"
 
-/** Taille minimim arbitraire de la liste. */
+/** Taille minimum arbitraire de la liste. */
 const size_t list_min_size = 10;
 
 /**
@@ -19,6 +19,13 @@ struct ArrayList {
     size_t len_array;   /**< Taille de `array` en nombre d'éléments. */
 };
 
+/**
+ * @brief Redimentionne la liste .
+ *
+ * Après redimention, la liste est à moitié vide.
+ *
+ * @param list La liste à redimentionner.
+ */
 static void list_resize(ArrayList *list);
 
 ArrayList *list_new() {
@@ -60,7 +67,9 @@ bool list_pop(ArrayList *list, TypeContent *item) {
 
     list->len_content -= 1;
     *item = list->array[list->len_content];
-    if (list->len_array >= 3 * list->len_content) {
+
+    if (3 * list->len_content <= list->len_array) {
+        // La liste est peu remplie.
         list_resize(list);
     }
 
@@ -69,6 +78,7 @@ bool list_pop(ArrayList *list, TypeContent *item) {
 
 bool list_push(ArrayList *list, TypeContent item) {
     if (list->len_content >= list->len_array) {
+        // La liste est pleine.
         list_resize(list);
     }
 

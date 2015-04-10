@@ -61,7 +61,8 @@ CompactGameState apply_move(CompactGameState game, CompactPlayer player, Compact
     {// on sort le pion du plateau (definitif)
         game.out[player] += 1 ;
     }
-    else if (game.board[move.dest_point-1].owner!=player && game.board[move.dest_point-1].nbDames == 1)
+    else if (game.board[move.dest_point-1].owner != player &&
+             game.board[move.dest_point-1].nbDames == 1)
     {// cas où on mange un pion ennemi
         game.bar[opposing_player(player)] += 1 ;
         game.board[move.dest_point-1].owner = player ;
