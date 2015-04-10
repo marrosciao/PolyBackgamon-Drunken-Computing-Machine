@@ -253,6 +253,7 @@ int move_all(
     set_level("referee_logger", LOG_LVL);
     uint errors = 0;
     uint i = 0;
+    // On copie l'état du jeu au cas ou il faille annuler les mouvements
     SGameState copy = *state;
     while(i<nb_moves && errors==0)
     {
@@ -261,6 +262,7 @@ int move_all(
         sprintf(mess, "%s bouge de %d à %d\n", enumToStr[player+1], moves[i].src_point, moves[i].dest_point);
         logging("referee_logger", mess, INFO);
 
+        // Si il y a une erreur, on annule le mouvement et on indique qu'il ya eu une erreur
         if(check_move(moves[i], dices, nb_dices, player, state))
         {
             ++errors;
@@ -271,6 +273,7 @@ int move_all(
         }
         else
         {
+            // Sinon, on effectue le mouvement
             move(state, moves[i], player);
         }
         ++i;
@@ -280,7 +283,7 @@ int move_all(
 
 void move(SGameState * const state, SMove const movement, const Player player)
 {
-    char mess[50];
+
     if(movement.dest_point == 25)
     {
         move_to_end(state, movement, player);
@@ -294,6 +297,7 @@ void move(SGameState * const state, SMove const movement, const Player player)
         move_in_board(state, movement, player);
     }
 
+    char mess[50];
     unsigned int nbDame = 0;
     if(movement.src_point>0) nbDame = state->board[movement.src_point-1].nbDames;
     else nbDame = state->bar[player];

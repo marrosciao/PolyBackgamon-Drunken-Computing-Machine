@@ -33,6 +33,8 @@ void init_lib(const char* lib_path, void** handle, Functions* func, err_func err
 {
     *handle = dlopen(lib_path, RTLD_NOW);
     test(*handle != NULL, err);
+    // Un appel à dlerror() "dans le vide" permet de vider le buffer
+    // d'erreur de dlopen/dlysm
     dlerror();
     init_func(*handle, func, err);
 }

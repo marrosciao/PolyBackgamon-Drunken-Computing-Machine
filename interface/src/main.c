@@ -17,15 +17,6 @@
 #include"logger.h"
 #include"human.h"
 
-#define LOG_LVL INFO
-
-
-//TODO : faire les test et merge la branche
-//TODO : appliquer clang-format
-//TODO : refactoring pour que ça soit plus propre
-//TODO : gestion erreur
-//TODO : finir affichage logger
-
 void err(String str){
     fprintf(stderr, "%s -> %s\n",str, dlerror());
     exit(EXIT_FAILURE);
@@ -33,6 +24,12 @@ void err(String str){
 
 Player choose_start_player(unsigned int i)
 {
+    // Le paramêtre sert d'arrêt à la reccursion
+    // Il est arrivé que le programme s'arrête sur une
+    // segfault causé par un trop grand nombre d'appel récursif :
+    // les valeurs des dés renvoyé par rand était toujours les mêmes
+    // Si au bout de 10 lancés, les dés sont identiques, le joueur noir
+    // commence par défaut
     unsigned char dice[2];
     roll_dice(dice);
     Player tmp = BLACK;
@@ -48,7 +45,9 @@ Player choose_start_player(unsigned int i)
 int main(int ARGC, const char* ARGV[])
 {
     init_logger();
+
     unsigned int target_score = 15 ;
+    
     set_level("main_logger", LOG_LVL);
     set_level("refere_logger", LOG_LVL);
     set_level("score_logger", INFO);
@@ -70,10 +69,11 @@ int main(int ARGC, const char* ARGV[])
 
         if (target_score <= 0)
         {
-            //stupide de faire un score nul comem objectif ...
+            //stupide de faire un score nul comme objectif ...
             perror("ERREUR : target_score negatif ou nul");
             exit(EXIT_FAILURE);
         }
+
         char mess[50];
         sprintf(mess, "Lecture de target score %d\n", target_score);
         logging("main_logger", mess, WARNING);
@@ -85,6 +85,7 @@ int main(int ARGC, const char* ARGV[])
         logging("main_logger", mess, WARNING);
     }
 
+    // Utile pour l'affichage des joueurs
     const char* const enumToStr[] = {"NOBODY", "BLACK", "WHITE"};
 
     IA players[2];
@@ -99,6 +100,7 @@ int main(int ARGC, const char* ARGV[])
     {
         if (ARGC >= 3+i)
         {
+            // Si c'est une IA
             players[i].lib_path=(char*)calloc(strlen(ARGV[2+i])+1,sizeof(char));
             strcpy(players[i].lib_path,ARGV[2+i]);
             players[i].func = (Functions*)malloc( sizeof(Functions) );
@@ -107,6 +109,7 @@ int main(int ARGC, const char* ARGV[])
         }
         else
         {
+            // Si c'est un humain
             players[i].func = StartScreen(screen);
             players[i].lib_path = NULL;
         }
@@ -121,6 +124,7 @@ int main(int ARGC, const char* ARGV[])
     SGameState state;
     init_state(&state);
     drawBoard(&state,screen);
+
     for(unsigned int i=0; i<24; ++i)
     {
         char mess[50];
@@ -133,18 +137,20 @@ int main(int ARGC, const char* ARGV[])
     const unsigned int maxScore = target_score;
     unsigned int turn_num       = 1;
     srand(time(NULL));
-    Player winner          = NOBODY;
+    Player winner               = NOBODY;
+    
     // --- Boucle principale
     while(!finished)
     {
-        //TODO : faire des affichages pour voir si les fonctions sont bien lancé
-        //TODO : faire un logger basic
         char mess[50];
         sprintf(mess, "Début de la manche %d\n", turn_num);
         logging("main_logger", mess, WARNING);
+        
         Player current = choose_start_player(0);
+
         sprintf(mess, "%s commence\n", enumToStr[current+1]);
         logging("main_logger", mess, WARNING);
+        
         for(unsigned int i=0; i<2; ++i)
         {
             players[i].func->startGame( (Player)i );
@@ -160,31 +166,39 @@ int main(int ARGC, const char* ARGV[])
         {
             sprintf(mess,"Début du tour %d, Joueur : %s\n", state.turn, enumToStr[current+1]);
             logging("main_logger", mess, WARNING);
+
+            // Si le joueur est humains, on lui renvoie sa couleur, ça permet d'éviter
+            // des erreurs du au fait que la variable contenant la couleur du joueur humain soit
+            // global (cf human.h). Cette erreur survenais lorsqu'il y a deux humains qui jouent
+            // en même temps.
             if (ARGC < 3+current){
                 players[current].func->startGame(current);
             }
             end_of_round = gamePlayTurn(&state, players, current, &lastStaker, &winner, screen);
     	    drawBackground(screen);
             drawBoard(&state,screen);//graph
-            SDL_Delay(1000);   
+            SDL_Delay(1000);
+
 	    	sprintf(mess,"fin du tour %d\n", state.turn);
             logging("main_logger", mess, WARNING);
+            
             current = (Player)(1-current);
             ++state.turn;
         }
         for(unsigned int i=0; i<2; ++i) players[i].func->endGame();
         if(winner==WHITE)
         {
-            state.whiteScore+=state.stake;
-            finished = state.whiteScore>=maxScore;
+            state.whiteScore += state.stake;
+            finished          = state.whiteScore>=maxScore;
             players[WHITE].match_won++;
         }
         else
         {
-            state.blackScore+=state.stake;
-            finished = state.blackScore>=maxScore;
+            state.blackScore += state.stake;
+            finished          = state.blackScore>=maxScore;
             players[BLACK].match_won++;
         }
+
         int score = state.blackScore;
         if(winner==WHITE) score = state.whiteScore;
         sprintf(mess, "gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
@@ -192,6 +206,7 @@ int main(int ARGC, const char* ARGV[])
         sprintf(mess, "fin de la manche %d\n", turn_num);
         logging("main_logger", mess, WARNING);
         printf("gagnant : %s, gagne %d points (total %d )\n", enumToStr[winner+1], state.stake, score);
+        
         ++turn_num;
     }
     for(unsigned int i=0; i<2; ++i) players[i].func->endMatch();
@@ -205,6 +220,7 @@ int main(int ARGC, const char* ARGV[])
     sprintf(mess, "%s , %d\n", enumToStr[winner+1], score);
     logging("score_logger", mess, INFO);
     free_logger();
+
     endGraph();//graph
     for(int i=0; i<2; ++i)
     {

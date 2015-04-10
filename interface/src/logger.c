@@ -15,6 +15,8 @@ void init_logger(){
 }
 
 Logger* get_logger(const char* name){
+    // Retourne un Logger, si aucun logger ayant le nom name,
+    // la fonction renvoie un nouveau logger
     unsigned int i=0;
     while(i<nb_loggers && strcmp(name, loggers[i].name)) ++i;
     if(i>=nb_loggers){
@@ -54,6 +56,8 @@ void set_simple_print(const char* name, bool simple_print)
 int p_logging(const char* name, const char* file, const char* fctn, const int ligne, const char* message, Level lvl){
     Logger* tmp = get_logger(name);
     if(!tmp) return 0;
+    // On affiche le message uniquement si le niveau passé en paramêtre est
+    // inférieur au niveau du logger (p.e. NONE < ERROR < WARNING < INFO )
     if(lvl<=tmp->lvl)
     {
         if(tmp->simple_print)
