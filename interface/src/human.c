@@ -7,19 +7,14 @@
 #include "graph.h"
 #include "init.h"
 #include "human.h"
+#include "game.h"
 
 Player color;
 SDL_Surface* screen;
 
 void InitLibrary(char name[50])
 {
-
     strcpy(name,"Joueur Humain");
-
-    // Code d'initialisation ici.
-
-    // Sauf qu'on a pas d'intialisation à faire vu notre algorithme
-    // Tout va bien
 }
 
 void StartMatch(const unsigned int target_score)
@@ -29,13 +24,15 @@ void StartMatch(const unsigned int target_score)
 
 void StartGame(Player p)
 {
-    // ai_player est une var globale !
     color = p ;
     fprintf(stderr,"couleur = %d",color);
 }
 
 Functions* StartScreen(SDL_Surface* s)
 {
+//Cette fonction est un ajout par rapport aux librairies d'IA qui nous permet de communiquer au joueur humain l'ecran
+//pour que l'on puisse avoir un joueur humain sur l'interface gerée par l'arbitre
+// Elle renvoie les fonctions que pourra ensuite appeler l'arbitre
 	screen = s;
     Functions* func = malloc(sizeof(Functions));
     func->initLibrary = InitLibrary;
@@ -61,6 +58,8 @@ void EndMatch()
 
 int DoubleStack(const SGameState * const gameState)
 {
+    //Dans cette fonction, on demande au joueur s'il souhaite doubler le videau, il peut taper o pour oui ou n pour non.
+
     int dobble = false;
     int continuer = 1;
     SDL_Event event;
@@ -108,6 +107,7 @@ int DoubleStack(const SGameState * const gameState)
 
 int TakeDouble(const SGameState * const gameState)
 {
+    //Dans cette fonction, on demande au joueur s'il accepte qu'on double le videau, il peut taper o pour oui ou n pour non.
     
     int dobble = false;
     int continuer = 1;
@@ -152,44 +152,71 @@ int TakeDouble(const SGameState * const gameState)
 }
 
 void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries){
-    int nbMoves = dices[0] == dices[1] ? 4 : 2;
-    *nbMove = nbMoves;
-    SGameState* gameState = state;
-    char coup[] = "coups restants : 0";
-    //SDL_Color blanc = {
-    //    .r = 255,
-    //    .g = 255,
-    //    .b = 255,
-    //};
-    SDL_Color noir = {
+    
+    //cette fonction à les mêmes parametres que le playturn d'une IA classique, ce qui permet à l'arbitre de ne pas differencier humain et IA
+
+    int nbMoves = 0;
+    SGameState* gameState = copy_state(*state);
+    int point;
+    int src = 0;
+    int boucle = 1;
+    char coup[] = "coups joues : 0";
+    SDL_Color noir = {      //Au final c'est du marron :p
         .r = 31,
         .g = 15,
         .b = 10,
     };
 
-    for (int i=0; i<nbMoves; i++){
-        coup[17] = nbMoves-i +48;
+    while (boucle){
+        fprintf(stderr,"%d",boucle);
+        coup[14] = nbMoves+'0';
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);
-        printtext(630, 283, "./Textures/CarnevaleeFreakshow.ttf",39,coup,noir, screen);
+        printtext(630, 263, "./Textures/CarnevaleeFreakshow.ttf",39,coup,noir, screen);
+        printtext(630, 303, "./Textures/CarnevaleeFreakshow.ttf",30," annuler tour: [backspace]",noir, screen);
+        printtext(630, 323, "./Textures/CarnevaleeFreakshow.ttf",30,"valider tour : [enter]",noir, screen);
         if (color == WHITE)
             printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"AU TOUR DES BLANCS",noir, screen);
         if (color == BLACK)
             printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"AU TOUR DES NOIRS",noir, screen);
         SDL_Flip(screen);
-        moves[i].src_point= selectPion(gameState,true,color);
-        fprintf(stderr,"src: %d",moves[i].src_point);
+        point= selectPion(gameState,true,color);
+        if (point <= 25){
+            src = point;
+        }
+        else if (point == 26){
+            gameState=copy_state(*state);
+            nbMoves = 0;
+        }
+        else if (point == 27){
+            *nbMove = nbMoves;
+            boucle = 0;
+        }
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);
         SDL_Flip(screen);
-        moves[i].dest_point = selectPion(gameState,false,color);
-        fprintf(stderr,"dest: %d",moves[i].dest_point);
+        if (point <= 25){
+        point= selectPion(gameState,false,color);
+        }
+        if (point <= 25){
+            moves[nbMoves].src_point= src;
+            moves[nbMoves].dest_point = point;
+            nbMoves += 1; 
+        } 
+        if (point == 26){
+            gameState=copy_state(*state);
+            nbMoves = 0;
+        }
+        if (point == 27){
+            *nbMove = nbMoves;
+            boucle = 0;
+        }
         drawBackground(screen);  
         drawBoard(gameState, screen);
         drawDes(dices,screen);
         SDL_Flip(screen);
     }
-
+    free(gameState); 
 }

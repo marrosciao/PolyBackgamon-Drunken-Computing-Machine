@@ -1,6 +1,7 @@
 #include<stdbool.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -274,6 +275,17 @@ int selectPion(SGameState* state, bool src, Player color){
                     }
                 }
                 break;
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.sym == SDLK_RETURN){
+                        val = 26;
+                        continuer = 0;
+                    }
+                    if (event.key.keysym.sym == SDLK_p){
+                        val = 25;
+                        continuer = 0;
+                    }
+                break;
+                    
     }
 }
     return val+1;
