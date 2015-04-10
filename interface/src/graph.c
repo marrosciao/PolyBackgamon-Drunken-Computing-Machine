@@ -28,7 +28,7 @@ void endGraph(){    //Ferme les fenetres SDL
 }
 
 
-int drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ // Dessine un pion à la position (posx posy)
+void drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ // Dessine un pion à la position (posx posy)
     SDL_Surface *img = NULL;
     SDL_Surface *imgOk = NULL;
     SDL_Rect pos;
@@ -45,18 +45,16 @@ int drawPiece(Player color,int posx,int posy,SDL_Surface* screen){ // Dessine un
     SDL_SetColorKey(imgOk, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB( imgOk->format, 0, 0, 0xFF ));
     SDL_BlitSurface(imgOk, NULL, screen, &pos);
     SDL_FreeSurface(imgOk);
-    return EXIT_SUCCESS;
 }
 
-int drawBackground(SDL_Surface* screen){ //Dessine le fond 
+void drawBackground(SDL_Surface* screen){ //Dessine le fond 
     SDL_Surface *background = NULL; 
     background = SDL_LoadBMP("./Textures/background.bmp");
     SDL_BlitSurface(background, NULL, screen, NULL);
     SDL_FreeSurface(background);
-    return EXIT_SUCCESS;
 }
 
-int drawDes(unsigned char dices[2], SDL_Surface* screen){ //Dessine les dés donnés
+void drawDes(unsigned char dices[2], SDL_Surface* screen){ //Dessine les dés donnés
         char nom1[] = "./Textures/De5.bmp";
         char nom2[] = "./Textures/De5.bmp";
         nom1[13] = dices[0]+'0';
@@ -80,9 +78,8 @@ int drawDes(unsigned char dices[2], SDL_Surface* screen){ //Dessine les dés don
         SDL_BlitSurface(imgOk2, NULL, screen, &pos2);
         SDL_FreeSurface(imgOk1);
         SDL_FreeSurface(imgOk2);
-        return EXIT_SUCCESS;
 }   
-int animateDes(unsigned char dices[2], SDL_Surface* screen){ //Fait une petite animation de dés qui clignotes avant d'arriver sur la valeur donnée
+void animateDes(unsigned char dices[2], SDL_Surface* screen){ //Fait une petite animation de dés qui clignotes avant d'arriver sur la valeur donnée
     unsigned char rollingDices[2];
     for (float i=50; i>10; i=i/1.5){
         rollingDices[0] = rand() %6 +1;;
@@ -94,7 +91,6 @@ int animateDes(unsigned char dices[2], SDL_Surface* screen){ //Fait une petite a
     drawDes(dices,screen);
     SDL_Flip( screen ); 
     SDL_Delay(1000);
-	return EXIT_SUCCESS;
 }
 
 void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_Color color, SDL_Surface* screen) { 
@@ -112,7 +108,7 @@ void printtext(int posx, int posy, char fontName[],int size, char message[],SDL_
 }
 
 
-int drawBoard(SGameState* state, SDL_Surface* screen){
+void drawBoard(SGameState* state, SDL_Surface* screen){
 // Dessine l'état donné
 
     char affichenb[20];
@@ -197,14 +193,8 @@ int drawBoard(SGameState* state, SDL_Surface* screen){
         sprintf(affichenb,"%d",state->blackScore);
         printtext(904, 25, "./Textures/RioGrande.ttf",32,affichenb,couleurTexte, screen);
 
-        
-    
-
-    
-    
-    
-    return EXIT_SUCCESS;
 }
+
 bool hitbox(int x,int y,int i){ // Cette fonction permet de verifier si des coordonées x,y sont dans la case i du board
     if (i== -1)
         return (x<460 && x>400);
@@ -280,7 +270,7 @@ int selectPion(SGameState* state, bool src, Player color){
                         val = 26;
                         continuer = 0;
                     }
-                    if (event.key.keysym.sym == SDLK_p){
+                    if (event.key.keysym.sym == SDLK_BACKSPACE){
                         val = 25;
                         continuer = 0;
                     }
