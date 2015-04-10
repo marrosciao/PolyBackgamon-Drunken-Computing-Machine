@@ -8,6 +8,7 @@
 #include "init.h"
 #include "human.h"
 #include "game.h"
+#include "referee.h"
 
 Player color;
 SDL_Surface* screen;
@@ -200,10 +201,18 @@ void PlayTurn( SGameState *  state, const unsigned char dices[2], SMove moves[4]
         if (point <= 25){
         point= selectPion(gameState,false,color);
         }
-        if (point <= 25){
+        if (point <= 25 ){
             moves[nbMoves].src_point= src;
             moves[nbMoves].dest_point = point;
-            nbMoves += 1; 
+            if (check_move(moves[nbMoves],dices,2,color,gameState) != 1){
+                nbMoves += 1;
+            }
+            else {
+                printtext(230, 283, "./Textures/CarnevaleeFreakshow.ttf",39,"Mouvement invalide!!",noir, screen);
+                point = 26;
+                SDL_Flip(screen);
+                SDL_Delay(1500);
+            }
         } 
         if (point == 26){
             gameState=copy_state(*state);
