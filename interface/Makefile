@@ -12,12 +12,12 @@ TARGETDIR     := bin
 DOCDIR        := doc
 
 #Flags, Libraries and Includes
-CFLAGS        += $(shell sdl-config --cflags)
+CFLAGS        := $(CFLAGS) $(shell sdl-config --cflags)
 CFLAGS_DEBUG  +=
 CFLAGS_PROD   +=
 CPPFLAGS      +=
 LDFLAGS       +=
-LDLIBS        += -ldl $(shell sdl-config --libs) -lSDL_ttf
+LDLIBS        := $(CFLAGS) -ldl $(shell sdl-config --libs) -lSDL_ttf
 
 
 #---------------------------------------------------------------------------------

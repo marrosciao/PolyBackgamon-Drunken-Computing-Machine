@@ -20,3 +20,6 @@ PolyBackgammon
 doc/
 obj/
 bin/
+
+perf.data
+perf.data.old
